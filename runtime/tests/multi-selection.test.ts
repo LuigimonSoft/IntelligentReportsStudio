@@ -1,0 +1,50 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createSampleProject } from '../domain/report/sample.ts';
+import { captureSelectionElements, elementBounds, placeElements } from '../domain/report/elementTransfer.ts';
+
+test('multiple elements move atomically, keep IDs and relative spacing, and copy gets new IDs', () => {
+  const project=createSampleProject();
+  const refs=project.report.header!.elements.filter(element=>element.type==='text').slice(0,2).map(element=>({bandId:project.report.header!.id,elementId:element.id}));
+  const bundle=captureSelectionElements(project.report,project.datasets,refs)!;
+  assert.equal(bundle.elements.length,2);
+  const original=structuredClone(project.report);
+  const placed=placeElements(project.report,bundle,project.report.pageHeader!.id,{x:0.1,y:0.1},false);
+  assert(refs.every(ref=>!placed.report.header!.elements.some(element=>element.id===ref.elementId)));
+  assert(refs.every(ref=>placed.report.pageHeader!.elements.some(element=>element.id===ref.elementId)));
+  assert.equal(placed.selection.elements!.length,2);
+  const elements=placed.report.pageHeader!.elements.filter(element=>refs.some(ref=>ref.elementId===element.id));
+  assert(Math.abs((elements[1].x-elements[0].x)-(bundle.elements[1].x-bundle.elements[0].x))<1e-9);
+  assert(Math.abs((elements[1].y-elements[0].y)-(bundle.elements[1].y-bundle.elements[0].y))<1e-9);
+  const copied=placeElements(project.report,bundle,project.report.pageHeader!.id,{x:.1,y:.1});
+  assert(copied.selection.elements!.every(ref=>!refs.some(old=>old.elementId===ref.elementId)));
+  assert.deepEqual(project.report,original);
+});
+test('selection across sections expands tables once and retains each source binding', () => {
+  const project=createSampleProject();const detail=project.report.details[0];
+  const cell=detail.band.elements.find(element=>element.type==='text'&&element.table)!;
+  const header=project.report.header!.elements.find(element=>element.type==='text')!;
+  const refs=[{bandId:detail.band.id,elementId:cell.id},{bandId:project.report.header!.id,elementId:header.id}];
+  const bundle=captureSelectionElements(project.report,project.datasets,refs)!;
+  const tableCount=detail.band.elements.filter(element=>element.groupId===cell.groupId).length;
+  assert.equal(bundle.elements.length,tableCount+1);
+  assert(bundle.elements.some(element=>element.type==='text' && element.text.includes('invoice.quantity')));
+  assert.equal(new Set(bundle.elements.map(element=>element.id)).size,bundle.elements.length);
+  const placed=placeElements(project.report,bundle,project.report.footer!.id,{x:0,y:0},false);
+  assert(!placed.report.details[0].band.elements.some(element=>element.groupId===cell.groupId));
+  assert.equal(placed.report.footer!.elements.filter(element=>element.groupId===cell.groupId).length,tableCount);
+  assert(!placed.report.header!.elements.some(element=>element.id===header.id));
+  assert(elementBounds(bundle.elements).height>detail.band.height);
+});
+test('cross-section selection uses compact section heights regardless of paper height', () => {
+  const project = createSampleProject();
+  const header = project.report.header!, detail = project.report.details[0].band;
+  const head = header.elements.find(e => e.type === 'text')!, item = detail.elements.find(e => e.type === 'text' && e.table)!;
+  const references = [{bandId:header.id, elementId:head.id},{bandId:detail.id, elementId:item.id}];
+  const before = captureSelectionElements(project.report,project.datasets,references)!;
+  const originalHeight=project.report.page.height;
+  project.report.page.height=25;
+  const after = captureSelectionElements(project.report,project.datasets,references)!;
+  assert.equal(after.elements.find(e=>e.id===item.id)!.y,before.elements.find(e=>e.id===item.id)!.y);
+  project.report.page.height=originalHeight;
+});

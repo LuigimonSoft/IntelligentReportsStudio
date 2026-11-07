@@ -1,0 +1,40 @@
+[workspace]
+resolver = "2"
+members = ["app", "frontend", "src-tauri"]
+
+[workspace.package]
+license = "MIT"
+authors = ["IntelligentReports Studio"]
+
+
+# need to be applied only to wasm build
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 'z'
+
+[workspace.dependencies]
+leptos = { version = "0.8.22" }
+leptos_meta = { version = "0.8.7" }
+leptos_router = { version = "0.8.17" }
+
+cfg-if = "1.0.0"
+console_error_panic_hook = "0.1.7"
+console_log = "1.0.0"
+http = "1.3.1"
+log = "0.4.27"
+simple_logger = "5.0.0"
+thiserror = "2.0.12"
+tokio = { version = "1.45.0", features = ["full"] }
+tower = { version = "0.5.2", features = ["full"] }
+tower-http = { version = "0.6.4", features = ["full"] }
+wasm-bindgen = "=0.2.126"
+
+# Keep desktop and WASM development builds small on developer machines.
+[profile.dev]
+debug = 0
+incremental = false
+
+[profile.test]
+debug = 0
+incremental = false

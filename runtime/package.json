@@ -1,0 +1,19 @@
+{
+  "name": "reportstudio-runtime",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "d3": "7.9.0",
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "6.4.299",
+    "@reportstudio/mini-reports": "file:engine"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "esbuild": "0.28.2"
+  }
+}

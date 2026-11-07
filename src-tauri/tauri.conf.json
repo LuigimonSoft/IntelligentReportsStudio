@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Report Studio",
+  "version": "0.1.0",
+  "identifier": "com.intelligentreports.studio",
+  "build": {
+    "frontendDist": "../target/csr",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeDevCommand": {
+      "script": "node scripts/frontend.mjs serve",
+      "cwd": "..",
+      "wait": false
+    },
+    "beforeBuildCommand": {
+      "script": "node scripts/frontend.mjs build --release",
+      "cwd": ".."
+    }
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Report Studio",
+        "dragDropEnabled": false,
+        "width": 1500,
+        "height": 960,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    },
+    "withGlobalTauri": true
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

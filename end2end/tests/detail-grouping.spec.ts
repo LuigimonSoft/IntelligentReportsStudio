@@ -1,0 +1,94 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
+test('create and reorder grouping sections, persist and preview grouped details',async({page})=>{
+ await page.addInitScript(()=>{(window as any).saved=[];(window as any).__TAURI__={core:{invoke:async(command:string,args:any)=>{if(command==='save_report')(window as any).saved.push(args.document);return true;}}};});
+ await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
+ await page.getByRole('button',{name:'Group data',exact:true}).click();const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
+ await expect(dialog.getByLabel('Existing grouping')).toHaveCount(0);
+ await dialog.getByRole('button',{name:'Add group',exact:true}).click();
+ await dialog.getByLabel('Grouping field 1').selectOption('status');
+ await dialog.getByRole('button',{name:'Add group',exact:true}).click();
+ await dialog.getByLabel('Grouping field 2').selectOption('quantity');
+ await dialog.getByLabel('Grouping order 2').selectOption('desc');
+ await dialog.getByRole('button',{name:'Move group up 2',exact:true}).click();
+ await expect(dialog.getByLabel('Grouping field 1')).toHaveValue('quantity');
+ await dialog.getByRole('button',{name:'Save groups',exact:true}).click();await expect(dialog).toHaveCount(0);
+ const sections=page.locator('.sections-bar');await expect(sections).toContainText('Group header · quantity');await expect(sections).toContainText('Group footer · status');
+ await page.getByRole('button',{name:'Save',exact:true}).click();await expect.poll(()=>page.evaluate(()=>(window as any).saved.length)).toBe(1);
+ const saved=await page.evaluate(()=>(window as any).saved[0]);expect(saved.report.details[0].groupBy).toBeUndefined();expect(saved.report.details[0].groups.map((g:any)=>[g.field,g.direction])).toEqual([['quantity','desc'],['status','asc']]);
+ await page.getByRole('button',{name:'Preview',exact:true}).click();await expect(page.locator('#pdf-page-1')).toHaveAttribute('data-rendered','true');
+});
+test('group dialog preserves document when cancelled and rejects duplicate grouping fields',async({page})=>{
+ await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
+ await page.getByRole('button',{name:'Group data',exact:true}).click();let dialog=page.getByRole('dialog');
+ await dialog.getByRole('button',{name:'Add group',exact:true}).click();await dialog.getByRole('button',{name:'Add group',exact:true}).click();
+ await dialog.getByLabel('Grouping field 2').selectOption(await dialog.getByLabel('Grouping field 1').inputValue());
+ await expect(dialog.getByRole('button',{name:'Save groups',exact:true})).toBeDisabled();
+ await dialog.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.locator('.sections-bar')).not.toContainText('Group header ·');
+});
+test('native grouping editor returns the configured levels',async({page})=>{
+ await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
+ await page.evaluate(()=>{(window as any).__TAURI_INTERNALS__={invoke:async(_:string,args:any)=>{(window as any).context=args.context;return null;}};});
+ await page.getByRole('button',{name:'Group data',exact:true}).click();
+ await expect.poll(()=>page.evaluate(()=>(window as any).context?.kind)).toBe('Grouping');
+ const context=await page.evaluate(()=>(window as any).context);
+ await page.addInitScript(context=>{(window as any).calls=[];(window as any).__TAURI_INTERNALS__={invoke:async(command:string,args:any)=>{(window as any).calls.push({command,args});return command==='editor_context'?context:null;}};},context);
+ await page.goto('/index.html?editor=1');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
+ await dialog.getByRole('button',{name:'Add group',exact:true}).click();await dialog.getByLabel('Grouping field 1').selectOption('status');
+ await dialog.getByRole('button',{name:'Save groups',exact:true}).click();
+ await expect.poll(()=>page.evaluate(()=>(window as any).calls.find((call:any)=>call.command==='finish_editor')?.args.result?.groups?.[0]?.field)).toBe('status');
+});
+test('each detail uses its own table fields and independent groups',async({page})=>{
+ await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
+ const dock=page.locator('.sections-bar');await dock.getByLabel('Add section',{exact:true}).click();
+ await dock.locator('.add-section-menu .section-popover button').first().click();
+ await expect(dock.locator('.section-card.selected')).toContainText('Details');
+ await page.getByRole('button',{name:'Group data',exact:true}).click();const dialog=page.getByRole('dialog');
+ await expect(dialog.getByLabel('Grouping detail')).not.toHaveValue('example-lines-detail');
+ await dialog.getByRole('button',{name:'Add group',exact:true}).click();
+ const field=dialog.getByLabel('Grouping field 1');await expect(field.locator('option[value="addressType"]')).toHaveCount(1);
+ await field.selectOption('country');await dialog.getByRole('button',{name:'Save groups',exact:true}).click();
+ await expect(dock).toContainText('Group header · country');
+});
+test('group edit button reopens the correct detail and preserves group sections',async({page})=>{
+ await page.addInitScript(()=>{(window as any).saved=[];(window as any).__TAURI__={core:{invoke:async(command:string,args:any)=>{if(command==='save_report')(window as any).saved.push(args.document);return true;}}};});
+ await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
+ const dock=page.locator('.sections-bar');await dock.getByLabel('Add section',{exact:true}).click();await dock.locator('.add-section-menu .section-popover button').first().click();
+ await page.getByRole('button',{name:'Group data',exact:true}).click();let dialog=page.getByRole('dialog');
+ const detailId=await dialog.getByLabel('Grouping detail').inputValue();expect(detailId).not.toBe('example-lines-detail');
+ await dialog.getByRole('button',{name:'Add group',exact:true}).click();await dialog.getByLabel('Grouping field 1').selectOption('country');
+ await dialog.getByRole('button',{name:'Save groups',exact:true}).click();await expect(dialog).toHaveCount(0);
+ const header=dock.locator('.section-card').filter({hasText:'Group header · country'});await expect(header).toBeVisible();
+ await header.getByRole('button',{name:'Edit group',exact:true}).click();dialog=page.getByRole('dialog');
+ await expect(dialog.getByLabel('Grouping detail')).toHaveValue(detailId);await expect(dialog.getByLabel('Grouping field 1')).toHaveValue('country');
+ await dialog.getByLabel('Grouping field 1').selectOption('city');await dialog.getByLabel('Grouping order 1').selectOption('desc');
+ await dialog.getByRole('button',{name:'Save groups',exact:true}).click();await expect(dialog).toHaveCount(0);
+ await expect(dock).toContainText('Group header · city');await expect(dock).toContainText('Group footer · city');
+ await page.getByRole('button',{name:'Save',exact:true}).click();await expect.poll(()=>page.evaluate(()=>(window as any).saved.length)).toBe(1);
+ const saved=await page.evaluate(()=>(window as any).saved[0]);const detail=saved.report.details.find((d:any)=>d.id===detailId);
+ expect(detail.groups).toHaveLength(1);expect(detail.groups[0].field).toBe('city');expect(detail.groups[0].direction).toBe('desc');
+ const footer=dock.locator('.section-card').filter({hasText:'Group footer · city'});await footer.locator('summary').click();
+ await footer.getByRole('button',{name:'Edit group',exact:true}).last().click();await expect(page.getByRole('dialog').getByLabel('Grouping field 1')).toHaveValue('city');
+});
+test('group edit button sends the existing group to the native modal',async({page})=>{
+ await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
+ await page.getByRole('button',{name:'Group data',exact:true}).click();const dialog=page.getByRole('dialog');
+ await dialog.getByRole('button',{name:'Add group',exact:true}).click();await dialog.getByLabel('Grouping field 1').selectOption('status');await dialog.getByRole('button',{name:'Save groups',exact:true}).click();await expect(dialog).toHaveCount(0);
+ await page.evaluate(()=>{(window as any).__TAURI_INTERNALS__={invoke:async(command:string,args:any)=>{(window as any).editorRequest={command,args};return null;}};});
+ const group=page.locator('.sections-bar .section-card').filter({hasText:'Group header · status'});
+ await group.getByRole('button',{name:'Edit group',exact:true}).click();
+ await expect.poll(()=>page.evaluate(()=>(window as any).editorRequest?.args?.context?.kind)).toBe('Grouping');
+ const request=await page.evaluate(()=>(window as any).editorRequest);expect(request.command).toBe('open_editor');expect(request.args.context.value.groups[0].field).toBe('status');
+});
+
+test('legacy group remains editable after opening an older report',async({page})=>{
+ const project=JSON.parse(readFileSync(path.resolve(__dirname,'../../app/src/data/exampleInvoice.json'),'utf8'));
+ project.report.details[0].groupBy='category';
+ await page.addInitScript(project=>{(window as any).__TAURI__={core:{invoke:async(command:string)=>command==='open_report'?JSON.stringify(project):true}};},project);
+ await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
+ await page.getByRole('button',{name:'Open',exact:true}).click();
+ const header=page.locator('.sections-bar .section-card').filter({hasText:'Details header'}).first();
+ await header.getByRole('button',{name:'Edit group',exact:true}).click();
+ await expect(page.getByRole('dialog').getByLabel('Existing grouping')).toHaveValue('category');
+});

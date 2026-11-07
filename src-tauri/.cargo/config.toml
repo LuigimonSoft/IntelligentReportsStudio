@@ -1,0 +1,4 @@
+# Tauri runs Cargo from src-tauri. Keep desktop builds independent of root
+# workspace checks and the Trunk frontend build, including their build locks.
+[build]
+target-dir = "../target/desktop"

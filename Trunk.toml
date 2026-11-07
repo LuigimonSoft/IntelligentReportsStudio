@@ -1,0 +1,17 @@
+[build]
+target = "index.html"
+dist = "target/csr"
+filehash = true
+
+[watch]
+watch = ["app/src", "frontend/src", "public", "index.html", "Cargo.toml", "app/Cargo.toml", "frontend/Cargo.toml"]
+ignore = ["src-tauri", "target", "end2end", "runtime/node_modules"]
+
+[serve]
+addresses = ["127.0.0.1"]
+port = 1420
+open = false
+ws_protocol = "ws"
+
+[tools]
+wasm_bindgen = "0.2.126"

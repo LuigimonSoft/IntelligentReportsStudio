@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-finish-editor"
+description = "Enables the finish_editor command without any pre-configured scope."
+commands.allow = ["finish_editor"]
+
+[[permission]]
+identifier = "deny-finish-editor"
+description = "Denies the finish_editor command without any pre-configured scope."
+commands.deny = ["finish_editor"]

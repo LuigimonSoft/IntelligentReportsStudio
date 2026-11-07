@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-reset-document-path"
+description = "Enables the reset_document_path command without any pre-configured scope."
+commands.allow = ["reset_document_path"]
+
+[[permission]]
+identifier = "deny-reset-document-path"
+description = "Denies the reset_document_path command without any pre-configured scope."
+commands.deny = ["reset_document_path"]

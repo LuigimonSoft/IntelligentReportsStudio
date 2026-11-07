@@ -1,0 +1,104 @@
+[English](README.md) · [Español](README.es.md) · [Français](README.fr.md)
+
+# IntelligentReports Studio
+
+Designed and created by **Luigimonsoft**.
+
+**Design reports around your data, then take them from the canvas to PDF.**
+
+![Report Studio designer with an example invoice](assets/readme/designer.png)
+
+IntelligentReports Studio is a desktop report designer for creating reusable, data-driven documents. Build an invoice, listing or other report visually, connect its fields to tabular data, and preview the result before exporting it. A report is stored as a JSON template, so its design can be opened and edited again.
+
+### What you can do
+
+- **Design visually:** arrange text, images, lines, shapes, tables and charts in report, page and detail sections. Adjust properties, styles, rulers and guides as you work.
+- **Model your data:** define tables and fields, connect relationships and inspect records. Import table definitions and records from JSON or supply data through a host integration.
+- **Make reports dynamic:** bind fields, add formulas and parameters, group details and control section visibility and backgrounds.
+- **Review and share:** preview paginated output, adjust the view, print and export to PDF.
+- **Work in your language:** use the English, Spanish or French interface and choose a light or dark theme.
+
+### How it works
+
+1. **Design** the page and its sections. Drag fields or add elements, then set their content, size and appearance.
+2. **Data** defines tables, fields, relationships and parameters. A section or table can use a data source to repeat content for records.
+3. **Preview** combines the template and available data, evaluates expressions and lays out pages. The same PDF generation path supplies the preview and PDF export.
+4. **Save** the template as JSON and reopen it for later changes. Normal template saves retain the design and data-source definitions, but exclude table records; parameter values marked not to save are excluded too. Recovery copies are local and may contain session data.
+
+Tauri provides the desktop window and system operations. The Leptos interface runs in the WebView, while a bundled report engine handles validation, data processing, layout and PDF generation. The included sample invoice is for development; release builds start with a blank report.
+
+## Requirements
+
+Install Rust, Node.js, Tauri CLI 2, Trunk 0.21.14 and wasm-bindgen-cli 0.2.126. Install the [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/) for your platform.
+
+```sh
+rustup target add wasm32-unknown-unknown
+cargo install --locked trunk --version 0.21.14
+cargo install --locked wasm-bindgen-cli --version 0.2.126
+cargo install tauri-cli --version '^2'
+cargo tauri dev
+```
+
+On external drives containing macOS `._*` metadata, the project build configuration selects only valid permission and capability files. To create a clean snapshot and run it instead, use `node scripts/clean-build.mjs dev`.
+
+## Build
+
+```sh
+cargo tauri build
+```
+
+The browser runtime and third-party assets are included in `public/vendor`. To rebuild the runtime after changing TypeScript code:
+
+```sh
+cd runtime
+npm ci
+npm run build
+```
+
+## Tests
+
+```sh
+cargo test -p app
+cargo test -p intelligent_reports_studio --lib
+cd runtime && npm ci && npm test
+```
+
+Browser tests are in `end2end`; install their dependencies with `npm ci` and run them against the development server.
+
+## Project layout
+
+- `app/`: Leptos interface and report state.
+- `frontend/`: WebAssembly entry point.
+- `src-tauri/`: desktop integration, native dialogs and file operations.
+- `runtime/`: report engine, data model, PDF generation and formulas.
+- `public/`: styles and compiled browser assets.
+- `end2end/`: browser integration tests.
+
+Reports are JSON documents. Saved templates contain table definitions and source names; table records are excluded. Parameters can be configured not to persist their values. Recovery files are stored locally and may contain the current session's data.
+
+## Future plans
+
+A planned next step is a family of libraries and integrations that can generate reports from the JSON templates created in IntelligentReports Studio. The goal is to let applications supply their own data and generate a report without requiring the desktop designer at runtime.
+
+Proposed targets are **.NET, Visual C++, SwiftUI, Rust, Tauri, React and Angular**. The exact APIs, supported features and release schedule are still to be defined. These are plans, not libraries currently included in this repository.
+
+## Contributing
+
+Contributions are welcome, whether you fix a bug, improve the documentation, add a feature or report a reproducible problem.
+
+1. Open an issue describing the problem or proposed change, including platform and steps to reproduce when applicable.
+2. Fork the repository and create a branch for a focused change.
+3. Follow the existing component structure and keep user-facing text in the translation catalogs. Run the checks relevant to your change and include screenshots for visible changes.
+4. Open a pull request describing the behavior, the reason for the change and how you verified it. Do not include credentials, private report data or generated build directories.
+
+### Adding or improving a language
+
+1. Use `app/src/i18n/en.json` as the source of English keys. Create or update the target catalog in `app/src/i18n/`; preserve keys, placeholders and expression syntax, and translate values only.
+2. For a new language, register its catalog and language code in `app/src/i18n/mod.rs`, then add it to the selector in `app/src/header/mod.rs`. Include a suitable accessible label and flag.
+3. Review the runtime catalogs in `runtime/i18n/` and their consumers, including report section names and data queries. Add support where that language needs runtime-specific translations. Rebuild the runtime with `npm run build` inside `runtime/` when its files change.
+4. Update the corresponding README and the language links at the top of all three READMEs. Check long labels, dialogs, native menu labels, date and number formats, and fallback behavior in the application.
+5. Validate JSON syntax and run the relevant checks. Explain any untranslated terms or limitations in the pull request.
+
+## License
+
+[MIT](LICENSE).

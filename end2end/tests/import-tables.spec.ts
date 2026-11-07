@@ -1,0 +1,46 @@
+import { test, expect } from '@playwright/test';
+test('imports JSON files atomically and displays the schema example', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForFunction(() => (window as any).reportstudioReady);
+  await page.getByRole('button', {name:'New', exact:true}).click();
+  await page.getByRole('button', {name:'Data', exact:true}).click();
+  await page.getByRole('button', {name:'Import tables', exact:true}).click();
+  const dialog=page.getByRole('dialog');
+  await expect(dialog).toContainText('JSON example');
+  const apply=dialog.getByRole('button',{name:'Import tables',exact:true});
+  await expect(apply).toBeDisabled();
+  const json={tables:[{name:'Customers',schema:{fields:[{name:'id',type:'number'},{name:'name',type:'text'}]},data:[{id:1,name:'Ana'}]},{name:'Orders',schema:{fields:[{name:'customerId',type:'number'}]}}]};
+  await dialog.getByLabel('Import JSON file').setInputFiles({name:'tables.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(json))});
+  await expect(dialog).toContainText('Tables ready to import: 2');
+  await expect(apply).toBeEnabled();
+  await apply.click();
+  await expect(dialog).toHaveCount(0);
+  await expect(page.locator('.model-canvas')).toContainText('Customers');
+  await expect(page.locator('.model-canvas')).toContainText('Orders');
+  await page.getByRole('button',{name:'Records',exact:true}).click();
+  await expect(page.locator('.records-grid')).toContainText('Ana');
+  await page.getByRole('button',{name:'Data model',exact:true}).click();
+  await page.getByRole('button',{name:'Import tables',exact:true}).click();
+  await page.getByLabel('Import JSON contents').fill(JSON.stringify(json));
+  await expect(page.getByRole('dialog')).toContainText('already exists');
+  await expect(page.getByRole('dialog').getByRole('button',{name:'Import tables',exact:true})).toBeDisabled();
+});
+
+test('native editor returns a validated import to its parent', async ({page}) => {
+  await page.goto('/');
+  await page.waitForFunction(() => (window as any).reportstudioReady);
+  await page.evaluate(() => { (window as any).__TAURI_INTERNALS__={invoke:async (_:string,args:any)=>{(window as any).context=args.context; return null;}}; });
+  await page.getByRole('button',{name:'Data',exact:true}).click();
+  await page.getByRole('button',{name:'Import tables',exact:true}).click();
+  await expect.poll(()=>page.evaluate(()=>(window as any).context?.kind)).toBe('Import tables');
+  const context=await page.evaluate(()=>(window as any).context);
+  await page.addInitScript(context=>{(window as any).calls=[];(window as any).__TAURI_INTERNALS__={invoke:async(command:string,args:any)=>{(window as any).calls.push({command,args}); return command==='editor_context' ? context : null;}};},context);
+  await page.goto('/index.html?editor=1');
+  const dialog=page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await dialog.getByLabel('Import JSON contents').fill(JSON.stringify({name:'Imported',schema:{fields:[{name:'id',type:'number'}]}}));
+  const button=dialog.getByRole('button',{name:'Import tables',exact:true});
+  await expect(button).toBeEnabled();
+  await button.click();
+  await expect.poll(()=>page.evaluate(()=>(window as any).calls.some((c:any)=>c.command==='finish_editor' && c.args.result?.json?.includes('Imported')))).toBe(true);
+});

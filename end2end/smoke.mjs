@@ -1,0 +1,17 @@
+import {mkdir} from 'node:fs/promises';
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+const browser = await chromium.launch({ headless:true, executablePath:process.env.REPORTSTUDIO_CHROMIUM });
+const page=await browser.newPage({viewport:{width:1600,height:1000}});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto(process.env.REPORTSTUDIO_URL || 'http://127.0.0.1:3010/',{timeout:120000});
+await page.waitForFunction(()=>globalThis.reportstudioReady===true);
+assert.equal(await page.title(),'Report Studio');
+await page.getByRole('button',{name:'Zoom in',exact:true}).click();
+await page.waitForTimeout(500);
+assert.equal(await page.locator('.zoom-value').textContent(),'105%');
+await mkdir('test-results',{recursive:true});
+await page.screenshot({path:'test-results/reportstudio-design.png',fullPage:true});
+console.log('SSR and WASM hydration: title, zoom and design rendering passed');
+console.log('Page errors:',errors);
+await browser.close();

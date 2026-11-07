@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-set-file-menu-labels"
+description = "Allow updating file menu labels"
+commands.allow = ["set_file_menu_labels"]

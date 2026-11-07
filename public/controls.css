@@ -1,0 +1,42 @@
+/* Shared form controls. Toolbars, editable table cells and report content keep
+   their intentional compact or document-specific presentation. */
+:root {
+  --control-height: 36px;
+  --control-radius: 6px;
+  --control-border: #dbe3ee;
+  --control-background: #fff;
+  --control-foreground: #10213d;
+  --control-focus: #3382ff;
+}
+.dark {
+  --control-border: #334155;
+  --control-background: #0f172a;
+  --control-foreground: #e2e8f0;
+}
+:is(.reportstudio-app,.editor-dialog) :is(.field,.property) > :is(input:not([type="checkbox"]):not([type="color"]):not([type="range"]),select,textarea) {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--control-height);
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  background-color: var(--control-background);
+  color: var(--control-foreground);
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 18px;
+  box-shadow: 0 1px 2px #10213d18;
+}
+:is(.reportstudio-app,.editor-dialog) :is(.field,.property) > select {
+  -webkit-appearance: none;
+  appearance: none;
+  height: var(--control-height);
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%2364758b' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+}
+:is(.reportstudio-app,.editor-dialog) :is(.field,.property) > textarea { height: auto; min-height: 80px; resize: vertical; }
+:is(.reportstudio-app,.editor-dialog) :is(.field,.property) > input[type="color"] { height: var(--control-height); }
+:is(.reportstudio-app,.editor-dialog) :is(.field,.property) > :is(input,select,textarea):focus-visible { outline: 2px solid var(--control-focus); outline-offset: 1px; }
+:is(.reportstudio-app,.editor-dialog) :is(.field,.property) > :is(input,select,textarea):disabled { cursor: not-allowed; opacity: .55; }

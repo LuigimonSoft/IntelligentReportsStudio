@@ -1,0 +1,38 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "enables the default permissions",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "allow-frontend-ready",
+    "allow-set-file-menu-labels",
+    "allow-save-recovery",
+    "allow-load-recovery",
+    "allow-clear-recovery",
+    "allow-set-document-dirty",
+    "allow-open-report",
+    "allow-open-document",
+    "allow-list-recent-documents",
+    "allow-open-recent-document",
+    "allow-accept-document-path",
+    "allow-reset-document-path",
+    "allow-save-report",
+    "allow-save-pdf",
+    "allow-save-csv",
+    "allow-open-image",
+    "allow-write-clipboard",
+    "allow-read-clipboard",
+    "allow-print-report",
+    "allow-toggle-fullscreen",
+    "allow-open-editor"
+  ],
+  "remote": {
+    "urls": [
+      "http://localhost:1420",
+      "http://127.0.0.1:1420"
+    ]
+  }
+}

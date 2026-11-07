@@ -1,0 +1,48 @@
+name: Desktop verification
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install Linux prerequisites
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev patchelf
+      - name: Install Rust build tools
+        run: |
+          cargo install --locked trunk --version 0.21.14
+          cargo install --locked wasm-bindgen-cli --version 0.2.126
+      - name: Verify development change detection
+        run: node --test scripts/tests/source-snapshot.test.mjs
+      - name: Verify report engine
+        working-directory: runtime
+        run: |
+          npm ci
+          npm test
+          npm run build
+      - name: Build CSR assets
+        run: node scripts/frontend.mjs build
+      - name: Verify Rust document model
+        run: cargo test -p app
+      - name: Verify native file operations
+        run: cargo test -p intelligent_reports_studio --lib
+      - name: Install browser test dependencies
+        working-directory: end2end
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium webkit
+      - name: Verify browser interactions
+        working-directory: end2end
+        run: npm run test
+        env:
+          REPORTSTUDIO_WEBKIT: "1"
