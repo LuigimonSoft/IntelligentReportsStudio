@@ -4,6 +4,8 @@
 
 Conçu et créé par **Luigimonsoft**.
 
+Créé avec **Tauri 2** pour macOS, Windows et Linux.
+
 **Concevez des rapports à partir de vos données, puis exportez-les en PDF.**
 
 ![Concepteur Report Studio affichant un exemple de facture](assets/readme/designer.png)

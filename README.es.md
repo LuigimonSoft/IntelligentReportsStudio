@@ -4,6 +4,8 @@
 
 Diseñado y creado por **Luigimonsoft**.
 
+Creado con **Tauri 2** para macOS, Windows y Linux.
+
 **Diseña reportes con tus datos y llévalos del lienzo a PDF.**
 
 ![Diseñador de Report Studio con una factura de ejemplo](assets/readme/designer.png)

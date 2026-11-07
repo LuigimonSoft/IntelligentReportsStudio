@@ -4,6 +4,8 @@
 
 Designed and created by **Luigimonsoft**.
 
+Built with **Tauri 2** for macOS, Windows and Linux.
+
 **Design reports around your data, then take them from the canvas to PDF.**
 
 ![Report Studio designer with an example invoice](assets/readme/designer.png)
