@@ -20,6 +20,20 @@ IntelligentReports Studio es un diseñador de reportes de escritorio para crear 
 - **Vista previa y distribución:** revisa páginas, ajusta la vista, imprime y exporta el PDF.
 - **Interfaz adaptable:** disponible en español, inglés y francés, con temas claro y oscuro.
 
+### Modela y proporciona tus datos
+
+En **Modelo de datos**, crea tablas y define sus campos y tipos desde el editor. Organiza las tablas visualmente y conecta columnas para establecer relaciones. También puedes importar definiciones de tablas y registros opcionales desde un archivo JSON, o pegar el JSON en el diálogo de importación.
+
+![Modelo de datos con tablas y campos en Report Studio](assets/readme/data-model.png)
+
+Usa **Registros** para consultar y editar los datos disponibles. Después, en **Diseño**, arrastra campos al reporte o enlázalos con una tabla o sección de detalles. La vista previa utiliza los registros disponibles para completar el reporte. El guardado normal conserva el esquema y el nombre de la fuente, pero excluye los registros; una integración puede proporcionar los datos nuevamente cuando se necesiten.
+
+### Del lienzo a la vista previa
+
+Crea un reporte como en otras herramientas de diseño visual: arrastra campos y elementos a la hoja, muévelos entre secciones y ajusta sus propiedades y estilos. Conecta el diseño a tus datos y abre **Vista previa** para ver las páginas resultantes con los campos, las fórmulas y los registros repetidos resueltos. Así puedes revisar el resultado antes de imprimirlo o exportarlo a PDF.
+
+![Vista previa de la factura de ejemplo generada a partir del diseño](assets/readme/preview.png)
+
 ### Cómo funciona
 
 1. En **Diseño**, organiza la página y sus secciones; agrega elementos y configura su contenido y apariencia.

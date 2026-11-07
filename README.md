@@ -20,6 +20,20 @@ IntelligentReports Studio is a desktop report designer for creating reusable, da
 - **Review and share:** preview paginated output, adjust the view, print and export to PDF.
 - **Work in your language:** use the English, Spanish or French interface and choose a light or dark theme.
 
+### Model and supply your data
+
+In **Data model**, create tables and define their fields and types through the table editor. Arrange tables visually and connect columns to define relationships. You can also import table definitions and optional records from a JSON file, or paste the JSON into the import dialog.
+
+![Data model with tables and fields in Report Studio](assets/readme/data-model.png)
+
+Use **Records** to inspect and edit the available data. Back in **Design**, drag fields onto the report or bind them to a table or detail section. The preview uses the available records to populate the report. Normal template saves retain the schema and source name while excluding records; a host integration can supply data again when needed.
+
+### From canvas to preview
+
+Build a report much like you would in other visual design tools: drag fields and elements onto the page, move them between sections, and adjust their properties and styles. Connect the design to your data, then open **Preview** to see the resulting pages with fields, formulas and repeated records resolved. You can review the output before printing or exporting the PDF.
+
+![Preview of the example invoice generated from the report design](assets/readme/preview.png)
+
 ### How it works
 
 1. **Design** the page and its sections. Drag fields or add elements, then set their content, size and appearance.

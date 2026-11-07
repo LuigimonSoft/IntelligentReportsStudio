@@ -20,6 +20,20 @@ IntelligentReports Studio est un concepteur de rapports de bureau pour créer de
 - **Aperçu et diffusion :** consultez les pages, ajustez la vue, imprimez et exportez en PDF.
 - **Interface adaptable :** disponible en français, anglais et espagnol, avec thèmes clair et sombre.
 
+### Modéliser et fournir les données
+
+Dans **Modèle de données**, créez des tables et définissez leurs champs et leurs types dans l’éditeur. Organisez les tables visuellement et reliez leurs colonnes pour établir des relations. Vous pouvez aussi importer des définitions de tables et des enregistrements facultatifs depuis un fichier JSON, ou coller le JSON dans la boîte d’importation.
+
+![Modèle de données avec des tables et des champs dans Report Studio](assets/readme/data-model.png)
+
+Utilisez **Enregistrements** pour consulter et modifier les données disponibles. Dans **Conception**, faites ensuite glisser les champs vers le rapport ou liez-les à un tableau ou à une section de détails. L’aperçu utilise les enregistrements disponibles pour remplir le rapport. L’enregistrement normal conserve le schéma et le nom de la source, mais exclut les enregistrements ; une intégration peut fournir à nouveau les données au besoin.
+
+### Du canevas à l’aperçu
+
+Créez un rapport comme dans les autres outils de conception visuelle : faites glisser les champs et les éléments sur la page, déplacez-les entre les sections et réglez leurs propriétés et styles. Reliez le modèle à vos données, puis ouvrez **Aperçu** pour voir les pages obtenues avec les champs, formules et enregistrements répétés résolus. Vous pouvez ainsi vérifier le résultat avant de l’imprimer ou de l’exporter en PDF.
+
+![Aperçu de la facture d’exemple générée à partir du modèle](assets/readme/preview.png)
+
 ### Fonctionnement
 
 1. Dans **Conception**, organisez la page et ses sections, ajoutez des éléments et réglez leur contenu et leur apparence.
