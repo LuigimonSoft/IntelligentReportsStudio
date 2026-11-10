@@ -29,7 +29,6 @@ jobs:
         run: |
           npm ci
           npm test
-          npm run build
       - name: Build CSR assets
         run: node scripts/frontend.mjs build
       - name: Verify Rust document model

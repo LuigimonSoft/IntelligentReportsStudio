@@ -8,7 +8,7 @@ import {acquireDevLock} from './dev-lock.mjs';
 const contentTypes={'.html':'text/html; charset=utf-8','.js':'application/javascript','.mjs':'application/javascript','.wasm':'application/wasm','.css':'text/css','.json':'application/json','.png':'image/png','.svg':'image/svg+xml','.ico':'image/x-icon','.woff':'font/woff','.woff2':'font/woff2','.pdf':'application/pdf'};
 
 /** Build with Trunk, but reload only after a real source-content change. */
-export async function serveFrontend(root,env,args,{serve=true}={}){
+export async function serveFrontend(root,env,args,{serve=true,beforeBuild=async()=>{}}={}){
   const buildArgs=[];let port=Number(env.TRUNK_SERVE_PORT||1420),autoreload=true;
   for(let i=0;i<args.length;i++){
     const arg=args[i];
@@ -24,7 +24,9 @@ export async function serveFrontend(root,env,args,{serve=true}={}){
   const release=await acquireDevLock(env.CARGO_TARGET_DIR || path.join(root,'target'));
   let child,stopped=false,timer,server,checking=false,version=0;
   const clients=new Set();
-  const build=()=>new Promise((resolve,reject)=>{
+  const build=async()=>{
+    await beforeBuild();
+    return new Promise((resolve,reject)=>{
     console.log('Report Studio: starting build');
     child=spawn('trunk',['build',...buildArgs],{cwd:root,env,stdio:'inherit'});
     child.once('error',reject);
@@ -33,7 +35,8 @@ export async function serveFrontend(root,env,args,{serve=true}={}){
       if(code===0){console.log('Report Studio: build complete');resolve();}
       else reject(new Error(`Frontend build failed: ${code??signal}`));
     });
-  });
+    });
+  };
   const stop=()=>{
     stopped=true;clearInterval(timer);child?.kill('SIGTERM');
     void release();

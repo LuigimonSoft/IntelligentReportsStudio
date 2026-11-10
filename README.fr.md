@@ -55,6 +55,8 @@ cargo install tauri-cli --version '^2'
 cargo tauri dev
 ```
 
+`cargo tauri dev`, `cargo tauri build` et `node scripts/frontend.mjs` compilent automatiquement le moteur avant Trunk. Si les dépendances verrouillées du moteur manquent ou ont changé, le script exécute `npm ci` dans `runtime/` (la première installation peut nécessiter une connexion). L’application empaquetée fonctionne sans Node.js. Les fichiers générés `chunk-*.js` et `sample-*.js` n’ont pas besoin d’être ajoutés à Git.
+
 Pour créer une version distribuable, exécutez `cargo tauri build`. Sur un disque externe contenant des fichiers auxiliaires `._*`, `node scripts/clean-build.mjs dev` démarre une copie temporaire.
 
 Les modèles JSON enregistrent les définitions des tables et les noms des sources, mais pas leurs données. Les fichiers de récupération sont locaux et peuvent contenir les données de la session.

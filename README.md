@@ -55,6 +55,8 @@ cargo install tauri-cli --version '^2'
 cargo tauri dev
 ```
 
+`cargo tauri dev`, `cargo tauri build`, and `node scripts/frontend.mjs` build the report runtime automatically before Trunk. If locked runtime dependencies are missing or have changed, the script runs `npm ci` in `runtime/` (the first installation may require network access). The packaged application works without Node.js. Generated `chunk-*.js` and `sample-*.js` files do not need to be committed.
+
 On external drives containing macOS `._*` metadata, the project build configuration selects only valid permission and capability files. To create a clean snapshot and run it instead, use `node scripts/clean-build.mjs dev`.
 
 ## Build
@@ -63,7 +65,7 @@ On external drives containing macOS `._*` metadata, the project build configurat
 cargo tauri build
 ```
 
-The browser runtime and third-party assets are included in `public/vendor`. To rebuild the runtime after changing TypeScript code:
+The frontend build generates the browser runtime in `public/vendor`. To rebuild it manually:
 
 ```sh
 cd runtime

@@ -1,6 +1,6 @@
 // Stage a clean source snapshot on the local filesystem before invoking Tauri.
 // This avoids AppleDouble files on external volumes without changing the source.
-import {cp, mkdir, mkdtemp, rm, symlink} from 'node:fs/promises';
+import {cp, mkdir, mkdtemp, rm, symlink, stat} from 'node:fs/promises';
 import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
@@ -17,7 +17,10 @@ await cp(root, stage, {recursive: true, filter: source => {
   return !relative.split(path.sep).some(part => part.startsWith('._') || ['.git', 'target', 'node_modules'].includes(part));
 }});
 for (const directory of ['runtime', 'end2end']) {
-  try { await symlink(path.join(root, directory, 'node_modules'), path.join(stage, directory, 'node_modules'), 'dir'); }
+  try {
+    const dependencies = path.join(root, directory, 'node_modules');
+    if ((await stat(dependencies)).isDirectory()) await symlink(dependencies, path.join(stage, directory, 'node_modules'), 'dir');
+  }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
 }
 console.log(`Clean source snapshot: ${stage}`);

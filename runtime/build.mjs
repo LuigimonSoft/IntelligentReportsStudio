@@ -22,6 +22,7 @@ const result = spawnSync(
     "--bundle",
     "--format=esm",
     "--splitting",
+    "--preserve-symlinks",
     "--target=es2022",
     "--minify",
     "--outdir=../public/vendor",

@@ -756,7 +756,7 @@
       ],
       "format": "esm"
     },
-    "../../../../IA/Configuraciones/intelligent-reports-studio/runtime/node_modules/pdfjs-dist/build/pdf.mjs": {
+    "node_modules/pdfjs-dist/build/pdf.mjs": {
       "bytes": 860818,
       "imports": [],
       "format": "esm"
@@ -830,7 +830,7 @@
           "original": "./charts/renderChart.ts"
         },
         {
-          "path": "../../../../IA/Configuraciones/intelligent-reports-studio/runtime/node_modules/pdfjs-dist/build/pdf.mjs",
+          "path": "node_modules/pdfjs-dist/build/pdf.mjs",
           "kind": "dynamic-import",
           "original": "pdfjs-dist"
         }
@@ -854,7 +854,7 @@
           "kind": "dynamic-import"
         },
         {
-          "path": "../public/vendor/pdf-VEBYVVMG.js",
+          "path": "../public/vendor/pdf-C6VLCPM5.js",
           "kind": "dynamic-import"
         }
       ],
@@ -1093,7 +1093,7 @@
       },
       "bytes": 285123
     },
-    "../public/vendor/pdf-VEBYVVMG.js": {
+    "../public/vendor/pdf-C6VLCPM5.js": {
       "imports": [],
       "exports": [
         "AbortException",
@@ -1159,9 +1159,9 @@
         "updateUrlHash",
         "version"
       ],
-      "entryPoint": "../../../../IA/Configuraciones/intelligent-reports-studio/runtime/node_modules/pdfjs-dist/build/pdf.mjs",
+      "entryPoint": "node_modules/pdfjs-dist/build/pdf.mjs",
       "inputs": {
-        "../../../../IA/Configuraciones/intelligent-reports-studio/runtime/node_modules/pdfjs-dist/build/pdf.mjs": {
+        "node_modules/pdfjs-dist/build/pdf.mjs": {
           "bytesInOutput": 431276
         }
       },

@@ -4,6 +4,7 @@ import {mkdir, lstat, readlink, symlink, rename, mkdtemp} from 'node:fs/promises
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
+import {buildRuntime} from './runtime-build.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const args = process.argv.slice(2);
@@ -37,8 +38,9 @@ if (process.platform === 'darwin') {
 }
 if (['serve', 'watch'].includes(args[0])) {
   const {serveFrontend} = await import('./dev-server.mjs');
-  await serveFrontend(root,env,args.slice(1),{serve:args[0] === 'serve'});
+  await serveFrontend(root,env,args.slice(1),{serve:args[0] === 'serve',beforeBuild:()=>buildRuntime(root,env)});
 } else {
+await buildRuntime(root,env);
 const child = spawn('trunk', args, {cwd:root, env, stdio:'inherit'});
 for (const signal of ['SIGINT','SIGTERM']) process.on(signal, () => child.kill(signal));
 child.on('error', error => {console.error(error.message);process.exitCode=1;});
