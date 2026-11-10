@@ -1,6 +1,7 @@
 import { resourceDiagnostics } from "./engine/resourceDiagnostics.ts";
 import { fieldDiagnostics } from "./engine/fieldDiagnostics.ts";
-import { replaceTableRecords } from "./tabs/data/model/replaceTableRecords.ts";
+import { replaceTableRecordsWithSource } from "./tabs/data/model/replaceTableRecords.ts";
+import { nestedSourceRoot } from "./tabs/data/model/nestedReload.ts";
 import { alignElements } from "./domain/report/alignElements.ts";
 import { importTables } from "./tabs/data/model/importTables.ts";
 import { tableDefinition } from "./tabs/data/model/tableDefinition.ts";
@@ -348,11 +349,12 @@ export async function act(request: Request): Promise<any> {
     case "reload-table-data": {
       const table = String(args.table ?? "");
       if (!p.datasets.some(dataset => dataset.id === table)) throw new Error("Unknown data table.");
+      const sourceTable = nestedSourceRoot(p, table) ?? table;
       const source = request.action === "load-table-data"
-        ? await native("choose_table_data", {table}) : await native("reload_table_data", {table});
+        ? await native("choose_table_data", {table:sourceTable}) : await native("reload_table_data", {table:sourceTable});
       if (source === null) return {message:"Data import cancelled"};
-      const project = replaceTableRecords(p, table, source);
-      return {project, activeTable:table, dataSourceTable:table,
+      const loaded = replaceTableRecordsWithSource(p, table, source);
+      return {project:loaded.project, activeTable:table, dataSourceTable:sourceTable, dataSourceTables:loaded.tables,
         pendingDataSource:request.action === "load-table-data", message:"Table data updated"};
     }
     case "import-tables":

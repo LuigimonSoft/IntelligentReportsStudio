@@ -98,6 +98,8 @@ Saved report JSON uses `schemaVersion: 1`. Older templates without this property
 
 When importing JSON, enable **Expand nested JSON into related tables** to turn a path such as `customer.name` into an editable column such as `customer_name`, and `items[].price` into a column in a related child table. The schema retains the original path as `sourcePath`; report expressions use the generated column name. Arrays must contain objects. Empty arrays produce an empty related table with generated key columns. Data is session-only.
 
+After loading a JSON data file for any table in an expanded source, **Reload data** updates the entire related group atomically, including regenerated parent and child keys. The schema stores the group and original array paths in `schema.nestedSource`, while records and the selected file path are not saved in the report. A newly introduced field or array requires a new import; reload only fills the existing schema. Generated keys depend on record order, so relationships from those keys to tables outside the imported group must be removed before reloading. For older imports, the existing structure must be identifiable from the original fields and relationships.
+
 In **Design → Available fields → Example templates**, choose an invoice, quotation, product list or sales report. Examples use editable session data; saved templates do not include table records.
 
 Root detail sections and the report footer support `pageBreakBefore: true` to start on a new page. On a repeating detail, the break applies to each record; repeating group headers move with the content. Page headers, page footers, the report header, and nested sections do not support this setting.

@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-clear-table-data-sources"
+description = "Allows clear table data sources."
+commands.allow = ["clear_table_data_sources"]

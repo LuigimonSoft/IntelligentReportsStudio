@@ -28,7 +28,11 @@
     "allow-read-clipboard",
     "allow-print-report",
     "allow-toggle-fullscreen",
-    "allow-open-editor"
+    "allow-open-editor",
+    "allow-choose-table-data",
+    "allow-reload-table-data",
+    "allow-accept-table-data",
+    "allow-clear-table-data-sources"
   ],
   "remote": {
     "urls": [

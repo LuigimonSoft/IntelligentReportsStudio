@@ -8,7 +8,8 @@ export type Field = {
   /** Original JSON property path for a flattened imported field. */
   sourcePath?: string;
 };
-export type Dataset = { id: string; name: string; data: DataRow[]; schema: { fields: Field[] } };
+export type NestedSource = { group: string; arrayPath: string; rootProperty?: string; idField?: string; parentField?: string };
+export type Dataset = { id: string; name: string; data: DataRow[]; schema: { fields: Field[]; nestedSource?: NestedSource } };
 export type FontFamily =
   | 'sans-serif'
   | 'serif'

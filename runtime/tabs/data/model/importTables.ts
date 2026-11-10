@@ -13,9 +13,9 @@ export function importTables(project: Project, input: string, recognizeDates = f
   const definitions = (items: any[]) => items.length > 0 && items.every(item => item && typeof item === 'object' && typeof item.name === 'string' && (Array.isArray(item.schema?.fields) || Array.isArray(item.data)));
   let incoming: any[] | null = null;
   const generatedRelations: NonNullable<Project['relations']> = [];
-  const infer = (name: string, rows: unknown[]) => {
+  const infer = (name: string, rows: unknown[], rootProperty?: string) => {
     if (!expandNested) return [inferTable(name, rows, recognizeDates)];
-    const result = expandNestedJson(name, rows, recognizeDates);
+    const result = expandNestedJson(name, rows, recognizeDates, rootProperty);
     generatedRelations.push(...result.relations);
     return result.tables;
   };
@@ -26,7 +26,7 @@ export function importTables(project: Project, input: string, recognizeDates = f
     else if (typeof parsed.name === 'string' && (parsed.schema || Array.isArray(parsed.data))) incoming = [parsed];
     else {
       const entries = Object.entries(parsed);
-      if (entries.length && entries.every(([, value]) => Array.isArray(value))) incoming = entries.flatMap(([name, rows]) => infer(name, rows as unknown[]));
+      if (entries.length && entries.every(([, value]) => Array.isArray(value))) incoming = entries.flatMap(([name, rows]) => infer(name, rows as unknown[], name));
       else if (expandNested) incoming = infer("Records", [parsed]);
     }
   }

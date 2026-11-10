@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-choose-table-data"
+description = "Allows choose table data."
+commands.allow = ["choose_table_data"]

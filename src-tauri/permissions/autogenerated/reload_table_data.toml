@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-reload-table-data"
+description = "Allows reload table data."
+commands.allow = ["reload_table_data"]

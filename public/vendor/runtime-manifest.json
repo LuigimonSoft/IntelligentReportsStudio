@@ -11,7 +11,7 @@
       "format": "esm"
     },
     "engine/types.ts": {
-      "bytes": 8178,
+      "bytes": 8335,
       "imports": [],
       "format": "esm"
     },
@@ -85,7 +85,7 @@
       "format": "esm"
     },
     "engine/validation.ts": {
-      "bytes": 23370,
+      "bytes": 24251,
       "imports": [
         {
           "path": "engine/charts.ts",
@@ -234,7 +234,7 @@
       "format": "esm"
     },
     "tabs/data/model/nestedJson.ts": {
-      "bytes": 4738,
+      "bytes": 4954,
       "imports": [
         {
           "path": "engine/index.ts",
@@ -250,7 +250,7 @@
       "format": "esm"
     },
     "tabs/data/model/tableDefinition.ts": {
-      "bytes": 2323,
+      "bytes": 2844,
       "imports": [
         {
           "path": "engine/sqlTypes.ts",
@@ -261,7 +261,7 @@
       "format": "esm"
     },
     "tabs/data/model/importTables.ts": {
-      "bytes": 3298,
+      "bytes": 3341,
       "imports": [
         {
           "path": "tabs/data/model/nestedJson.ts",
@@ -393,8 +393,19 @@
       ],
       "format": "esm"
     },
+    "tabs/data/model/nestedReload.ts": {
+      "bytes": 8819,
+      "imports": [
+        {
+          "path": "tabs/data/model/nestedJson.ts",
+          "kind": "import-statement",
+          "original": "./nestedJson.ts"
+        }
+      ],
+      "format": "esm"
+    },
     "tabs/data/model/replaceTableRecords.ts": {
-      "bytes": 1412,
+      "bytes": 1877,
       "imports": [
         {
           "path": "engine/validation.ts",
@@ -405,6 +416,11 @@
           "path": "tabs/data/model/jsonSyntax.ts",
           "kind": "import-statement",
           "original": "./jsonSyntax.ts"
+        },
+        {
+          "path": "tabs/data/model/nestedReload.ts",
+          "kind": "import-statement",
+          "original": "./nestedReload.ts"
         }
       ],
       "format": "esm"
@@ -579,7 +595,7 @@
       "format": "esm"
     },
     "core.ts": {
-      "bytes": 43999,
+      "bytes": 44228,
       "imports": [
         {
           "path": "engine/resourceDiagnostics.ts",
@@ -595,6 +611,11 @@
           "path": "tabs/data/model/replaceTableRecords.ts",
           "kind": "import-statement",
           "original": "./tabs/data/model/replaceTableRecords.ts"
+        },
+        {
+          "path": "tabs/data/model/nestedReload.ts",
+          "kind": "import-statement",
+          "original": "./tabs/data/model/nestedReload.ts"
         },
         {
           "path": "domain/report/alignElements.ts",
@@ -842,7 +863,7 @@
     "../public/vendor/reportstudio-runtime.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-FTC2M6DH.js",
+          "path": "../public/vendor/chunk-ZTQQABIW.js",
           "kind": "import-statement"
         },
         {
@@ -878,10 +899,10 @@
       },
       "bytes": 524141
     },
-    "../public/vendor/sample-RMCCRBQZ.js": {
+    "../public/vendor/sample-HIMDMQA5.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-FTC2M6DH.js",
+          "path": "../public/vendor/chunk-ZTQQABIW.js",
           "kind": "import-statement"
         }
       ],
@@ -911,10 +932,10 @@
       },
       "bytes": 44126
     },
-    "../public/vendor/chunk-FTC2M6DH.js": {
+    "../public/vendor/chunk-ZTQQABIW.js": {
       "imports": [
         {
-          "path": "../public/vendor/sample-RMCCRBQZ.js",
+          "path": "../public/vendor/sample-HIMDMQA5.js",
           "kind": "dynamic-import"
         }
       ],
@@ -966,7 +987,7 @@
           "bytesInOutput": 846
         },
         "engine/validation.ts": {
-          "bytesInOutput": 14146
+          "bytesInOutput": 14753
         },
         "engine/index.ts": {
           "bytesInOutput": 0
@@ -981,22 +1002,22 @@
           "bytesInOutput": 582
         },
         "engine/layout.ts": {
-          "bytesInOutput": 8360
+          "bytesInOutput": 8353
         },
         "engine/relations.ts": {
           "bytesInOutput": 686
         },
         "tabs/data/model/tableDefinition.ts": {
-          "bytesInOutput": 1406
+          "bytesInOutput": 1745
         },
         "tabs/data/model/inferTables.ts": {
           "bytesInOutput": 1301
         },
         "tabs/data/model/nestedJson.ts": {
-          "bytesInOutput": 2304
+          "bytesInOutput": 2430
         },
         "tabs/data/model/importTables.ts": {
-          "bytesInOutput": 1582
+          "bytesInOutput": 1588
         },
         "tabs/data/records/recordsQuery.ts": {
           "bytesInOutput": 2710
@@ -1013,8 +1034,11 @@
         "engine/fieldDiagnostics.ts": {
           "bytesInOutput": 1180
         },
+        "tabs/data/model/nestedReload.ts": {
+          "bytesInOutput": 4887
+        },
         "tabs/data/model/replaceTableRecords.ts": {
-          "bytesInOutput": 585
+          "bytesInOutput": 668
         },
         "domain/report/alignElements.ts": {
           "bytesInOutput": 1245
@@ -1050,10 +1074,10 @@
           "bytesInOutput": 2034
         },
         "core.ts": {
-          "bytesInOutput": 23361
+          "bytesInOutput": 23424
         }
       },
-      "bytes": 91035
+      "bytes": 97139
     },
     "../public/vendor/renderChart-7BOQJLCP.js": {
       "imports": [

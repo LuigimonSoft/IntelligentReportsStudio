@@ -318,6 +318,17 @@ export function validateDatasets(input: unknown): Dataset[] {
       }
       names.add(name);
     }
+    if (schema.nestedSource !== undefined) {
+      const source = object(schema.nestedSource);
+      if (!text(source.group, 'Nested source group', 100)) throw new Error('Invalid nested source group.');
+      text(source.arrayPath, 'Nested array path', 200);
+      if (source.rootProperty !== undefined && !text(source.rootProperty, 'Nested root property', 100)) throw new Error('Invalid nested root property.');
+      for (const key of ['idField', 'parentField']) if (source[key] !== undefined) {
+        const name = text(source[key], 'Nested key', 100);
+        if (!schema.fields.some(value => { const field = object(value); return field.name === name && field.type === 'number' && field.sourcePath === undefined; })) throw new Error('Invalid nested key.');
+      }
+      if (!!source.arrayPath !== !!source.parentField) throw new Error('Invalid nested source parent.');
+    }
     if (!Array.isArray(ds.data) || ds.data.length > 10000)
       throw new Error('Maximum 10000 rows per source.');
     for (const value of ds.data) {

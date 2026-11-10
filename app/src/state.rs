@@ -445,7 +445,12 @@ impl Studio {
                                     }
                                 }
                                 if let Some(id) = result["dataSourceTable"].as_str() {
-                                    self.data_file_tables.update(|ids| if !ids.iter().any(|item| item == id) { ids.push(id.to_owned()) });
+                                    let tables = result["dataSourceTables"].as_array().cloned().unwrap_or_default();
+                                    self.data_file_tables.update(|ids| {
+                                        for table in tables.iter().filter_map(|value| value.as_str()).chain(std::iter::once(id)) {
+                                            if !ids.iter().any(|item| item == table) { ids.push(table.to_owned()); }
+                                        }
+                                    });
                                     self.record_refresh.update(|version| *version += 1);
                                 }
                             }

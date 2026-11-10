@@ -18,10 +18,13 @@ export function tableDefinition(project: Project, draft: Dataset, editing: boole
   error ||= 'Remove relationships using a column before deleting it.';
  if(original && project.report.details.some(detail=>detail.dataset===original.id && [detail.groupBy,...(detail.groups ?? []).map(group=>group.field)].some(field=>!!field && !mapping.has(field))))
   error ||= 'Remove grouping before deleting its column.';
+ const source=original?.schema.nestedSource ?? draft.schema?.nestedSource;
+ const nestedSource=source ? {...source, ...(source.idField ? {idField:mapping.get(source.idField) ?? source.idField} : {}), ...(source.parentField ? {parentField:mapping.get(source.parentField) ?? source.parentField} : {})} : undefined;
+ if(original && source && [source.idField,source.parentField].some(key=>key && !mapping.has(key))) error ||= 'Remove relationships using a column before deleting it.';
  const cleaned=fields.map(field=>{const {_sourceName,...clean}=field as any;return clean;});
  const data=original?.data.map(row=>Object.fromEntries(fields.map(field=>{
   const key=(field as any)._sourceName ?? field.name;
   return [field.name,Object.hasOwn(row,key)?row[key]:field.type==='number'?0:field.type==='boolean'?false:''];
  }))) ?? [];
- return {error,table:{...draft,id:original?.id ?? name,name,schema:{...draft.schema,fields:cleaned},data},mapping};
+ return {error,table:{...draft,id:original?.id ?? name,name,schema:{...draft.schema,fields:cleaned,...(nestedSource ? {nestedSource} : {})},data},mapping};
 }

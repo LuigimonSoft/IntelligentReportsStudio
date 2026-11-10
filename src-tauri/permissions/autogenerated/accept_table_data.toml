@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-accept-table-data"
+description = "Allows accept table data."
+commands.allow = ["accept_table_data"]

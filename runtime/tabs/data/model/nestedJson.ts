@@ -6,7 +6,7 @@ type Shape = 'object' | 'array' | 'value';
 export type NestedImport = { tables: Dataset[]; relations: TableRelation[] };
 
 /** Turn nested objects into columns and arrays of objects into related child tables. */
-export function expandNestedJson(name: string, records: unknown[], recognizeDates: boolean): NestedImport {
+export function expandNestedJson(name: string, records: unknown[], recognizeDates: boolean, rootProperty?: string): NestedImport {
   const result: NestedImport = { tables: [], relations: [] };
   if (!records.length) throw new Error('An empty array needs an explicit table schema.');
   const visit = (tableName: string, input: unknown[], prefix: string, parent?: { table: string; key: string; ids: number[] }, depth = 0): void => {
@@ -64,6 +64,7 @@ export function expandNestedJson(name: string, records: unknown[], recognizeDate
     if (flat.length) table = inferTable(tableName, flat, recognizeDates);
     else table = {id:'',name:tableName,schema:{fields:[{name:id,type:'number'},{name:parentId,type:'number'}]},data:[]};
     table.schema.fields = table.schema.fields.map(field => paths.has(field.name) ? {...field,sourcePath:paths.get(field.name)!} : field);
+    table.schema.nestedSource = {group:name, arrayPath:prefix, ...(rootProperty !== undefined ? {rootProperty} : {}), ...(id ? {idField:id} : {}), ...(parentId ? {parentField:parentId} : {})};
     result.tables.push(table);
     if (parent) result.relations.push({id:uid('relationship'),from:{dataset:parent.table,field:parent.key},to:{dataset:tableName,field:parentId},cardinality:'1:n'});
     for (const [path, child] of children) {
