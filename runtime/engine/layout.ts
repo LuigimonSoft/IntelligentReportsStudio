@@ -75,7 +75,7 @@ type Placement = { block: Block; y: number };
 export function compileReport(
   reportInput: ReportDefinition,
   datasetsInput: Dataset[],
-  options: { now?: Date; measureText?: MeasureText; sectionHeights?: Record<string, number> } = {},
+  options: { now?: Date; measureText?: MeasureText; sectionHeights?: Record<string, number>; parameters?: ExpressionContext['parameters'] } = {},
 ): ReportLayout {
   const { report, datasets } = validateProject({
     version: 1,
@@ -94,6 +94,7 @@ export function compileReport(
     row,
     rows,
     formulas: report.formulas,
+    parameters: options.parameters,
     rowNumber,
     rowCount: datasets.find((source) => source.id === dataset)?.data.length ?? rows.length,
     sources: Object.fromEntries(
@@ -104,7 +105,12 @@ export function compileReport(
   });
   const sectionLayout = options.sectionHeights !== undefined;
   const detailIds = new Set(report.details.map(detail => detail.band.id));
+  // Messages are literal user text, not field or formula expressions.
+  const literalTextIds = new Set<string>();
+  const elementText = (element: import('./types.ts').ReportElement, ctx: ExpressionContext) =>
+    literalTextIds.has(element.id) ? element.text : renderText(element.text, ctx, report, element.style);
   function block(band: Band, ctx = context()): Block {
+    band = { ...band, elements: band.elements.filter(element => element.visible !== false) };
     // Page-dependent rules reserve their area during pagination and resolve on each page.
     const pageRule = (source?: string, visited = new Set<string>()): boolean => {
       if (/\bPAGE_(NUMBER|COUNT)\b/.test(source ?? '')) return true;
@@ -193,7 +199,7 @@ export function compileReport(
     for (const el of band.elements) {
       let elementHeight = el.height;
       if (el.type === 'text') {
-        const text = renderText(el.text, ctx, report, el.style);
+        const text = elementText(el, ctx);
         const lines = wrapText(text, el.width, el.style, measure);
         elementHeight = Math.max(el.height, lines.length * lineHeight(el.style));
       }
@@ -261,7 +267,18 @@ export function compileReport(
       throw new Error(
         `Section ${item.band.name} is too tall for a page. Reduce its height or text.`,
       );
-    if (y + item.height > endY + 1e-8) {
+    // Carry freshly placed group headers with their first row instead of leaving
+    // an orphaned header on the previous page when a manual break is requested.
+    let forceBreak = false;
+    if (item.visible && item.height > 1e-8 && item.band.pageBreakBefore) {
+      let carry = 0;
+      while (carry < repeated.length && carry < current().length &&
+        current()[current().length - 1 - carry].block === repeated[repeated.length - 1 - carry]) carry++;
+      const beforeHeaders = current().slice(0, current().length - carry);
+      forceBreak = beforeHeaders.some(placement => placement.block.visible && placement.block.height > 1e-8);
+      if (forceBreak && carry) current().splice(current().length - carry, carry);
+    }
+    if (forceBreak || y + item.height > endY + 1e-8) {
       newPage();
       for (const header of repeated) {
         current().push({ block: header, y });
@@ -282,6 +299,21 @@ export function compileReport(
   for (const detail of report.details) {
     // Unbound sections render their static design once, with no placeholder dataset.
     const rows = detail.dataset ? datasets.find((ds) => ds.id === detail.dataset)!.data : [{}];
+    if (detail.dataset && rows.length === 0 && detail.emptyMessage?.trim()) {
+      const ctx = context({}, rows, detail.dataset);
+      const header = detail.groupHeader ? block(detail.groupHeader, ctx) : undefined;
+      if (header) append(header);
+      const text = makeElement('text', {
+        text: detail.emptyMessage,
+        x: 0, y: 0, width: report.page.width - margin.left - margin.right, height: 0.2,
+        style: { ...defaultTextStyle, wrap: true },
+      });
+      literalTextIds.add(text.id);
+      const emptyBand = { ...detail.band, elements: [text], sections: [] };
+      append(block(emptyBand, ctx), header);
+      if (detail.groupFooter) append(block(detail.groupFooter, ctx));
+      continue;
+    }
     if (detail.groups?.length) {
       const ctx = context(rows[0] ?? {}, rows, detail.dataset);
       const legacy = detail.groupBy ? [{ field: detail.groupBy, direction: detail.sortDirection ?? 'asc', header: detail.groupHeader, footer: detail.groupFooter }] : [];
@@ -366,6 +398,8 @@ export function compileReport(
     }
   }
   if (reportFooter) {
+    if (sectionLayout && reportFooter.visible && reportFooter.height > 1e-8 &&
+      reportFooter.band.pageBreakBefore && current().some(placement => placement.block.visible && placement.block.height > 1e-8)) newPage();
     if (sectionLayout && reportFooter.height > capacity + 1e-8)
       throw new Error('The report footer is too tall for a page.');
     if (sectionLayout && y + reportFooter.height > endY + 1e-8) newPage();
@@ -384,7 +418,7 @@ export function compileReport(
     const appearance = sectionAppearance(block.band, ctx);
     if (!appearance.visible) return [];
     const elements = block.band.elements.map((el) => {
-      const text = el.type === 'text' ? renderText(el.text, ctx, report, el.style) : '';
+      const text = el.type === 'text' ? elementText(el, ctx) : '';
       const lines = el.type === 'text' ? wrapText(text, el.width, el.style, measure) : [];
       // Page counters are resolved after pagination; reject reflow instead of clipping content.
       if (
@@ -464,5 +498,5 @@ export function compileReport(
       elements: [...items, ...fixed].flatMap((item) => renderPlacement(item, pageNumber)),
     };
   });
-  return { width: report.page.width, height: report.page.height, margins: { ...margin }, title: report.title, pages };
+  return { width: report.page.width, height: report.page.height, background: report.page.background, margins: { ...margin }, title: report.title, pages };
 }

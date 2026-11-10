@@ -47,6 +47,8 @@ pub fn PropertiesSidebar() -> impl IntoView {
                     b["readOnly"] = json!(false);
                 }
                 let inherited = read_only(&unlocked, &text(&band, "id"));
+                let selected_element = s.selected_element();
+                let element_locked = selected_element.as_ref().is_some_and(|e| e["locked"] == true);
                 let options = bands(&report)
                     .iter()
                     .map(|b| (text(b, "id"), s.t(&text(b, "name"))))
@@ -86,7 +88,15 @@ pub fn PropertiesSidebar() -> impl IntoView {
                                 }
                             })}
                     </section>
-                    <fieldset class="inspector-contents" disabled=locked>
+                    {selected_element.map(|element| view! {
+                        <section class="inspector-section element-protection">
+                            <CheckField label="Lock element" checked=element_locked disabled=locked
+                                on_change=move |v: bool| s.command("element-flags", json!({"locked":v})) />
+                            <CheckField label="Element visible" checked=element["visible"] != false disabled=locked || element_locked
+                                on_change=move |v: bool| s.command("element-flags", json!({"visible":v})) />
+                        </section>
+                    })}
+                    <fieldset class="inspector-contents" disabled=locked || element_locked>
                         {if let Some(element) = s.selected_element() {
                             if element["table"].is_object() {
                                 view! { <tables::TableProperties element /> }.into_any()

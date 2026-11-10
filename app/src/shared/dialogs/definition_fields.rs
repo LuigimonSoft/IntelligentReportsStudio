@@ -296,6 +296,16 @@ pub fn FormulaEditor() -> impl IntoView {
                     })
                     .collect_view()}
                 <details>
+                    <summary>{move || s.t("Parameters")}</summary>
+                    {array(&s.project.get_untracked()["parameters"]).into_iter().map(|parameter| {
+                        let id = text(&parameter, "id");
+                        let name = text(&parameter, "label");
+                        let token = format!("PARAM({})", serde_json::to_string(&id).unwrap_or_default());
+                        let filter = name.to_lowercase();
+                        view! { <button class="formula-token" hidden=move || !filter.contains(&search.get()) on:click=move |_| insert_token(&token)>{name}</button> }
+                    }).collect_view()}
+                </details>
+                <details>
                     <summary>{move || s.t("Special fields")}</summary>
                     {[
                         "ROW_NUMBER",

@@ -29,6 +29,10 @@ pub fn RecordsToolbar() -> impl IntoView {
     view! {
         <div class="records-toolbar" role="toolbar" aria-label="Record tools">
             <Button label="Run query" primary=true on_press=move |_| s.record_refresh.update(|v| *v += 1) />
+            <Button label="Load JSON data" icon="upload" disabled=Signal::derive(move || s.table.get().is_empty())
+                on_press=move |_| s.command("load-table-data", serde_json::Value::Null) />
+            <Button label="Reload JSON data" icon="refresh" disabled=Signal::derive(move || !s.data_file_tables.get().contains(&s.table.get()))
+                on_press=move |_| s.command("reload-table-data", serde_json::Value::Null) />
             <Button
                 label="Edit query"
                 on_press=move |_| {

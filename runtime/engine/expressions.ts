@@ -251,6 +251,11 @@ function evaluate(node: Node, context: ExpressionContext): unknown {
         if (node.args.length !== count)
           throw new Error(`${node.name} requires ${count} arguments.`);
       };
+      if (node.name === 'PARAM') {
+        arity(1);
+        const id = String(evaluate(node.args[0], context));
+        return context.parameters && Object.hasOwn(context.parameters, id) ? context.parameters[id] : '';
+      }
       if (node.name === 'MOD') {
         arity(2);
         const divisor = numeric(evaluate(node.args[1], context));
@@ -350,6 +355,7 @@ export function validateExpression(source: string): void {
     'DATE',
     'FORMAT',
     'FIELD',
+    'PARAM',
   ]);
   function check(node: Node): void {
     if (node.kind === 'call') {
@@ -363,6 +369,7 @@ export function validateExpression(source: string): void {
         DATE: 0,
         FORMAT: 2,
         FIELD: 2,
+        PARAM: 1,
       };
       if (node.name in counts && node.args.length !== counts[node.name])
         throw new Error(`${node.name} requires ${counts[node.name]} arguments.`);
@@ -375,6 +382,24 @@ export function validateExpression(source: string): void {
     } else if (node.kind === 'unary') check(node.value);
   }
   check(parse(source.trim().replace(/^=/, '')));
+}
+/** Extract static field references using the same parser used to evaluate expressions. */
+export function expressionFieldReferences(source: string): string[] {
+  const result: string[] = [];
+  function visit(node: Node): void {
+    if (node.kind === 'field') result.push(node.name);
+    else if (node.kind === 'binary') { visit(node.left); visit(node.right); }
+    else if (node.kind === 'unary') visit(node.value);
+    else if (node.kind === 'call') {
+      if (node.name === 'FIELD' && node.args.length === 2 && node.args.every(arg => arg.kind === 'literal' && typeof arg.value === 'string')) {
+        const [table, field] = node.args as [{ kind: 'literal'; value: string }, { kind: 'literal'; value: string }];
+        result.push(`${table.value}.${field.value}`);
+      }
+      node.args.forEach(visit);
+    }
+  }
+  visit(parse(source.trim().replace(/^=/, '')));
+  return result;
 }
 export function evaluateExpression(source: string, context: ExpressionContext): unknown {
   source = source.trim().replace(/^=/, '');
@@ -402,6 +427,13 @@ export function renderText(
         }).format(value);
       if (style.format === 'number')
         return new Intl.NumberFormat(report.locale, { maximumFractionDigits: 2 }).format(value);
+      if (style.format === 'percent')
+        return new Intl.NumberFormat(report.locale, { style: 'percent', maximumFractionDigits: 2 }).format(value);
+    }
+    if (style.format === 'date' && typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      const date = new Date(`${value}T00:00:00Z`);
+      if (Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value)
+        return new Intl.DateTimeFormat(report.locale, { timeZone: 'UTC' }).format(date);
     }
     return value instanceof Date ? value.toLocaleDateString(report.locale) : String(value ?? '');
   });

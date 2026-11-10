@@ -2,6 +2,26 @@ use super::fields::*;
 use crate::{domain::*, shared::controls::Button, state::studio};
 use leptos::prelude::*;
 use serde_json::{json, Value};
+fn measure_label(kind: &str, scale: f64) -> &'static str {
+    match (kind, scale) {
+        ("width", 25.4) => "Table width (mm)",
+        ("width", 72.0) => "Table width (pt)",
+        ("width", 1.0) => "Table width (inches)",
+        ("width", _) => "Table width (cm)",
+        ("row", 25.4) => "Row height (mm)",
+        ("row", 72.0) => "Row height (pt)",
+        ("row", 1.0) => "Row height (inches)",
+        ("row", _) => "Row height (cm)",
+        ("column", 25.4) => "Column width (mm)",
+        ("column", 72.0) => "Column width (pt)",
+        ("column", 1.0) => "Column width (inches)",
+        ("column", _) => "Column width (cm)",
+        (_, 25.4) => "Selected row height (mm)",
+        (_, 72.0) => "Selected row height (pt)",
+        (_, 1.0) => "Selected row height (inches)",
+        _ => "Selected row height (cm)",
+    }
+}
 fn current() -> Value {
     studio().selected_element().unwrap_or_default()
 }
@@ -218,14 +238,14 @@ pub fn TableProperties(element: Value) -> impl IntoView {
                     on_change=move |v: f64| settings(json!({"columns":v.round()}))
                 />
                 <MetricField
-                    label=if unit == 1.0 { "Table width (inches)" } else { "Table width (cm)" }
+                    label=measure_label("width", unit)
                     value=number(&table, "width") * unit
                     min=0.12 * columns as f64 * unit
                     max=maximum_width * unit
                     on_change=move |v: f64| settings(json!({"width":v/unit}))
                 />
                 <MetricField
-                    label=if unit == 1.0 { "Row height (inches)" } else { "Row height (cm)" }
+                    label=measure_label("row", unit)
                     value=number(&table, "rowHeight") * unit
                     min=0.15 * unit
                     max=unit
@@ -290,11 +310,7 @@ pub fn TableProperties(element: Value) -> impl IntoView {
                 .then(|| {
                     view! {
                         <MetricField
-                            label=if unit == 1.0 {
-                                "Column width (inches)"
-                            } else {
-                                "Column width (cm)"
-                            }
+                            label=measure_label("column", unit)
                             value=table["columnWidths"][col]
                                 .as_f64()
                                 .unwrap_or(number(&table, "width") / columns.max(1) as f64) * unit
@@ -313,11 +329,7 @@ pub fn TableProperties(element: Value) -> impl IntoView {
                 .then(|| {
                     view! {
                         <MetricField
-                            label=if unit == 1.0 {
-                                "Selected row height (inches)"
-                            } else {
-                                "Selected row height (cm)"
-                            }
+                            label=measure_label("selected-row", unit)
                             value=table["rowHeights"][row]
                                 .as_f64()
                                 .unwrap_or(number(&table, "rowHeight")) * unit
@@ -359,10 +371,13 @@ pub fn TableProperties(element: Value) -> impl IntoView {
                         />
                     }
                 })}
+            <SelectField label="Vertical alignment" value=if a["verticalAlign"].is_string() { text(&a,"verticalAlign") } else { "top".into() }
+                options=options(&[("top", "Top"), ("middle", "Middle"), ("bottom", "Bottom")])
+                on_change=move |value: String| style(json!({"verticalAlign":value})) />
             <SelectField
                 label="Value format"
                 value=text(&a, "format")
-                options=options(&[("text", "Text"), ("number", "Number"), ("currency", "Currency")])
+                options=options(&[("text", "Text"), ("number", "Number"), ("currency", "Currency"), ("percent", "Percentage"), ("date", "Date")])
                 on_change=move |v: String| style(json!({"format":v}))
             />
             <div class="field-grid">
@@ -371,6 +386,12 @@ pub fn TableProperties(element: Value) -> impl IntoView {
                     checked=a["bold"] == true
                     on_change=move |v: bool| style(json!({"bold":v}))
                 />
+                <Button label="Underline"
+                    active=Signal::derive(move || s.selected_element().is_some_and(|element| appearance(&element)["underline"] == true))
+                    on_press=move |_| {
+                        let enabled = s.selected_element().is_some_and(|element| appearance(&element)["underline"] == true);
+                        style(json!({"underline":!enabled}));
+                    } />
                 <CheckField
                     label="Italic"
                     checked=a["italic"] == true

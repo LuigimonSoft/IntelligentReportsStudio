@@ -13,8 +13,8 @@ pub fn DataSourcesSidebar() -> impl IntoView {
                     s.project
                         .get()["dataSource"]["name"]
                         .as_str()
-                        .unwrap_or("No data source")
-                        .to_owned()
+                        .map(str::to_owned)
+                        .unwrap_or_else(|| s.t("No data source"))
                 }}
             </p>
             <input

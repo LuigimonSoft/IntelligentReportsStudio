@@ -76,7 +76,7 @@ pub fn read_only(report: &Value, id: &str) -> bool {
 }
 pub fn blank_project() -> Value {
     let band = |id: &str, name: &str, height: f64| json!({"id":id,"name":name,"height":height,"elements":[],"visible":true});
-    json!({"version":1,"datasets":[],"report":{"version":1,"id":"new-report","title":"New report","locale":"en-US","currency":"MXN",
+    json!({"version":1,"schemaVersion":1,"datasets":[],"report":{"version":1,"id":"new-report","title":"New report","locale":"en-US","currency":"MXN",
       "page":{"width":210.0/25.4,"height":297.0/25.4,"margins":{"top":0.4,"left":0.4,"right":0.4,"bottom":0.4}},
       "header":band("report-header","Report header",0.7),"pageHeader":band("page-header","Page header",0.6),
       "details":[{"id":"detail","dataset":"","groupHeader":band("details-header","Details header",0.4),"band":band("details","Details",0.4),"groupFooter":band("details-footer","Details footer",0.5)}],
@@ -101,7 +101,7 @@ pub fn example_project() -> Value {
 }
 /// Explicit whitelist prevents credentials and runtime rows reaching disk.
 pub fn template_only(project: &Value) -> Value {
-    let mut result = json!({"version":1,"report":project["report"].clone(),"datasets":[]});
+    let mut result = json!({"version":1,"schemaVersion":1,"report":project["report"].clone(),"datasets":[]});
     result["datasets"] = Value::Array(
         array(&project["datasets"])
             .into_iter()

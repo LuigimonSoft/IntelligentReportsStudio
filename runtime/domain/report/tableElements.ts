@@ -80,6 +80,8 @@ export function createTable(
             ...defaultTextStyle,
             bold: appearance.bold ?? header,
             italic: appearance.italic ?? false,
+            underline: appearance.underline ?? false,
+            verticalAlign: appearance.verticalAlign ?? 'top',
             ...(appearance.fontFamily ? { fontFamily: appearance.fontFamily } : {}),
             fontsize: appearance.fontsize ?? defaultTextStyle.fontsize,
             align: appearance.align,

@@ -94,7 +94,7 @@ pub fn ElementProperties(element: Value) -> impl IntoView {
                 _ => ().into_any(),
             }}
         </InspectorSection>
-        <InspectorSection title="Position and size" hint="inches">
+        <InspectorSection title="Position and size" hint=match s.units.get().as_str() { "mm" => "mm", "cm" => "cm", "pt" => "pt", _ => "inches" }>
             <div class="field-grid">
                 {[("X", "x"), ("Y", "y"), ("Width", "width"), ("Height", "height")]
                     .into_iter()
@@ -102,20 +102,20 @@ pub fn ElementProperties(element: Value) -> impl IntoView {
                         view! {
                             <MetricField
                                 label
-                                value=s.selected_metric(key)
-                                max=match key {
+                                value=s.selected_metric(key) * s.measurement_scale()
+                                max=(match key {
                                     "x" => (maximum_width - s.selected_metric("width")).max(0.0),
                                     "width" => (maximum_width - s.selected_metric("x")).max(0.1),
                                     _ => 30.0,
-                                }
-                                min=if key == "width" {
+                                }) * s.measurement_scale()
+                                min=(if key == "width" {
                                     0.1
                                 } else if key == "height" {
                                     0.01
                                 } else {
                                     0.0
-                                }
-                                on_change=move |v: f64| s.patch_element(key, json!(v))
+                                }) * s.measurement_scale()
+                                on_change=move |v: f64| s.patch_element(key, json!(v / s.measurement_scale()))
                             />
                         }
                     })
@@ -170,6 +170,9 @@ pub fn ElementProperties(element: Value) -> impl IntoView {
                                             }
                                         />
                                     </div>
+                                    <SelectField label="Vertical alignment" value=if style["verticalAlign"].is_string() { text(&style,"verticalAlign") } else { "top".into() }
+                                        options=options(&[("top", "Top"), ("middle", "Middle"), ("bottom", "Bottom")])
+                                        on_change=move |value: String| s.command("style", json!({"verticalAlign":value})) />
                                     <div class="toggle-row">
                                         <Button
                                             label="Bold"
@@ -201,6 +204,8 @@ pub fn ElementProperties(element: Value) -> impl IntoView {
                                                 )
                                             }
                                         />
+                                        <Button label="Underline" active=Signal::derive(move || s.selected_element().is_some_and(|e| e["style"]["underline"] == true))
+                                            on_press=move |_| s.command("style", json!({"underline":!s.selected_element().is_some_and(|e| e["style"]["underline"]==true)})) />
                                         <CheckField
                                             label="Wrap text"
                                             checked=style["wrap"] != false
@@ -217,6 +222,8 @@ pub fn ElementProperties(element: Value) -> impl IntoView {
                                                 ("text", "Text"),
                                                 ("number", "Number"),
                                                 ("currency", "Currency"),
+                                                ("percent", "Percentage"),
+                                                ("date", "Date"),
                                             ],
                                         )
                                         on_change=move |v: String| {

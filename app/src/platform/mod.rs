@@ -1,10 +1,12 @@
 pub mod editor_windows;
 pub mod layout_styles;
 #[cfg(feature = "csr")]
+pub mod preferences;
+#[cfg(feature = "csr")]
 use wasm_bindgen::prelude::*;
 #[cfg(feature = "csr")]
 #[wasm_bindgen(
-    inline_js = "export async function studioCall(payload) { const runtime = await import('/vendor/reportstudio-runtime.js'); return runtime.call(payload); } export function eventPayload(event) { return JSON.stringify(event.detail ?? null); } export function confirmDiscard(message) { return window.confirm(message); } export function syncFileMenu(labels) { globalThis.__TAURI__?.core?.invoke('set_file_menu_labels', {labels: JSON.parse(labels)}).catch(console.error); } export function syncDocumentDirty(dirty, message) { globalThis.__TAURI__?.core?.invoke('set_document_dirty', {dirty, message}).catch(console.error); }"
+    inline_js = "export async function studioCall(payload) { try { const runtime = await import('/vendor/reportstudio-runtime.js'); return await runtime.call(payload); } catch (error) { throw String(error?.message ?? error); } } export function eventPayload(event) { return JSON.stringify(event.detail ?? null); } export async function confirmDiscard(message) { const api = globalThis.__TAURI__?.core; return api ? await api.invoke('confirm_discard_changes', {message}) : window.confirm(message); } export function syncFileMenu(labels) { globalThis.__TAURI__?.core?.invoke('set_file_menu_labels', {labels: JSON.parse(labels)}).catch(console.error); } export function syncDocumentDirty(dirty, message) { globalThis.__TAURI__?.core?.invoke('set_document_dirty', {dirty, message}).catch(console.error); }"
 )]
 extern "C" {
     #[wasm_bindgen(catch)]
@@ -13,10 +15,18 @@ extern "C" {
     pub fn sync_file_menu(labels: &str);
     #[wasm_bindgen(js_name = syncDocumentDirty)]
     pub fn sync_document_dirty(dirty: bool, message: &str);
-    #[wasm_bindgen(js_name = confirmDiscard)]
-    pub fn confirm_discard(message: &str) -> bool;
+    #[wasm_bindgen(catch, js_name = confirmDiscard)]
+    async fn confirm_discard_native(message: &str) -> Result<JsValue, JsValue>;
     #[wasm_bindgen(js_name = eventPayload)]
     fn event_payload(event: &web_sys::Event) -> String;
+}
+
+/// A failed native prompt never authorizes discarding the current document.
+#[cfg(feature = "csr")]
+pub async fn confirm_discard(message: &str) -> Result<bool, String> {
+    let value = confirm_discard_native(message).await
+        .map_err(|error| error.as_string().unwrap_or_else(|| format!("{error:?}")))?;
+    value.as_bool().ok_or_else(|| "Invalid confirmation response.".into())
 }
 
 /// Host applications may bind API records without persisting records or credentials.
@@ -59,6 +69,14 @@ pub fn install_host_events() {
         move |event| {
             if let Ok(value) = serde_json::from_str::<Value>(&event_payload(&event)) {
                 if let Some(action) = value["action"].as_str() {
+                    // Native menu actions must not modify selected report elements while editing text.
+                    if matches!(action, "cut" | "copy" | "paste" | "delete")
+                        && document().active_element().is_some_and(|element|
+                            element.closest("input,textarea,select,[contenteditable]:not([contenteditable=false])")
+                                .ok().flatten().is_some())
+                    {
+                        return;
+                    }
                     match action {
                         "undo" => studio.undo(),
                         "redo" => studio.redo(),

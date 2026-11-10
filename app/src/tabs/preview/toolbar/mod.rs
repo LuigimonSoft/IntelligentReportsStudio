@@ -99,6 +99,7 @@ pub fn PreviewToolbar() -> impl IntoView {
                 }
             >
                 <option value="A4">"A4 (210 × 297 mm)"</option>
+                <option value="A5">"A5 (148 × 210 mm)"</option>
                 <option value="Letter">{move || format!("{} (216 × 279 mm)", s.t("Letter"))}</option>
                 <option value="Legal">{move || format!("{} (216 × 356 mm)", s.t("Legal"))}</option>
                 <option value="Custom">{move || s.t("Custom")}</option>

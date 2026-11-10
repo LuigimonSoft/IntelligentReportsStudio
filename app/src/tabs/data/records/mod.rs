@@ -65,6 +65,7 @@ pub fn RecordsTab() -> impl IntoView {
 
                 </footer>
             </div>
+            <crate::shared::controls::panel_splitter::PanelSplitter width=s.data_right_width label="Resize properties panel" right=true />
             <right_sidebar::RecordsSidebar />
         </div>
     }

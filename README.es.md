@@ -61,6 +61,14 @@ Las plantillas JSON guardan definiciones de tablas y nombres de fuentes, pero no
 
 Consulta el [README principal](README.md) para la estructura y los comandos de pruebas.
 
+El JSON guardado usa `schemaVersion: 1`. Las plantillas anteriores sin esta propiedad se interpretan como versión 1; las versiones de esquema no compatibles se rechazan. Los campos existentes `version` en la raíz y `report.version` siguen siendo obligatorios.
+
+Al importar JSON, activa **Expandir JSON anidado en tablas relacionadas** para convertir una ruta como `customer.name` en una columna editable como `customer_name`, e `items[].price` en una columna de una tabla hija relacionada. El esquema conserva la ruta original en `sourcePath`; las expresiones del reporte usan el nombre de columna generado. Los arreglos deben contener objetos. Un arreglo vacío produce una tabla relacionada vacía con claves generadas. Los datos permanecen solo en la sesión.
+
+En **Diseño → Campos disponibles → Plantillas de ejemplo** puedes elegir una factura, cotización, lista de productos o reporte de ventas. Los ejemplos usan datos editables de sesión; las plantillas guardadas no incluyen registros.
+
+Las secciones principales de detalles y el pie del reporte admiten `pageBreakBefore: true` para comenzar en una página nueva. En un detalle repetido, el salto se aplica a cada registro y los encabezados de grupo acompañan al contenido. No se admite en la cabecera del reporte, la cabecera o el pie de página ni las subsecciones.
+
 ## Próximas etapas
 
 Una próxima etapa propuesta es crear una familia de bibliotecas e integraciones capaces de generar reportes a partir de las plantillas JSON creadas en IntelligentReports Studio. La intención es que cada aplicación proporcione sus propios datos y genere el reporte sin necesitar el diseñador de escritorio durante la ejecución.

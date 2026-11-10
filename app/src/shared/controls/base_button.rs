@@ -39,6 +39,7 @@ pub fn BaseButton(
                 | "Download PDF"
                 | "Bold"
                 | "Italic"
+                | "Underline"
         );
     let s = studio();
     view! {
@@ -59,12 +60,15 @@ pub fn BaseButton(
             disabled=move || {
                 disabled.is_some_and(|v| v.get())
                     || match label {
+                        "Export PDF" | "Download PDF" => s.exporting_pdf.get(),
+                        "Print" => s.preview.get().is_null() || s.preview_loading.get() || !s.preview_error.get().is_empty(),
                         "Undo" => s.history.get().is_empty(),
                         "Redo" => s.future.get().is_empty(),
                         "Save formula" => !s.formula_valid.get(),
-                        "Copy" => s.selected.get().is_empty(),
+                        "Copy" => s.tab.get() != "Design" || s.selected.get().is_empty(),
+                        "Paste" => s.tab.get() != "Design",
                         "Cut" => {
-                            s.selected.get().is_empty()
+                            s.tab.get() != "Design" || s.selected.get().is_empty()
                                 || crate::domain::read_only(
                                     &s.project.get()["report"],
                                     &s.band.get(),
@@ -94,7 +98,7 @@ pub fn BaseButton(
                     },
                 )
             }
-            aria-pressed=move || if label == "Toggle theme" { Some(s.dark.get()) } else { None }
+            aria-pressed=move || if label == "Toggle theme" { Some(s.dark.get()) } else if label == "Underline" { active.map(|value| value.get()) } else { None }
             on:click=move |_| on_press.run(())
         >
             {move || {
@@ -118,6 +122,8 @@ pub fn BaseButton(
                     view! { <strong aria-hidden="true">"B"</strong> }.into_any()
                 } else if label == "Italic" {
                     view! { <em aria-hidden="true">"I"</em> }.into_any()
+                } else if label == "Underline" {
+                    view! { <span class="underline-glyph" aria-hidden="true">{move || if s.language.get() == "es" { "S" } else { "U" }}</span> }.into_any()
                 } else if !resolved_icon.is_empty() {
                     view! { <crate::shared::icons::Icon name=resolved_icon /> }.into_any()
                 } else {

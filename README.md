@@ -92,6 +92,14 @@ Browser tests are in `end2end`; install their dependencies with `npm ci` and run
 
 Reports are JSON documents. Saved templates contain table definitions and source names; table records are excluded. Parameters can be configured not to persist their values. Recovery files are stored locally and may contain the current session's data.
 
+Saved report JSON uses `schemaVersion: 1`. Older templates without this property are read as version 1; unsupported schema versions are rejected. The existing root `version` and `report.version` fields remain required.
+
+When importing JSON, enable **Expand nested JSON into related tables** to turn a path such as `customer.name` into an editable column such as `customer_name`, and `items[].price` into a column in a related child table. The schema retains the original path as `sourcePath`; report expressions use the generated column name. Arrays must contain objects. Empty arrays produce an empty related table with generated key columns. Data is session-only.
+
+In **Design → Available fields → Example templates**, choose an invoice, quotation, product list or sales report. Examples use editable session data; saved templates do not include table records.
+
+Root detail sections and the report footer support `pageBreakBefore: true` to start on a new page. On a repeating detail, the break applies to each record; repeating group headers move with the content. Page headers, page footers, the report header, and nested sections do not support this setting.
+
 ## Future plans
 
 A planned next step is a family of libraries and integrations that can generate reports from the JSON templates created in IntelligentReports Studio. The goal is to let applications supply their own data and generate a report without requiring the desktop designer at runtime.

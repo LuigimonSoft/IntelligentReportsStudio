@@ -13,13 +13,21 @@ pub fn PreviewTab() -> impl IntoView {
         let layout = s.preview.get();
         let zoom = s.preview_zoom.get();
         if !layout.is_null() {
+            let revision = s.preview_render_revision.get_untracked().wrapping_add(1);
+            s.preview_render_revision.set(revision);
+            s.preview_loading.set(true);
+            s.preview_error.set(String::new());
             leptos::task::spawn_local(async move {
-                if let Err(error) = crate::platform::call(
+                let result = crate::platform::call(
                     json!({"action":"render-preview","args":{"layout":layout,"zoom":zoom}}),
-                )
-                .await
-                {
-                    s.message.set(error);
+                ).await;
+                if s.preview_render_revision.get_untracked() == revision {
+                    s.preview_loading.set(false);
+                    if let Err(error) = result {
+                        let message = s.describe_error(&error);
+                        s.preview_error.set(message.clone());
+                        s.message.set(message);
+                    }
                 }
             });
         }
@@ -47,10 +55,11 @@ pub fn PreviewTab() -> impl IntoView {
     view! {
         <div class="preview-tab">
             <toolbar::PreviewToolbar />
-            <div class="preview-workspace">
+            <div class="preview-workspace" data-layout={ let layout = crate::platform::layout_styles::LayoutStyle::new(); move || layout.apply(format!("--panel-left:{}px;--panel-right:{}px",s.preview_left_width.get(),s.preview_right_width.get())) }>
                 <left_sidebar::PagesSidebar />
+                <crate::shared::controls::panel_splitter::PanelSplitter width=s.preview_left_width label="Resize pages panel" min=140.0 max=360.0 default_width=190.0 />
                 <div class="preview-scroll">
-                    <div id="pdf-pages">
+                    <div id="pdf-pages" hidden=move || !s.preview_error.get().is_empty()>
                         {move || {
                             array(&s.preview.get()["pages"])
                                 .into_iter()
@@ -64,10 +73,25 @@ pub fn PreviewTab() -> impl IntoView {
                                 .collect_view()
                         }}
                     </div>
-                    <Show when=move || s.preview.get().is_null()>
-                        <p>{move || s.t("Generating preview...")}</p>
+                    <Show when=move || s.preview_loading.get()>
+                        <div class="preview-state preview-loading" role="status" aria-live="polite">
+                            <span class="preview-spinner" aria-hidden="true"></span>
+                            <span>{move || s.t("Generating preview...")}</span>
+                        </div>
+                    </Show>
+                    <Show when=move || !s.preview_loading.get() && !s.preview_error.get().is_empty()>
+                        <div class="preview-state preview-error" role="alert">
+                            <strong>{move || s.t("Unable to generate the preview")}</strong>
+                            <p>{move || s.preview_error.get()}</p>
+                            <crate::shared::controls::Button label="Retry preview" primary=true
+                                on_press=move |_| s.command("preview", serde_json::Value::Null) />
+                        </div>
+                    </Show>
+                    <Show when=move || s.preview.get().is_null() && !s.preview_loading.get() && s.preview_error.get().is_empty()>
+                        <div class="preview-state" role="status">{move || s.t("Refresh the preview to display the report.")}</div>
                     </Show>
                 </div>
+                <crate::shared::controls::panel_splitter::PanelSplitter width=s.preview_right_width label="Resize preview options panel" right=true />
                 <right_sidebar::PreviewSidebar />
             </div>
         </div>

@@ -1,14 +1,15 @@
 pub mod left_sidebar;
 pub mod model;
 pub mod records;
-use crate::state::studio;
+use crate::{state::studio, shared::controls::panel_splitter::PanelSplitter};
 use leptos::prelude::*;
 #[component]
 pub fn DataTab() -> impl IntoView {
     let s = studio();
     view! {
-        <div class="data-workspace">
+        <div class="data-workspace" data-layout={ let layout = crate::platform::layout_styles::LayoutStyle::new(); move || layout.apply(format!("--panel-left:{}px;--panel-right:{}px",s.data_left_width.get(),s.data_right_width.get())) }>
             <left_sidebar::DataSourcesSidebar />
+            <PanelSplitter width=s.data_left_width label="Resize data sources panel" default_width=260.0 />
             <div class="data-main">
                 <nav class="data-tabs">
                     {["Data model", "Records"]

@@ -12,11 +12,21 @@
         "state": "",
         "zipcode": "03100",
         "country": "Mexico",
-        "rfc": "DEMO000000XXX"
+        "rfc": "DEMO000000XXX",
+        "id": 1,
+        "invoiceId": 1001
       }
     ],
     "schema": {
       "fields": [
+        {
+          "name": "id",
+          "type": "number"
+        },
+        {
+          "name": "invoiceId",
+          "type": "number"
+        },
         {
           "name": "addressType",
           "type": "text"
@@ -69,7 +79,9 @@
         "unitLabel": "Hours",
         "date": "2026-10-15",
         "client": "Example Customer Inc.",
-        "status": "Issued"
+        "status": "Issued",
+        "id": 1,
+        "invoiceId": 1001
       },
       {
         "description": "Report development",
@@ -80,7 +92,9 @@
         "unitLabel": "Hours",
         "date": "2026-10-15",
         "client": "Example Customer Inc.",
-        "status": "Issued"
+        "status": "Issued",
+        "id": 2,
+        "invoiceId": 1001
       },
       {
         "description": "Technical support",
@@ -91,11 +105,21 @@
         "unitLabel": "Hours",
         "date": "2026-10-15",
         "client": "Example Customer Inc.",
-        "status": "Issued"
+        "status": "Issued",
+        "id": 3,
+        "invoiceId": 1001
       }
     ],
     "schema": {
       "fields": [
+        {
+          "name": "id",
+          "type": "number"
+        },
+        {
+          "name": "invoiceId",
+          "type": "number"
+        },
         {
           "name": "description",
           "type": "text"
@@ -141,6 +165,10 @@
     "schema": {
       "fields": [
         {
+          "name": "id",
+          "type": "number"
+        },
+        {
           "name": "number",
           "type": "text"
         },
@@ -178,7 +206,8 @@
         "currency": "MXN",
         "conditions": "30 days",
         "project": "ERP implementation",
-        "seller": "Example sales representative"
+        "seller": "Example sales representative",
+        "id": 1001
       }
     ]
   }

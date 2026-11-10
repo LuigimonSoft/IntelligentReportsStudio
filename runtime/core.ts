@@ -1,3 +1,7 @@
+import { resourceDiagnostics } from "./engine/resourceDiagnostics.ts";
+import { fieldDiagnostics } from "./engine/fieldDiagnostics.ts";
+import { replaceTableRecords } from "./tabs/data/model/replaceTableRecords.ts";
+import { alignElements } from "./domain/report/alignElements.ts";
 import { importTables } from "./tabs/data/model/importTables.ts";
 import { tableDefinition } from "./tabs/data/model/tableDefinition.ts";
 import { relationshipPreview } from "./tabs/data/model/relationshipPreview.ts";
@@ -39,7 +43,7 @@ import {
   resizeSectionBoundary,
 } from "./tabs/design/report-area/sectionGeometry.ts";
 import { previewProject } from "./tabs/preview/previewSettings.ts";
-import { serializableParameters } from "./shared/parameters/reportParameters.ts";
+import { serializableParameters, expressionParameters, validParameterDate } from "./shared/parameters/reportParameters.ts";
 import {
   editTableStructure,
   setTableHeaders,
@@ -71,6 +75,7 @@ export const native = async (
 export function templateOnly(project: Project): Project {
   return validateProject({
     version: 1,
+    schemaVersion: project.schemaVersion ?? 1,
     report: structuredClone(project.report),
     datasets: project.datasets.map(({ id, name, schema }) => ({
       id,
@@ -190,17 +195,19 @@ export function layoutOf(project: Project, measureText: any, args: any = {}) {
     const value = String(args.values?.[parameter.id] ?? parameter.value ?? parameter.defaultValue ?? '').trim();
     if (parameter.required && !value) throw new Error(`Required parameter: ${parameter.label}`);
     if (value && parameter.type === 'boolean' && !['true', 'false'].includes(value)) throw new Error(`Invalid boolean parameter: ${parameter.label}`);
-    if (value && parameter.type === 'number' && !Number.isFinite(Number(value))) throw new Error(`Invalid numeric parameter: ${parameter.label}`);
+    if (value && parameter.type === 'number' && (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(value) || !Number.isFinite(Number(value)))) throw new Error(`Invalid numeric parameter: ${parameter.label}`);
+    if (value && parameter.type === 'date' && !validParameterDate(value)) throw new Error(`Invalid date parameter: ${parameter.label}`);
   }
   const p = displayedProject(project, args);
   const layout=compileReport(p.report, p.datasets, {
     measureText,
+    parameters: expressionParameters(project.parameters, args.values),
     sectionHeights: Object.fromEntries(sectionHeights(p.report)),
     ...(args.now ? { now: new Date(args.now) } : {}),
   });
   const sources=new Set(p.report.details.map(detail=>detail.dataset).filter(Boolean));
   const recordCount=p.datasets.filter(table=>sources.has(table.id)).reduce((count,table)=>count+table.data.length,0);
-  return {...layout,recordCount};
+  return {...layout,recordCount,fieldDiagnostics:fieldDiagnostics(p),resourceDiagnostics:resourceDiagnostics(layout,p.report)};
 }
 function activeElements(p: Project, ids: string[]) {
   const all = bandsOf(p.report).flatMap((b) => b.elements);
@@ -212,6 +219,7 @@ function activeElements(p: Project, ids: string[]) {
   );
 }
 function checkEditable(p: Project, els: ReportElement[], target?: Band) {
+  if (els.some(element => element.locked)) throw new Error("This element is locked.");
   for (const band of bandsOf(p.report))
     if (
       (band === target || band.elements.some((e) => els.includes(e))) &&
@@ -282,6 +290,8 @@ function rebuild(
   next.forEach((e) => {
     e.x += x;
     e.y += y;
+    if (original.visible !== undefined) e.visible = original.visible;
+    if (original.locked !== undefined) e.locked = original.locked;
   });
   band.elements = band.elements
     .filter((e) => e.groupId !== original.groupId)
@@ -334,9 +344,21 @@ export async function act(request: Request): Promise<any> {
       p.dataModel.tables[id] = { ...p.dataModel.tables[id], ...args.settings };
       return result();
     }
+    case "load-table-data":
+    case "reload-table-data": {
+      const table = String(args.table ?? "");
+      if (!p.datasets.some(dataset => dataset.id === table)) throw new Error("Unknown data table.");
+      const source = request.action === "load-table-data"
+        ? await native("choose_table_data", {table}) : await native("reload_table_data", {table});
+      if (source === null) return {message:"Data import cancelled"};
+      const project = replaceTableRecords(p, table, source);
+      return {project, activeTable:table, dataSourceTable:table,
+        pendingDataSource:request.action === "load-table-data", message:"Table data updated"};
+    }
     case "import-tables":
-      return { project: importTables(p, args.json), message: "Tables imported" };
+      return { project: importTables(p, args.json, args.recognizeDates === true, args.expandNested === true), message: "Tables imported" };
     case "replace-tables":
+      if ((globalThis as any).__TAURI__?.core) await native("clear_table_data_sources");
       p.datasets = args.tables;
       if (p.dataModel?.rootDataset && !p.datasets.some((table) => table.id === p.dataModel?.rootDataset)) delete p.dataModel.rootDataset;
       p.dataSource = { name: args.name ?? "API" };
@@ -446,7 +468,10 @@ export async function act(request: Request): Promise<any> {
     }
     case "restore-example": {
       const { createSampleProject } = await import("./domain/report/sample.ts");
-      return { project: createSampleProject(), selected: [] };
+      const project = createSampleProject(args.example ?? "invoice");
+      // An example is a new document and must never inherit the previous save path.
+      if ((globalThis as any).__TAURI__?.core) await native("reset_document_path");
+      return { project, selected: [] };
     }
     case "add-field": {
       checkEditable(p, [], band);
@@ -525,6 +550,13 @@ export async function act(request: Request): Promise<any> {
         selected: [items.find((e) => e.type === "text")?.id ?? items[0].id],
       });
     }
+    case "align-elements": {
+      checkEditable(p, chosen);
+      const owner = allBands.find(section => section.elements.includes(chosen[0]));
+      if (!owner) throw new Error("Select at least two objects in the same section.");
+      alignElements(owner, chosen, String(args.operation));
+      return result({ selected: ids });
+    }
     case "move": {
       const target = allBands.find((b) => b.id === args.targetBand) ?? band;
       checkEditable(p, chosen, target);
@@ -543,18 +575,19 @@ export async function act(request: Request): Promise<any> {
           .slice(0, allBands.indexOf(b))
           .reduce((sum, b) => sum + (heights.get(b.id) ?? b.height), 0);
       const bounds = elementBounds(bundle.elements);
+      let x = bounds.x + Number(args.dx ?? 0);
+      let y = bounds.y + (bundle.multiple ? 0 : top(source)) - top(target) + Number(args.dy ?? 0);
+      const step = Number(args.snapSpacing);
+      if (Number.isFinite(step) && step > 0) {
+        const offsetX = Number(args.snapOffsetX) || 0, offsetY = Number(args.snapOffsetY) || 0;
+        x = Math.max(0, Math.round((x + offsetX) / step) * step - offsetX);
+        y = Math.max(0, Math.round((y + offsetY) / step) * step - offsetY);
+      }
       const placed = placeElements(
         p.report,
         bundle,
         target.id,
-        {
-          x: bounds.x + Number(args.dx ?? 0),
-          y:
-            bounds.y +
-            (bundle.multiple ? 0 : top(source)) -
-            top(target) +
-            Number(args.dy ?? 0),
-        },
+        { x, y },
         false,
         source.id,
       );
@@ -662,6 +695,22 @@ export async function act(request: Request): Promise<any> {
       checkEditable(p, chosen);
       if (first?.chart) { first.chart = { ...first.chart, ...args }; if(first.chart.categoryColors === null) delete first.chart.categoryColors; }
       return result();
+    case "resize-element": {
+      checkEditable(p, chosen);
+      if (!first || ids.length !== 1) return {};
+      const width = Number(args.width), height = Number(args.height);
+      if (!Number.isFinite(width) || !Number.isFinite(height) || width < 0.1 || height < 0.05) throw new Error("Invalid geometry.");
+      if (!first.table) { first.width = width; first.height = height; return result(); }
+      const settings = structuredClone(first.table);
+      const widthRatio = width / settings.width;
+      settings.width = width;
+      if (settings.columnWidths) settings.columnWidths = settings.columnWidths.map(w => w * widthRatio);
+      const heights = settings.rowHeights ?? Array(settings.rows).fill(settings.rowHeight);
+      const ratio = height / heights.reduce((sum, h) => sum + h, 0);
+      settings.rowHeights = heights.map(h => h * ratio);
+      const next = rebuild(p, allBands.find(b => b.elements.includes(first))!, first, settings);
+      return result({selected: [selectedCell(next, first)]});
+    }
     case "table-geometry": {
       checkEditable(p, chosen);
       if (!first?.table) return {};
@@ -761,6 +810,19 @@ export async function act(request: Request): Promise<any> {
       }
       return result({selected:[selectedCell(next,first)]});
     }
+    case 'element-flags': {
+      for (const band of allBands)
+        if (band.elements.some(element => chosen.includes(element))) checkEditable(p, [], band);
+      if (args.visible !== undefined && chosen.some(element => element.locked))
+        throw new Error("This element is locked.");
+      for (const key of ['visible', 'locked'] as const) {
+        if (args[key] !== undefined) {
+          if (typeof args[key] !== 'boolean') throw new Error('Invalid element setting.');
+          for (const element of chosen) element[key] = args[key];
+        }
+      }
+      return result();
+    }
     case 'element-settings':
       checkEditable(p,chosen); for(const e of chosen) for(const key of ['type','shape','src','borderColor','borderWidth']) if(args[key]!==undefined)(e as any)[key]=args[key]; return result();
     case 'change-image': {
@@ -778,10 +840,23 @@ export async function act(request: Request): Promise<any> {
     case 'report-settings':
       for(const key of ['title','currency','locale'])if(args[key]!==undefined)(p.report as any)[key]=args[key];return result();
     case 'page-settings':
-      if(args.paper){p.report.page.width=args.paper==='letter'?8.5:210/25.4;p.report.page.height=args.paper==='letter'?11:297/25.4;}
+      if (args.paper && args.paper !== 'Custom') {
+        const sizes: Record<string, [number, number]> = {A4:[210/25.4,297/25.4], A5:[148/25.4,210/25.4], Letter:[8.5,11], Legal:[8.5,14]};
+        const size = sizes[args.paper] ?? sizes[String(args.paper).toUpperCase() === 'A4' ? 'A4' : args.paper];
+        if (!size) throw new Error('Unsupported paper size.');
+        const landscape = p.report.page.width > p.report.page.height;
+        [p.report.page.width,p.report.page.height] = landscape ? [size[1],size[0]] : size;
+      }
+      if(args.background!==undefined)p.report.page.background=args.background;
       if(args.margin!==undefined)p.report.page.margins={top:args.margin,bottom:args.margin,left:args.margin,right:args.margin};return result();
     case 'detail-settings': {
-      const detail=p.report.details.find(d=>d.id===args.id);if(detail)for(const key of ['dataset','groupBy'])if(args[key]!==undefined)(detail as any)[key]=args[key];return result();
+      const detail=p.report.details.find(d=>d.id===args.id);
+      if (detail) {
+        if (args.emptyMessage !== undefined) checkEditable(p, [], detail.band);
+        for (const key of ['dataset','groupBy','emptyMessage'])
+          if (args[key] !== undefined) (detail as any)[key] = args[key];
+      }
+      return result();
     }
     case "layer":
       checkEditable(p, chosen);

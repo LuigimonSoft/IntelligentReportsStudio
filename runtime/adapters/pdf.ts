@@ -65,6 +65,7 @@ export async function buildPdf(layout: ReportLayout): Promise<PDFDocument> {
   const images = new Map<string, Awaited<ReturnType<PDFDocument['embedPng']>>>();
   for (const page of layout.pages) {
     const sheet = doc.addPage([layout.width * 72, layout.height * 72]);
+    if (layout.background) sheet.drawRectangle({ x: 0, y: 0, width: layout.width * 72, height: layout.height * 72, color: color(layout.background) });
     // Keep preview and exported PDF content inside all four report margins.
     // Older layouts may omit margins and retain their full-page behavior.
     if (layout.margins) {
@@ -92,6 +93,9 @@ export async function buildPdf(layout: ReportLayout): Promise<PDFDocument> {
           clip(),
           endPath(),
         );
+        const contentHeight = el.lines.length * lineHeight(el.style) * 72;
+        const freeHeight = Math.max(0, height - contentHeight);
+        const verticalOffset = el.style.verticalAlign === 'bottom' ? freeHeight : el.style.verticalAlign === 'middle' ? freeHeight / 2 : 0;
         for (const [i, line] of el.lines.entries()) {
           const textWidth = font.widthOfTextAtSize(line, el.style.fontsize);
           const left =
@@ -101,16 +105,15 @@ export async function buildPdf(layout: ReportLayout): Promise<PDFDocument> {
               : el.style.align === 'center'
                 ? (width - textWidth) / 2
                 : 0);
+          const baseline = top - verticalOffset - font.heightAtSize(el.style.fontsize, { descender: false }) - i * lineHeight(el.style) * 72;
           sheet.drawText(line, {
             x: left,
-            y:
-              top -
-              font.heightAtSize(el.style.fontsize, { descender: false }) -
-              i * lineHeight(el.style) * 72,
+            y: baseline,
             size: el.style.fontsize,
             font,
             color: ink,
           });
+          if (el.style.underline && textWidth > 0) sheet.drawLine({ start: { x: left, y: baseline - el.style.fontsize * 0.12 }, end: { x: left + textWidth, y: baseline - el.style.fontsize * 0.12 }, thickness: Math.max(0.5, el.style.fontsize / 16), color: ink });
         }
         sheet.pushOperators(popGraphicsState());
       } else if (el.type === 'shape') {
@@ -172,9 +175,13 @@ export async function buildPdf(layout: ReportLayout): Promise<PDFDocument> {
       } else if (el.src) {
         let image = images.get(el.src);
         if (!image) {
-          image = await (el.src.startsWith('data:image/png')
-            ? doc.embedPng(el.src)
-            : doc.embedJpg(el.src));
+          try {
+            image = await (el.src.startsWith('data:image/png')
+              ? doc.embedPng(el.src)
+              : doc.embedJpg(el.src));
+          } catch {
+            throw new Error(`Image could not be decoded: ${el.bandId} / ${el.id}`);
+          }
           images.set(el.src, image);
         }
         const ratio = Math.min(width / image.width, height / image.height);

@@ -13,6 +13,7 @@ export const UNBOUND_TABLE_SOURCE: Dataset = { id: '', name: '', schema: { field
 export function createBlankProject(title = 'New report'): Project {
   const project: Project = {
     version: 1,
+    schemaVersion: 1,
     report: {
       version: 1,
       id: uid('report'),

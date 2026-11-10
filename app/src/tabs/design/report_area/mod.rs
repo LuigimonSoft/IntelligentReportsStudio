@@ -1,5 +1,6 @@
 mod drag_geometry;
 pub mod elements;
+mod resize_handle;
 pub mod rulers;
 use crate::{domain::*, state::studio};
 use leptos::prelude::*;
@@ -60,10 +61,11 @@ pub fn ReportArea() -> impl IntoView {
                                         let z = DESIGN_PIXELS_PER_INCH * s.zoom.get();
                                         let spacing = s.spacing.get();
                                         format!(
-                                            "width:{}px;min-height:{}px;--guide-size:{}px",
+                                            "width:{}px;min-height:{}px;--guide-size:{}px;background-color:{}",
                                             number(&p["report"]["page"], "width") * z,
                                             design_height(&p["report"]) * z,
                                             spacing * z,
+                                            p["report"]["page"]["background"].as_str().unwrap_or("#ffffff"),
                                         )
                                     })
                             }
@@ -114,7 +116,13 @@ pub fn ReportArea() -> impl IntoView {
                                         })
                                         .and_then(|band| band.get_attribute("data-band"));
                                     if let Some(target) = target {
-                                        s.command("move", json!({"dx":dx,"dy":dy,"targetBand":target}));
+                                        let scale = DESIGN_PIXELS_PER_INCH * s.zoom.get_untracked();
+                                        let target_top = document().get_element_by_id(&format!("report-section-{target}"))
+                                            .map(|element| (element.get_bounding_client_rect().top() - rect.top()) / scale).unwrap_or(0.0);
+                                        let margin = number(&s.project.get_untracked()["report"]["page"]["margins"], "left");
+                                        s.command("move", json!({"dx":dx,"dy":dy,"targetBand":target,
+                                            "snapSpacing":if s.snap_grid.get_untracked() {s.spacing.get_untracked()} else {0.0},
+                                            "snapOffsetX":margin,"snapOffsetY":target_top}));
                                     }
                                 }
                                 drag.set(None);
@@ -162,8 +170,14 @@ pub fn ReportArea() -> impl IntoView {
                                         let paper_rect = p.get_bounding_client_rect();
                                         let band_rect = band.get_bounding_client_rect();
                                         let margin = number(&s.project.get_untracked()["report"]["page"]["margins"], "left");
-                                        let x = ((e.client_x() as f64 - paper_rect.left()) / z - margin).max(0.0);
-                                        let y = ((e.client_y() as f64 - band_rect.top()) / z).max(0.0);
+                                        let mut x = ((e.client_x() as f64 - paper_rect.left()) / z - margin).max(0.0);
+                                        let mut y = ((e.client_y() as f64 - band_rect.top()) / z).max(0.0);
+                                        if s.snap_grid.get_untracked() {
+                                            let step = s.spacing.get_untracked().max(0.001);
+                                            let top = (band_rect.top() - paper_rect.top()) / z;
+                                            x = (((x + margin) / step).round() * step - margin).max(0.0);
+                                            y = (((y + top) / step).round() * step - top).max(0.0);
+                                        }
                                         s.band.set(id);
                                         if let Some(action) = token.strip_prefix("reportstudio-tool:") {
                                             s.command(action, json!({"x":x,"y":y}));
@@ -185,6 +199,22 @@ pub fn ReportArea() -> impl IntoView {
                             }
                         }
                     >
+                        <Show when=move || s.show_margins.get()>
+                            <div class="page-margin-outline" aria-hidden="true" data-layout={
+                                let layout = crate::platform::layout_styles::LayoutStyle::new();
+                                move || {
+                                    let project = s.project.get();
+                                    let page = &project["report"]["page"];
+                                    let margins = &page["margins"];
+                                    let scale = DESIGN_PIXELS_PER_INCH * s.zoom.get();
+                                    let left = number(margins, "left");
+                                    let top = number(margins, "top");
+                                    let width = (number(page, "width") - left - number(margins, "right")).max(0.0);
+                                    let height = (number(page, "height") - top - number(margins, "bottom")).max(0.0);
+                                    layout.apply(format!("left:{}px;top:{}px;width:{}px;height:{}px", left*scale, top*scale, width*scale, height*scale))
+                                }
+                            }></div>
+                        </Show>
                         {move || {
                             design_bands(&s.project.get()["report"])
                                 .into_iter()
@@ -244,7 +274,7 @@ pub fn ReportArea() -> impl IntoView {
                                                     {move || {
                                                         format!(
                                                             "{:.2} {}",
-                                                            height * if s.units.get() == "cm" { 2.54 } else { 1.0 },
+                                                            height * s.measurement_scale(),
                                                             s.units.get(),
                                                         )
                                                     }}
@@ -263,9 +293,14 @@ pub fn ReportArea() -> impl IntoView {
                                                     let blur_id = StoredValue::new(eid.clone());
                                                     let elstyle = element.clone();
                                                     let elmove = element.clone();
+                                                    let element_locked = element["locked"] == true;
                                                     view! {
                                                         <div
                                                             class="report-element"
+                                                            class:hidden-element=element["visible"] == false
+                                                            class:locked-element=element["locked"] == true
+                                                            data-vertical-align=element["style"]["verticalAlign"].as_str().unwrap_or("top").to_owned()
+                                                            class:underlined=element["type"] == "text" && element["style"]["underline"] == true
                                                             data-element=eid.clone()
                                                             class:selected=move || s.selected.get().contains(&active)
                                                             data-layout={
@@ -340,19 +375,20 @@ pub fn ReportArea() -> impl IntoView {
                                                                 } else if !s.selected.get_untracked().contains(&select) {
                                                                     s.selected.set(vec![select.clone()]);
                                                                 }
-                                                                if let (false, 0, Some(p)) = (readonly, e.button(), paper.get_untracked()) {
+                                                                if let (false, 0, Some(p)) = (readonly || element_locked, e.button(), paper.get_untracked()) {
                                                                     let rect = p.get_bounding_client_rect();
                                                                     drag.set(Some(drag_geometry::DragGesture::new(e.pointer_id(), (e.client_x() as f64, e.client_y() as f64), (rect.left(), rect.top()), DESIGN_PIXELS_PER_INCH * s.zoom.get_untracked())));
                                                                 }
                                                             }
                                                             on:dblclick=move |_| {
-                                                                if !readonly && edit["type"] == "text" {
+                                                                if !readonly && !element_locked && edit["type"] == "text" {
                                                                     editing.set(text(&edit, "id"));
                                                                     edit_value.set(text(&edit, "text"));
                                                                 }
                                                             }
                                                         >
                                                             <elements::ReportElementView element=element.clone() />
+                                                            {(!readonly && !element_locked).then(|| view! { <resize_handle::ResizeHandle element=element.clone() /> })}
                                                             <span class="element-accessible">{text_value}</span>
                                                             <Show when=move || editing.get() == editor_id>
                                                                 <textarea

@@ -30,6 +30,8 @@ pub fn App() -> impl IntoView {
 fn StudioWorkspace() -> impl IntoView {
     let s = studio();
     #[cfg(feature = "csr")]
+    platform::preferences::install(s);
+    #[cfg(feature = "csr")]
     Effect::new(move |_| {
         platform::sync_document_dirty(s.dirty.get(), &s.t("Discard unsaved changes?"))
     });
@@ -74,13 +76,21 @@ fn StudioWorkspace() -> impl IntoView {
                         return;
                     }
                     if let Some(project) = result.get("project").filter(|v| v.is_object()) {
-                        if platform::confirm_discard(
+                        match platform::confirm_discard(
                             &s.t("Recover the unsaved report from the previous session?"),
-                        ) {
-                            s.commit(project.clone());
-                        } else {
-                            let _ = platform::call(serde_json::json!({"action":"recovery-clear"}))
-                                .await;
+                        ).await {
+                            Ok(true) if !s.dirty.get_untracked() => s.commit(project.clone()),
+                            Ok(false) if !s.dirty.get_untracked() => {
+                                let _ = platform::call(serde_json::json!({"action":"recovery-clear"})).await;
+                            },
+                            Ok(_) => {
+                                s.message.set(s.t("Recovery was paused because the report was edited during startup. Save your work before restarting to review the previous recovery copy."));
+                                return;
+                            },
+                            Err(error) => {
+                                s.message.set(format!("{}: {}", s.t("Unable to show confirmation"), error));
+                                return;
+                            }
                         }
                     }
                     recovery_ready.set(true);
@@ -145,7 +155,23 @@ fn StudioWorkspace() -> impl IntoView {
             <footer class="status-bar" role="status" hidden=move || s.tab.get() == "Preview">
                 {move || s.t(&s.message.get())}
             </footer>
+            <Show when=move || !s.notification.get().is_empty()>
+                <div class="app-notification" class:app-notification-error=move || s.notification_error.get()
+                    role=move || if s.notification_error.get() { "alert" } else { "status" }>
+                    <span>{move || s.notification.get()}</span>
+                    <ButtonNotificationClose />
+                </div>
+            </Show>
             <shared::dialogs::EditorDialog />
         </div>
+    }
+}
+
+#[component]
+fn ButtonNotificationClose() -> impl IntoView {
+    let s = studio();
+    view! {
+        <crate::shared::controls::Button label="Close" compact=true
+            on_press=move |_| s.notification.set(String::new()) />
     }
 }

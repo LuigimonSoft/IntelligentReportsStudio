@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "schemaVersion": 1,
   "dataSource": {
     "name": "InvoiceDB"
   },
@@ -493,7 +494,12 @@
                 "headers": false,
                 "width": 7.427716535433072,
                 "rowHeight": 0.34,
-                "columnWidths": [3.1, 1, 1.5, 1.8277165354330727],
+                "columnWidths": [
+                  3.1,
+                  1,
+                  1.5,
+                  1.8277165354330727
+                ],
                 "styles": {
                   "column:1": {
                     "align": "center"
@@ -544,7 +550,12 @@
                 "headers": false,
                 "width": 7.427716535433072,
                 "rowHeight": 0.34,
-                "columnWidths": [3.1, 1, 1.5, 1.8277165354330727],
+                "columnWidths": [
+                  3.1,
+                  1,
+                  1.5,
+                  1.8277165354330727
+                ],
                 "styles": {
                   "column:1": {
                     "align": "center"
@@ -595,7 +606,12 @@
                 "headers": false,
                 "width": 7.427716535433072,
                 "rowHeight": 0.34,
-                "columnWidths": [3.1, 1, 1.5, 1.8277165354330727],
+                "columnWidths": [
+                  3.1,
+                  1,
+                  1.5,
+                  1.8277165354330727
+                ],
                 "styles": {
                   "column:1": {
                     "align": "center"
@@ -646,7 +662,12 @@
                 "headers": false,
                 "width": 7.427716535433072,
                 "rowHeight": 0.34,
-                "columnWidths": [3.1, 1, 1.5, 1.8277165354330727],
+                "columnWidths": [
+                  3.1,
+                  1,
+                  1.5,
+                  1.8277165354330727
+                ],
                 "styles": {
                   "column:1": {
                     "align": "center"
@@ -697,7 +718,12 @@
                 "headers": false,
                 "width": 7.427716535433072,
                 "rowHeight": 0.34,
-                "columnWidths": [3.1, 1, 1.5, 1.8277165354330727],
+                "columnWidths": [
+                  3.1,
+                  1,
+                  1.5,
+                  1.8277165354330727
+                ],
                 "styles": {
                   "column:1": {
                     "align": "center"
@@ -748,7 +774,12 @@
                 "headers": false,
                 "width": 7.427716535433072,
                 "rowHeight": 0.34,
-                "columnWidths": [3.1, 1, 1.5, 1.8277165354330727],
+                "columnWidths": [
+                  3.1,
+                  1,
+                  1.5,
+                  1.8277165354330727
+                ],
                 "styles": {
                   "column:1": {
                     "align": "center"
@@ -799,7 +830,12 @@
                 "headers": false,
                 "width": 7.427716535433072,
                 "rowHeight": 0.34,
-                "columnWidths": [3.1, 1, 1.5, 1.8277165354330727],
+                "columnWidths": [
+                  3.1,
+                  1,
+                  1.5,
+                  1.8277165354330727
+                ],
                 "styles": {
                   "column:1": {
                     "align": "center"
@@ -850,7 +886,12 @@
                 "headers": false,
                 "width": 7.427716535433072,
                 "rowHeight": 0.34,
-                "columnWidths": [3.1, 1, 1.5, 1.8277165354330727],
+                "columnWidths": [
+                  3.1,
+                  1,
+                  1.5,
+                  1.8277165354330727
+                ],
                 "styles": {
                   "column:1": {
                     "align": "center"
@@ -1345,6 +1386,14 @@
       "schema": {
         "fields": [
           {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "invoiceId",
+            "type": "number"
+          },
+          {
             "name": "addressType",
             "type": "text"
           },
@@ -1389,6 +1438,14 @@
       "name": "Details",
       "schema": {
         "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "invoiceId",
+            "type": "number"
+          },
           {
             "name": "description",
             "type": "text"
@@ -1435,6 +1492,10 @@
       "schema": {
         "fields": [
           {
+            "name": "id",
+            "type": "number"
+          },
+          {
             "name": "number",
             "type": "text"
           },
@@ -1467,7 +1528,32 @@
       "data": []
     }
   ],
-  "relations": [],
+  "relations": [
+    {
+      "id": "invoice-addresses",
+      "from": {
+        "dataset": "invoiceInfo",
+        "field": "id"
+      },
+      "to": {
+        "dataset": "addresses",
+        "field": "invoiceId"
+      },
+      "cardinality": "1:n"
+    },
+    {
+      "id": "invoice-details",
+      "from": {
+        "dataset": "invoiceInfo",
+        "field": "id"
+      },
+      "to": {
+        "dataset": "invoice",
+        "field": "invoiceId"
+      },
+      "cardinality": "1:n"
+    }
+  ],
   "parameters": [
     {
       "id": "startDate",
@@ -1503,5 +1589,25 @@
       "field": "status",
       "operator": "eq"
     }
-  ]
+  ],
+  "dataModel": {
+    "rootDataset": "invoiceInfo",
+    "tables": {
+      "invoiceInfo": {
+        "x": 100,
+        "y": 235,
+        "color": "#f59e0b"
+      },
+      "addresses": {
+        "x": 520,
+        "y": 35,
+        "color": "#3b82f6"
+      },
+      "invoice": {
+        "x": 520,
+        "y": 450,
+        "color": "#22c55e"
+      }
+    }
+  }
 }

@@ -20,6 +20,8 @@ pub fn NativeEditorWindow() -> impl IntoView {
                 s.project.set(context["project"].clone());
                 s.language
                     .set(context["language"].as_str().unwrap_or("en").to_owned());
+                s.units
+                    .set(context["units"].as_str().unwrap_or("cm").to_owned());
                 s.dark.set(context["dark"].as_bool().unwrap_or(false));
                 s.table
                     .set(context["table"].as_str().unwrap_or_default().to_owned());

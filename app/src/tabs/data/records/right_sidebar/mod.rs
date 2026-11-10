@@ -44,32 +44,40 @@ pub fn RecordsSidebar() -> impl IntoView {
                                         }
                                     />
                                 </div>
-                                <input
-                                    type=match p["type"].as_str() {
-                                        Some("date") => "date",
-                                        Some("number") => "number",
-                                        _ => "text",
-                                    }
-                                    value=p["value"]
-                                        .as_str()
-                                        .or(p["defaultValue"].as_str())
-                                        .unwrap_or("")
-                                        .to_owned()
-                                    on:change=move |e| {
-                                        let value = event_target_value(&e);
-                                        s.mutate(|project| {
-                                            for p in project["parameters"]
-                                                .as_array_mut()
-                                                .into_iter()
-                                                .flatten()
-                                            {
-                                                if p["id"] == update {
-                                                    p["value"] = json!(value);
-                                                }
+                                {if p["type"] == "boolean" {
+                                    let current = p["value"].as_str().or(p["defaultValue"].as_str()).unwrap_or("").to_owned();
+                                    view! {
+                                        <select aria-label=text(&p, "label") prop:value=current
+                                            on:change=move |e| {
+                                                let value = event_target_value(&e);
+                                                s.mutate(|project| {
+                                                    for parameter in project["parameters"].as_array_mut().into_iter().flatten() {
+                                                        if parameter["id"] == update { parameter["value"] = json!(value); }
+                                                    }
+                                                });
+                                            }>
+                                            <option value="">{s.t("Select value")}</option>
+                                            <option value="true">{s.t("True")}</option>
+                                            <option value="false">{s.t("False")}</option>
+                                        </select>
+                                    }.into_any()
+                                } else {
+                                    view! {
+                                        <input
+                                            type=match p["type"].as_str() { Some("date") => "date", Some("number") => "number", _ => "text" }
+                                            aria-label=text(&p, "label")
+                                            value=p["value"].as_str().or(p["defaultValue"].as_str()).unwrap_or("").to_owned()
+                                            on:change=move |e| {
+                                                let value = event_target_value(&e);
+                                                s.mutate(|project| {
+                                                    for parameter in project["parameters"].as_array_mut().into_iter().flatten() {
+                                                        if parameter["id"] == update { parameter["value"] = json!(value); }
+                                                    }
+                                                });
                                             }
-                                        });
-                                    }
-                                />
+                                        />
+                                    }.into_any()
+                                }}
                                 <label class="check">
                                     <input
                                         type="checkbox"

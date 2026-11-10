@@ -11,10 +11,11 @@ pub struct RulerTick {
     pub label: String,
 }
 pub fn ruler_ticks(length: f64, unit: &str) -> Vec<RulerTick> {
-    let (units_per_inch, step, divisions) = if unit == "cm" {
-        (2.54, 0.1, 10)
-    } else {
-        (1.0, 0.125, 8)
+    let (units_per_inch, step, divisions) = match unit {
+        "mm" => (25.4, 1.0, 10),
+        "cm" => (2.54, 0.1, 10),
+        "pt" => (72.0, 6.0, 6),
+        _ => (1.0, 0.125, 8),
     };
     (0..=((length * units_per_inch / step).floor() as usize))
         .map(|index| RulerTick {
@@ -37,7 +38,7 @@ pub fn HorizontalRuler() -> impl IntoView {
             class="horizontal-ruler"
             role="img"
             aria-label=move || {
-                s.t(if s.units.get() == "cm" { "Ruler in centimeters" } else { "Ruler in inches" })
+                s.t(match s.units.get().as_str() { "mm" => "Ruler in millimeters", "cm" => "Ruler in centimeters", "pt" => "Ruler in points", _ => "Ruler in inches" })
             }
             data-unit=move || s.units.get()
             data-layout={

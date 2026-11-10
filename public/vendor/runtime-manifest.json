@@ -1,7 +1,17 @@
 {
   "inputs": {
+    "shared/parameters/reportParameters.ts": {
+      "bytes": 2281,
+      "imports": [],
+      "format": "esm"
+    },
+    "tabs/data/model/jsonSyntax.ts": {
+      "bytes": 1290,
+      "imports": [],
+      "format": "esm"
+    },
     "engine/types.ts": {
-      "bytes": 7229,
+      "bytes": 8178,
       "imports": [],
       "format": "esm"
     },
@@ -33,7 +43,7 @@
       "format": "esm"
     },
     "engine/expressions.ts": {
-      "bytes": 14631,
+      "bytes": 16265,
       "imports": [],
       "format": "esm"
     },
@@ -75,7 +85,7 @@
       "format": "esm"
     },
     "engine/validation.ts": {
-      "bytes": 21738,
+      "bytes": 23370,
       "imports": [
         {
           "path": "engine/charts.ts",
@@ -106,7 +116,7 @@
       "format": "esm"
     },
     "engine/layout.ts": {
-      "bytes": 18665,
+      "bytes": 20841,
       "imports": [
         {
           "path": "engine/charts.ts",
@@ -212,6 +222,33 @@
       ],
       "format": "esm"
     },
+    "tabs/data/model/inferTables.ts": {
+      "bytes": 2414,
+      "imports": [
+        {
+          "path": "shared/parameters/reportParameters.ts",
+          "kind": "import-statement",
+          "original": "../../../shared/parameters/reportParameters.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "tabs/data/model/nestedJson.ts": {
+      "bytes": 4738,
+      "imports": [
+        {
+          "path": "engine/index.ts",
+          "kind": "import-statement",
+          "original": "../../../engine/index.ts"
+        },
+        {
+          "path": "tabs/data/model/inferTables.ts",
+          "kind": "import-statement",
+          "original": "./inferTables.ts"
+        }
+      ],
+      "format": "esm"
+    },
     "tabs/data/model/tableDefinition.ts": {
       "bytes": 2323,
       "imports": [
@@ -224,12 +261,27 @@
       "format": "esm"
     },
     "tabs/data/model/importTables.ts": {
-      "bytes": 1780,
+      "bytes": 3298,
       "imports": [
+        {
+          "path": "tabs/data/model/nestedJson.ts",
+          "kind": "import-statement",
+          "original": "./nestedJson.ts"
+        },
+        {
+          "path": "tabs/data/model/jsonSyntax.ts",
+          "kind": "import-statement",
+          "original": "./jsonSyntax.ts"
+        },
         {
           "path": "engine/index.ts",
           "kind": "import-statement",
           "original": "../../../engine/index.ts"
+        },
+        {
+          "path": "tabs/data/model/inferTables.ts",
+          "kind": "import-statement",
+          "original": "./inferTables.ts"
         },
         {
           "path": "tabs/data/model/tableDefinition.ts",
@@ -314,8 +366,56 @@
       ],
       "format": "esm"
     },
+    "engine/resourceDiagnostics.ts": {
+      "bytes": 1581,
+      "imports": [
+        {
+          "path": "engine/index.ts",
+          "kind": "import-statement",
+          "original": "./index.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "engine/fieldDiagnostics.ts": {
+      "bytes": 2939,
+      "imports": [
+        {
+          "path": "engine/types.ts",
+          "kind": "import-statement",
+          "original": "./types.ts"
+        },
+        {
+          "path": "engine/expressions.ts",
+          "kind": "import-statement",
+          "original": "./expressions.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "tabs/data/model/replaceTableRecords.ts": {
+      "bytes": 1412,
+      "imports": [
+        {
+          "path": "engine/validation.ts",
+          "kind": "import-statement",
+          "original": "../../../engine/validation.ts"
+        },
+        {
+          "path": "tabs/data/model/jsonSyntax.ts",
+          "kind": "import-statement",
+          "original": "./jsonSyntax.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "domain/report/alignElements.ts": {
+      "bytes": 2700,
+      "imports": [],
+      "format": "esm"
+    },
     "domain/report/tableElements.ts": {
-      "bytes": 5282,
+      "bytes": 5398,
       "imports": [
         {
           "path": "engine/index.ts",
@@ -342,7 +442,7 @@
       "format": "esm"
     },
     "domain/report/blankProject.ts": {
-      "bytes": 1188,
+      "bytes": 1210,
       "imports": [
         {
           "path": "engine/index.ts",
@@ -358,7 +458,7 @@
       "format": "esm"
     },
     "domain/report/readOnlySections.ts": {
-      "bytes": 1568,
+      "bytes": 2158,
       "imports": [
         {
           "path": "engine/index.ts",
@@ -379,11 +479,6 @@
       ],
       "format": "esm"
     },
-    "shared/parameters/reportParameters.ts": {
-      "bytes": 1249,
-      "imports": [],
-      "format": "esm"
-    },
     "tabs/design/report-area/table/tableEditing.ts": {
       "bytes": 3965,
       "imports": [],
@@ -401,15 +496,31 @@
       "format": "esm"
     },
     "../app/src/data/exampleData.json": {
-      "bytes": 3731,
+      "bytes": 4301,
       "imports": [],
       "format": "esm",
       "with": {
         "type": "json"
       }
     },
+    "domain/report/sampleCatalog.ts": {
+      "bytes": 5358,
+      "imports": [
+        {
+          "path": "domain/report/blankProject.ts",
+          "kind": "import-statement",
+          "original": "./blankProject.ts"
+        },
+        {
+          "path": "engine/index.ts",
+          "kind": "import-statement",
+          "original": "@reportstudio/mini-reports"
+        }
+      ],
+      "format": "esm"
+    },
     "data/exampleInvoice.json": {
-      "bytes": 61871,
+      "bytes": 63856,
       "imports": [],
       "format": "esm",
       "with": {
@@ -439,8 +550,13 @@
       "format": "esm"
     },
     "domain/report/sample.ts": {
-      "bytes": 496,
+      "bytes": 621,
       "imports": [
+        {
+          "path": "domain/report/sampleCatalog.ts",
+          "kind": "import-statement",
+          "original": "./sampleCatalog.ts"
+        },
         {
           "path": "data/exampleInvoice.json",
           "kind": "import-statement",
@@ -463,8 +579,28 @@
       "format": "esm"
     },
     "core.ts": {
-      "bytes": 39158,
+      "bytes": 43999,
       "imports": [
+        {
+          "path": "engine/resourceDiagnostics.ts",
+          "kind": "import-statement",
+          "original": "./engine/resourceDiagnostics.ts"
+        },
+        {
+          "path": "engine/fieldDiagnostics.ts",
+          "kind": "import-statement",
+          "original": "./engine/fieldDiagnostics.ts"
+        },
+        {
+          "path": "tabs/data/model/replaceTableRecords.ts",
+          "kind": "import-statement",
+          "original": "./tabs/data/model/replaceTableRecords.ts"
+        },
+        {
+          "path": "domain/report/alignElements.ts",
+          "kind": "import-statement",
+          "original": "./domain/report/alignElements.ts"
+        },
         {
           "path": "tabs/data/model/importTables.ts",
           "kind": "import-statement",
@@ -600,7 +736,7 @@
       "format": "esm"
     },
     "adapters/pdf.ts": {
-      "bytes": 7356,
+      "bytes": 8199,
       "imports": [
         {
           "path": "vendor/pdf-lib.esm.min.js",
@@ -620,14 +756,24 @@
       ],
       "format": "esm"
     },
-    "node_modules/pdfjs-dist/build/pdf.mjs": {
+    "../../../../IA/Configuraciones/intelligent-reports-studio/runtime/node_modules/pdfjs-dist/build/pdf.mjs": {
       "bytes": 860818,
       "imports": [],
       "format": "esm"
     },
     "bridge.ts": {
-      "bytes": 7818,
+      "bytes": 9377,
       "imports": [
+        {
+          "path": "shared/parameters/reportParameters.ts",
+          "kind": "import-statement",
+          "original": "./shared/parameters/reportParameters.ts"
+        },
+        {
+          "path": "tabs/data/model/jsonSyntax.ts",
+          "kind": "import-statement",
+          "original": "./tabs/data/model/jsonSyntax.ts"
+        },
         {
           "path": "tabs/data/model/importTables.ts",
           "kind": "import-statement",
@@ -684,7 +830,7 @@
           "original": "./charts/renderChart.ts"
         },
         {
-          "path": "node_modules/pdfjs-dist/build/pdf.mjs",
+          "path": "../../../../IA/Configuraciones/intelligent-reports-studio/runtime/node_modules/pdfjs-dist/build/pdf.mjs",
           "kind": "dynamic-import",
           "original": "pdfjs-dist"
         }
@@ -696,7 +842,7 @@
     "../public/vendor/reportstudio-runtime.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-3PJABCXZ.js",
+          "path": "../public/vendor/chunk-FTC2M6DH.js",
           "kind": "import-statement"
         },
         {
@@ -708,7 +854,7 @@
           "kind": "dynamic-import"
         },
         {
-          "path": "../public/vendor/pdf-C6VLCPM5.js",
+          "path": "../public/vendor/pdf-VEBYVVMG.js",
           "kind": "dynamic-import"
         }
       ],
@@ -721,21 +867,21 @@
           "bytesInOutput": 2715
         },
         "vendor/pdf-lib.esm.min.js": {
-          "bytesInOutput": 511948
+          "bytesInOutput": 511946
         },
         "adapters/pdf.ts": {
-          "bytesInOutput": 2923
+          "bytesInOutput": 3403
         },
         "bridge.ts": {
-          "bytesInOutput": 4067
+          "bytesInOutput": 5020
         }
       },
-      "bytes": 522694
+      "bytes": 524141
     },
-    "../public/vendor/sample-5JDT4RYF.js": {
+    "../public/vendor/sample-RMCCRBQZ.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-3PJABCXZ.js",
+          "path": "../public/vendor/chunk-FTC2M6DH.js",
           "kind": "import-statement"
         }
       ],
@@ -747,8 +893,11 @@
       ],
       "entryPoint": "domain/report/sample.ts",
       "inputs": {
+        "domain/report/sampleCatalog.ts": {
+          "bytesInOutput": 3722
+        },
         "data/exampleInvoice.json": {
-          "bytesInOutput": 38247
+          "bytesInOutput": 38820
         },
         "data/sources.ts": {
           "bytesInOutput": 0
@@ -757,15 +906,15 @@
           "bytesInOutput": 1344
         },
         "domain/report/sample.ts": {
-          "bytesInOutput": 42
+          "bytesInOutput": 72
         }
       },
-      "bytes": 39773
+      "bytes": 44126
     },
-    "../public/vendor/chunk-3PJABCXZ.js": {
+    "../public/vendor/chunk-FTC2M6DH.js": {
       "imports": [
         {
-          "path": "../public/vendor/sample-5JDT4RYF.js",
+          "path": "../public/vendor/sample-RMCCRBQZ.js",
           "kind": "dynamic-import"
         }
       ],
@@ -787,11 +936,22 @@
         "o",
         "p",
         "q",
-        "r"
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "w"
       ],
       "inputs": {
+        "shared/parameters/reportParameters.ts": {
+          "bytesInOutput": 586
+        },
+        "tabs/data/model/jsonSyntax.ts": {
+          "bytesInOutput": 647
+        },
         "engine/expressions.ts": {
-          "bytesInOutput": 7428
+          "bytesInOutput": 8316
         },
         "engine/charts.ts": {
           "bytesInOutput": 1311
@@ -806,7 +966,7 @@
           "bytesInOutput": 846
         },
         "engine/validation.ts": {
-          "bytesInOutput": 12899
+          "bytesInOutput": 14146
         },
         "engine/index.ts": {
           "bytesInOutput": 0
@@ -821,7 +981,7 @@
           "bytesInOutput": 582
         },
         "engine/layout.ts": {
-          "bytesInOutput": 7480
+          "bytesInOutput": 8360
         },
         "engine/relations.ts": {
           "bytesInOutput": 686
@@ -829,8 +989,14 @@
         "tabs/data/model/tableDefinition.ts": {
           "bytesInOutput": 1406
         },
+        "tabs/data/model/inferTables.ts": {
+          "bytesInOutput": 1301
+        },
+        "tabs/data/model/nestedJson.ts": {
+          "bytesInOutput": 2304
+        },
         "tabs/data/model/importTables.ts": {
-          "bytesInOutput": 999
+          "bytesInOutput": 1582
         },
         "tabs/data/records/recordsQuery.ts": {
           "bytesInOutput": 2710
@@ -841,29 +1007,38 @@
         "tabs/data/model/relationshipPreview.ts": {
           "bytesInOutput": 344
         },
+        "engine/resourceDiagnostics.ts": {
+          "bytesInOutput": 680
+        },
+        "engine/fieldDiagnostics.ts": {
+          "bytesInOutput": 1180
+        },
+        "tabs/data/model/replaceTableRecords.ts": {
+          "bytesInOutput": 585
+        },
+        "domain/report/alignElements.ts": {
+          "bytesInOutput": 1245
+        },
         "domain/report/tableElements.ts": {
-          "bytesInOutput": 1333
+          "bytesInOutput": 1396
         },
         "domain/report/reportTools.ts": {
           "bytesInOutput": 511
         },
         "domain/report/blankProject.ts": {
-          "bytesInOutput": 315
+          "bytesInOutput": 331
         },
         "domain/report/elementOrder.ts": {
           "bytesInOutput": 412
         },
         "domain/report/readOnlySections.ts": {
-          "bytesInOutput": 373
+          "bytesInOutput": 621
         },
         "tabs/design/report-area/sectionGeometry.ts": {
           "bytesInOutput": 543
         },
         "tabs/preview/previewSettings.ts": {
           "bytesInOutput": 550
-        },
-        "shared/parameters/reportParameters.ts": {
-          "bytesInOutput": 111
         },
         "tabs/design/report-area/table/tableEditing.ts": {
           "bytesInOutput": 1743
@@ -872,13 +1047,13 @@
           "bytesInOutput": 4331
         },
         "../app/src/data/exampleData.json": {
-          "bytesInOutput": 1802
+          "bytesInOutput": 2034
         },
         "core.ts": {
-          "bytesInOutput": 20678
+          "bytesInOutput": 23361
         }
       },
-      "bytes": 75739
+      "bytes": 91035
     },
     "../public/vendor/renderChart-7BOQJLCP.js": {
       "imports": [
@@ -918,7 +1093,7 @@
       },
       "bytes": 285123
     },
-    "../public/vendor/pdf-C6VLCPM5.js": {
+    "../public/vendor/pdf-VEBYVVMG.js": {
       "imports": [],
       "exports": [
         "AbortException",
@@ -984,9 +1159,9 @@
         "updateUrlHash",
         "version"
       ],
-      "entryPoint": "node_modules/pdfjs-dist/build/pdf.mjs",
+      "entryPoint": "../../../../IA/Configuraciones/intelligent-reports-studio/runtime/node_modules/pdfjs-dist/build/pdf.mjs",
       "inputs": {
-        "node_modules/pdfjs-dist/build/pdf.mjs": {
+        "../../../../IA/Configuraciones/intelligent-reports-studio/runtime/node_modules/pdfjs-dist/build/pdf.mjs": {
           "bytesInOutput": 431276
         }
       },

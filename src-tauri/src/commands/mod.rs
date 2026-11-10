@@ -1,4 +1,6 @@
 mod editor_modality;
+pub mod data_files;
+pub mod preferences;
 pub mod editor_windows;
 use serde_json::Value;
 use std::{fs, path::Path, sync::Mutex};
@@ -20,6 +22,19 @@ pub fn set_document_dirty(dirty: bool, message: String, state: State<'_, Documen
 
 pub struct NativeClipboard(pub Mutex<Option<arboard::Clipboard>>);
 
+/// Ask in an operating-system dialog; a WebKit window.confirm is not supported.
+#[tauri::command]
+pub async fn confirm_discard_changes(window: tauri::WebviewWindow, message: String) -> Result<bool, String> {
+    if message.len() > 2048 { return Err("Confirmation message is too long.".into()); }
+    let answer = rfd::AsyncMessageDialog::new()
+        .set_title("Report Studio")
+        .set_description(&message)
+        .set_buttons(rfd::MessageButtons::YesNo)
+        .set_parent(&window)
+        .show().await;
+    Ok(answer == rfd::MessageDialogResult::Yes)
+}
+
 /// A native acknowledgement proves that the CSR application mounted in the WebView.
 #[tauri::command]
 pub fn frontend_ready() {
@@ -27,6 +42,15 @@ pub fn frontend_ready() {
 }
 
 const MAX_DOCUMENT: usize = 16 * 1024 * 1024;
+fn validate_document_version(document: &Value) -> Result<(), String> {
+    if document["version"] != 1 || !document["report"].is_object() {
+        return Err("Invalid report document.".into());
+    }
+    if document.get("schemaVersion").is_some_and(|version| version != 1) {
+        return Err("Unsupported report schema version.".into());
+    }
+    Ok(())
+}
 fn checked_text(text: String) -> Result<String, String> {
     if text.len() > MAX_DOCUMENT {
         Err("The document exceeds the 16 MiB limit.".into())
@@ -61,9 +85,7 @@ fn recovery_path(app: &tauri::AppHandle) -> Result<std::path::PathBuf, String> {
 }
 #[tauri::command]
 pub fn save_recovery(app: tauri::AppHandle, document: Value) -> Result<(), String> {
-    if document["version"] != 1 || !document["report"].is_object() {
-        return Err("Invalid report document.".into());
-    }
+    validate_document_version(&document)?;
     let bytes = serde_json::to_vec(&document).map_err(|e| e.to_string())?;
     if bytes.len() > MAX_DOCUMENT {
         return Err("The document exceeds the 16 MiB limit.".into());
@@ -144,9 +166,7 @@ pub async fn save_report(
     save_as: Option<bool>,
     state: State<'_, DocumentPath>,
 ) -> Result<bool, String> {
-    if document["version"] != 1 || !document["report"].is_object() {
-        return Err("Invalid report document.".into());
-    }
+    validate_document_version(&document)?;
     let template = app::domain::template_only(&document);
     let bytes = serde_json::to_vec_pretty(&template).map_err(|e| e.to_string())?;
     if bytes.len() > MAX_DOCUMENT {
@@ -175,7 +195,8 @@ pub async fn save_report(
     }
 }
 #[tauri::command]
-pub fn reset_document_path(state: State<'_, DocumentPath>) -> Result<(), String> {
+pub fn reset_document_path(state: State<'_, DocumentPath>, files: State<'_, data_files::DataFiles>) -> Result<(), String> {
+    files.clear()?;
     *state.0.lock().map_err(|e| e.to_string())? = None;
     Ok(())
 }
@@ -189,9 +210,7 @@ pub async fn open_document(state: State<'_, DocumentPath>) -> Result<Option<Stri
         let text = read_document(file.path())?;
         // Only remember a document after basic structural validation.
         let value: Value = serde_json::from_str(&text).map_err(|e| e.to_string())?;
-        if value["version"] != 1 || !value["report"].is_object() {
-            return Err("Invalid report document.".into());
-        }
+        validate_document_version(&value)?;
         *state.1.lock().map_err(|e| e.to_string())? = Some(file.path().to_path_buf());
         Ok(Some(text))
     } else {
@@ -202,7 +221,9 @@ pub async fn open_document(state: State<'_, DocumentPath>) -> Result<Option<Stri
 pub fn accept_document_path(
     app: tauri::AppHandle,
     state: State<'_, DocumentPath>,
+    files: State<'_, data_files::DataFiles>,
 ) -> Result<(), String> {
+    files.clear()?;
     let pending = state.1.lock().map_err(|e| e.to_string())?.take();
     if let Some(path) = &pending {
         if let Err(error) = remember_document(&app, path) {
@@ -212,14 +233,26 @@ pub fn accept_document_path(
     *state.0.lock().map_err(|e| e.to_string())? = pending;
     Ok(())
 }
+/// Generate a portable file name without treating report titles as paths.
+fn pdf_file_name(title: Option<&str>) -> String {
+    let cleaned: String = title.unwrap_or("").chars().take(100)
+        .map(|c| if c.is_control() || ['/', '\\', ':', '*', '?', '"', '<', '>', '|'].contains(&c) { '_' } else { c })
+        .collect();
+    let stem = cleaned.trim().trim_matches('.').trim();
+    let stem = if stem.is_empty() { "Report Studio" } else { stem };
+    let base = stem.split('.').next().unwrap_or(stem).to_ascii_uppercase();
+    let reserved = matches!(base.as_str(), "CON" | "PRN" | "AUX" | "NUL" | "COM1" | "COM2" | "COM3" | "COM4" | "COM5" | "COM6" | "COM7" | "COM8" | "COM9" | "LPT1" | "LPT2" | "LPT3" | "LPT4" | "LPT5" | "LPT6" | "LPT7" | "LPT8" | "LPT9");
+    let stem = if reserved { format!("_{stem}") } else { stem.to_owned() };
+    if stem.to_ascii_lowercase().ends_with(".pdf") { stem } else { format!("{stem}.pdf") }
+}
 #[tauri::command]
-pub async fn save_pdf(bytes: Vec<u8>) -> Result<bool, String> {
+pub async fn save_pdf(bytes: Vec<u8>, suggested_name: Option<String>) -> Result<bool, String> {
     if bytes.len() > 100 * 1024 * 1024 || !bytes.starts_with(b"%PDF-") {
         return Err("Invalid PDF document.".into());
     }
     if let Some(file) = rfd::AsyncFileDialog::new()
         .add_filter("PDF", &["pdf"])
-        .set_file_name("Report Studio.pdf")
+        .set_file_name(pdf_file_name(suggested_name.as_deref()))
         .save_file()
         .await
     {

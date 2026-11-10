@@ -13,6 +13,7 @@
     "allow-load-recovery",
     "allow-clear-recovery",
     "allow-set-document-dirty",
+    "allow-confirm-discard-changes",
     "allow-open-report",
     "allow-open-document",
     "allow-list-recent-documents",

@@ -26,6 +26,10 @@ pub fn SectionProperties(band: Value) -> impl IntoView {
     let report = s.project.get()["report"].clone();
     let b = band.clone();
     let name_band_id = text(&band, "id");
+    let page_break_id = name_band_id.clone();
+    let page_break = band["pageBreakBefore"] == true;
+    let can_break = !["header", "pageHeader", "pageFooter"].iter().any(|key| report[*key]["id"] == band["id"])
+        && !bands(&report).iter().any(|section| array(&section["sections"]).iter().any(|child| child["id"] == band["id"]));
     let page = report["page"].clone();
     let detail = array(&report["details"]).into_iter().find(|d| {
         ["band", "groupHeader", "groupFooter"]
@@ -42,12 +46,16 @@ pub fn SectionProperties(band: Value) -> impl IntoView {
                 on_change=move |v: String| s.patch_band_by_id(&name_band_id, "name", json!(v))
             />
             <MetricField
-                label=if unit == 1.0 { "Section height (inches)" } else { "Section height (cm)" }
+                label=match s.units.get().as_str() { "mm" => "Section height (mm)", "cm" => "Section height (cm)", "pt" => "Section height (pt)", _ => "Section height (inches)" }
                 value=number(&band, "height") * unit
-                min=0.1
-                max=25.4
+                min=0.05 * unit
+                max=10.0 * unit
                 on_change=move |v: f64| s.patch_band("height", json!(v/unit))
             />
+            {can_break.then(|| view! {
+                <CheckField label="Start section on a new page" checked=page_break toggle=false
+                    on_change=move |value: bool| s.patch_band_by_id(&page_break_id, "pageBreakBefore", json!(value)) />
+            })}
             {detail
                 .map(|detail| {
                     let mut source_options = vec![(String::new(), s.t("No data source"))];
@@ -64,6 +72,8 @@ pub fn SectionProperties(band: Value) -> impl IntoView {
                     }
                     let id = text(&detail, "id");
                     let group_id = id.clone();
+                    let empty_id = id.clone();
+                    let is_detail_band = detail["band"]["id"] == band["id"];
                     view! {
                         <SelectField
                             label="Data source"
@@ -81,6 +91,11 @@ pub fn SectionProperties(band: Value) -> impl IntoView {
                                 s.command("detail-settings", json!({"id":group_id,"groupBy":v}))
                             }
                         />
+                        {is_detail_band.then(|| view! {
+                            <TextField label="Message when no records" value=text(&detail,"emptyMessage") multiline=true
+                                on_change=move |v: String| s.command("detail-settings", json!({"id":empty_id,"emptyMessage":v})) />
+                            <p class="helper">{s.t("Leave blank to show no message when the data source is empty.")}</p>
+                        })}
                     }
                 })}
         </InspectorSection>
@@ -114,16 +129,13 @@ pub fn SectionProperties(band: Value) -> impl IntoView {
         <InspectorSection title="Page">
             <SelectField
                 label="Paper"
-                value=if (number(&page, "width") - 8.5).abs() < 0.01 {
-                    "letter".into()
-                } else {
-                    "a4".into()
-                }
-                options=options(
-                    &[("letter", "Letter · 8.5 × 11″"), ("a4", "A4 · 210 × 297 mm")],
-                )
+                value=crate::shared::dialogs::page_preset(&page).to_string()
+                options=options(&[("A4", "A4 · 210 × 297 mm"), ("A5", "A5 · 148 × 210 mm"),
+                    ("Letter", "Letter · 8.5 × 11″"), ("Legal", "Legal · 8.5 × 14″"), ("Custom", "Custom")])
                 on_change=move |v: String| s.command("page-settings", json!({"paper":v}))
             />
+            <ColorField label="Page background" value=page["background"].as_str().unwrap_or("#ffffff").to_owned()
+                on_change=move |value: String| s.command("page-settings", json!({"background":value})) />
             <MetricField
                 label="Uniform margins"
                 value=number(&page["margins"], "left")

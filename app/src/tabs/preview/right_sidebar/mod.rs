@@ -53,6 +53,48 @@ pub fn PreviewSidebar() -> impl IntoView {
                     {move || s.t("Fit to width")}
                 </label>
             </details>
+            <Show when=move || !array(&s.preview.get()["fieldDiagnostics"]).is_empty()>
+                <details class="preview-field-warnings" open>
+                    <summary>{move || s.t("Data warnings")}</summary>
+                    <p>{move || s.t("The report was generated, but some fields may be empty.")}</p>
+                    <ul>
+                        {move || array(&s.preview.get()["fieldDiagnostics"]).into_iter().map(|warning| {
+                            let kind = if warning["kind"] == "missing-values" { "Missing in some records" } else { "Field not found" };
+                            view! { <li><strong>{text(&warning,"field")}</strong><br />{s.t(kind)}" · "{s.t(&text(&warning,"section"))}</li> }
+                        }).collect_view()}
+                    </ul>
+                </details>
+            </Show>
+            <Show when=move || !array(&s.preview.get()["resourceDiagnostics"]).is_empty()>
+                <details class="preview-field-warnings" open>
+                    <summary>{move || s.t("Resource warnings")}</summary>
+                    <p>{move || s.t("Review these resources to improve the exported report.")}</p>
+                    <ul>
+                        {move || array(&s.preview.get()["resourceDiagnostics"]).into_iter().map(|warning| {
+                            let section = text(&warning,"section");
+                            let band = text(&warning,"bandId");
+                            let element = text(&warning,"elementId");
+                            let resource = text(&warning,"resource");
+                            let fallback = text(&warning,"fallback");
+                            let image = warning["kind"] == "missing-image";
+                            view! { <li>
+                                <strong>{if image {s.t("Image has no file")} else {s.t("PDF font substitution")}}</strong><br />
+                                {s.t(&section)}
+                                {(!image).then(|| view! { <span>" · "{resource}" → "{fallback}</span> })}
+                                <div><Button label="Review element" on_press=move |_| {
+                                    s.band.set(band.clone()); s.selected.set(vec![element.clone()]); s.tab.set("Design".into());
+                                    let section_id = band.clone();
+                                    request_animation_frame(move || {
+                                        if let Some(section) = document().get_element_by_id(&format!("report-section-{section_id}")) {
+                                            section.scroll_into_view_with_bool(false);
+                                        }
+                                    });
+                                } /></div>
+                            </li> }
+                        }).collect_view()}
+                    </ul>
+                </details>
+            </Show>
             <section class="preview-panel-information">
             <h2>{move || s.t("Information")}</h2>
             <dl>

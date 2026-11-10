@@ -7,6 +7,7 @@ const MM_PER_INCH: f64 = 25.4;
 pub fn paper_dimensions(preset: &str) -> Option<(f64, f64)> {
     match preset {
         "A4" => Some((210.0 / MM_PER_INCH, 297.0 / MM_PER_INCH)),
+        "A5" => Some((148.0 / MM_PER_INCH, 210.0 / MM_PER_INCH)),
         "Letter" => Some((8.5, 11.0)),
         "Legal" => Some((8.5, 14.0)),
         _ => None,
@@ -16,7 +17,7 @@ pub fn paper_dimensions(preset: &str) -> Option<(f64, f64)> {
 pub fn page_preset(page: &Value) -> &'static str {
     let width = number(page, "width");
     let height = number(page, "height");
-    for name in ["A4", "Letter", "Legal"] {
+    for name in ["A4", "A5", "Letter", "Legal"] {
         let (w, h) = paper_dimensions(name).unwrap();
         if ((width - w).abs() < 0.001 && (height - h).abs() < 0.001)
             || ((width - h).abs() < 0.001 && (height - w).abs() < 0.001)
@@ -59,8 +60,8 @@ fn set_page(page: Value) {
     studio().draft.set(page.to_string());
     studio().message.set(String::new());
 }
-fn mm(value: f64) -> String {
-    let rounded = (value * MM_PER_INCH * 100.0).round() / 100.0;
+fn display_value(value: f64, scale: f64) -> String {
+    let rounded = (value * scale * 100.0).round() / 100.0;
     rounded.to_string()
 }
 
@@ -69,15 +70,15 @@ fn Dimension(label: &'static str, key: &'static str, margin: bool) -> impl IntoV
     let s = studio();
     view! {
         <label class="property">
-            <span>{move || s.t(label)}</span>
+            <span>{move || format!("{} ({})", s.t(label), s.units.get())}</span>
             <input type="number" step="0.1" min="0" aria-label=move || s.t(label)
                 prop:value=move || {
                     let page = draft();
                     let value = if margin { page["margins"][key].as_f64() } else { page[key].as_f64() };
-                    value.map(mm).unwrap_or_default()
+                    value.map(|v| display_value(v, s.measurement_scale())).unwrap_or_default()
                 }
                 on:change=move |event| {
-                    let value = event_target_value(&event).parse::<f64>().ok().filter(|v| v.is_finite()).map(|v| json!(v / MM_PER_INCH)).unwrap_or(Value::Null);
+                    let value = event_target_value(&event).parse::<f64>().ok().filter(|v| v.is_finite()).map(|v| json!(v / s.measurement_scale())).unwrap_or(Value::Null);
                     let mut page = draft();
                     if margin { page["margins"][key] = value; } else { page[key] = value; }
                     set_page(page);
@@ -107,6 +108,7 @@ pub fn PrintSettings() -> impl IntoView {
                             }
                         }>
                         <option value="A4">"A4 (210 × 297 mm)"</option>
+                        <option value="A5">"A5 (148 × 210 mm)"</option>
                         <option value="Letter">{move || format!("{} (216 × 279 mm)", s.t("Letter"))}</option>
                         <option value="Legal">{move || format!("{} (216 × 356 mm)", s.t("Legal"))}</option>
                         <option value="Custom">{move || s.t("Custom")}</option>
@@ -129,16 +131,16 @@ pub fn PrintSettings() -> impl IntoView {
                         <option value="landscape">{move || s.t("Landscape")}</option>
                     </select>
                 </label>
-                <Dimension label="Width (mm)" key="width" margin=false />
-                <Dimension label="Height (mm)" key="height" margin=false />
+                <Dimension label="Width" key="width" margin=false />
+                <Dimension label="Height" key="height" margin=false />
             </div>
-            <h3>{move || s.t("Margins (mm)")}</h3>
+            <h3>{move || format!("{} ({})", s.t("Margins"), s.units.get())}</h3>
             <p class="print-settings-hint">{move || s.t("Content outside the printable area will be clipped.")}</p>
             <div class="print-settings-grid">
-                <Dimension label="Top margin (mm)" key="top" margin=true />
-                <Dimension label="Bottom margin (mm)" key="bottom" margin=true />
-                <Dimension label="Left margin (mm)" key="left" margin=true />
-                <Dimension label="Right margin (mm)" key="right" margin=true />
+                <Dimension label="Top margin" key="top" margin=true />
+                <Dimension label="Bottom margin" key="bottom" margin=true />
+                <Dimension label="Left margin" key="left" margin=true />
+                <Dimension label="Right margin" key="right" margin=true />
             </div>
         </div>
     }

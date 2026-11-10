@@ -35,6 +35,7 @@ pub fn StudioHeader() -> impl IntoView {
                     <select
                         class="language-select"
                         aria-label="Language"
+                        prop:value=move || s.language.get()
                         on:change=move |e| s.language.set(event_target_value(&e))
                     >
                         <option value="en">{move || format!("🇬🇧 {}", s.t("English"))}</option>

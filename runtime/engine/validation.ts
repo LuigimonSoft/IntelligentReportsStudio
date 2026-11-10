@@ -79,6 +79,8 @@ export function validateReport(input: unknown): ReportDefinition {
   }
   const page = object(report.page);
   const margins = object(page.margins);
+  if (page.background !== undefined && !/^#[0-9a-fA-F]{6}$/.test(String(page.background)))
+    throw new Error('Invalid page background color.');
   const width = number(page.width, 3, 30, 'Page width');
   const height = number(page.height, 3, 40, 'Page height');
   for (const key of ['top', 'right', 'bottom', 'left']) number(margins[key], 0, 10, 'Margen');
@@ -106,6 +108,10 @@ export function validateReport(input: unknown): ReportDefinition {
       throw new Error('Invalid section visibility.');
     if (band.readOnly !== undefined && typeof band.readOnly !== 'boolean')
       throw new Error('Invalid section read-only flag.');
+    if (band.pageBreakBefore !== undefined && typeof band.pageBreakBefore !== 'boolean')
+      throw new Error('Invalid page break setting.');
+    if (depth > 0 && band.pageBreakBefore === true)
+      throw new Error('Page breaks are available only for root sections.');
     for (const key of ['visibilityExpression', 'backgroundExpression'])
       if (band[key] !== undefined) text(band[key], 'Section expression', 2048);
     if (band.background !== undefined && !/^#[0-9a-fA-F]{6}$/.test(String(band.background)))
@@ -119,6 +125,9 @@ export function validateReport(input: unknown): ReportDefinition {
     for (const input of band.elements) {
       const el = object(input);
       uniqueId(el.id);
+      for (const key of ['visible', 'locked'])
+        if (el[key] !== undefined && typeof el[key] !== 'boolean')
+          throw new Error(`Invalid element ${key}.`);
       if (el.groupId !== undefined) text(el.groupId, 'Table group', 200);
       if (!['text', 'image', 'line', 'box', 'shape', 'chart'].includes(String(el.type)))
         throw new Error('Unsupported element type.');
@@ -172,15 +181,16 @@ export function validateReport(input: unknown): ReportDefinition {
           for (const key of ['background', 'color', 'borderColor'])
             if (appearance[key] !== undefined && !/^#[0-9a-fA-F]{6}$/.test(String(appearance[key])))
               throw new Error('Invalid cell color.');
+          if (appearance.verticalAlign !== undefined && !['top', 'middle', 'bottom'].includes(String(appearance.verticalAlign))) throw new Error('Invalid vertical alignment.');
           if (appearance.fontFamily !== undefined && !isReportFontFamily(appearance.fontFamily))
             throw new Error('Invalid font family.');
           if (appearance.fontsize !== undefined) number(appearance.fontsize, 6, 48, 'Text size');
-          for (const key of ['bold', 'italic'])
+          for (const key of ['bold', 'italic', 'underline'])
             if (appearance[key] !== undefined && typeof appearance[key] !== 'boolean')
               throw new Error('Invalid text formatting.');
           if (
             appearance.format !== undefined &&
-            !['text', 'number', 'currency'].includes(String(appearance.format))
+            !['text', 'number', 'currency', 'percent', 'date'].includes(String(appearance.format))
           )
             throw new Error('Invalid value format.');
           if (appearance.borderWidth !== undefined)
@@ -233,8 +243,10 @@ export function validateReport(input: unknown): ReportDefinition {
       if (!/^#[0-9a-fA-F]{6}$/.test(String(style.color))) throw new Error('Invalid color.');
       if (!['left', 'center', 'right'].includes(String(style.align)))
         throw new Error('Invalid alignment.');
-      if (!['text', 'number', 'currency'].includes(String(style.format)))
+      if (!['text', 'number', 'currency', 'percent', 'date'].includes(String(style.format)))
         throw new Error('Invalid format.');
+      if (style.verticalAlign !== undefined && !['top', 'middle', 'bottom'].includes(String(style.verticalAlign))) throw new Error('Invalid vertical alignment.');
+      if (style.underline !== undefined && typeof style.underline !== 'boolean') throw new Error('Invalid style.');
       for (const flag of ['wrap', 'bold', 'italic'])
         if (typeof style[flag] !== 'boolean') throw new Error('Invalid style.');
     }
@@ -243,6 +255,7 @@ export function validateReport(input: unknown): ReportDefinition {
     const detail = object(detailInput);
     uniqueId(detail.id);
     text(detail.dataset, 'Data source', 100);
+    if (detail.emptyMessage !== undefined) text(detail.emptyMessage, 'Empty message', 1000);
     if (detail.groupBy !== undefined) text(detail.groupBy, 'Grouping field', 100);
     if (
       detail.sortDirection !== undefined &&
@@ -265,8 +278,13 @@ export function validateReport(input: unknown): ReportDefinition {
     if (detail.groupHeader) band(detail.groupHeader);
     if (detail.groupFooter) band(detail.groupFooter);
   }
-  for (const key of ['header', 'footer', 'pageHeader', 'pageFooter'])
-    if (report[key]) band(report[key]);
+  for (const key of ['header', 'footer', 'pageHeader', 'pageFooter']) {
+    if (report[key]) {
+      if (key !== 'footer' && object(report[key]).pageBreakBefore === true)
+        throw new Error('Page breaks are not available for report or page headers and page footers.');
+      band(report[key]);
+    }
+  }
   return structuredClone(input) as ReportDefinition;
 }
 export function validateDatasets(input: unknown): Dataset[] {
@@ -291,6 +309,7 @@ export function validateDatasets(input: unknown): Dataset[] {
         names.has(name)
       )
         throw new Error('Invalid or duplicate field name.');
+      if (field.sourcePath !== undefined) text(field.sourcePath, 'Source path', 200);
       if (!['text', 'number', 'boolean'].includes(String(field.type)))
         throw new Error('Invalid field type.');
       if (field.sqlType !== undefined) {
@@ -307,7 +326,7 @@ export function validateDatasets(input: unknown): Dataset[] {
         const field = object(fieldInput);
         const v = row[String(field.name)];
         if (
-          v !== null &&
+          v !== null && v !== undefined &&
           (field.type === 'number'
             ? typeof v !== 'number' || !Number.isFinite(v)
             : field.type === 'boolean'
@@ -326,6 +345,7 @@ export function validateDatasets(input: unknown): Dataset[] {
 export function validateProject(input: unknown): Project {
   const obj = object(input);
   if (obj.version !== 1) throw new Error('Unsupported project version.');
+  if (obj.schemaVersion !== undefined && obj.schemaVersion !== 1) throw new Error('Unsupported report schema version.');
   const report = validateReport(obj.report);
   const datasets = validateDatasets(obj.datasets);
   for (const detail of report.details) {
@@ -453,6 +473,7 @@ export function validateProject(input: unknown): Project {
   }
   return {
     version: 1,
+    schemaVersion: 1,
     ...(parameters ? { parameters } : {}),
     ...(dataModel ? { dataModel } : {}),
     report,

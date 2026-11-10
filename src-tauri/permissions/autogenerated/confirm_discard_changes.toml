@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-confirm-discard-changes"
+description = "Allows the native confirmation dialog for unsaved report changes."
+commands.allow = ["confirm_discard_changes"]

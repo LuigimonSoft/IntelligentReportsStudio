@@ -24,7 +24,17 @@ export function hasReadOnlyAncestor(report: ReportDefinition, sectionId: string)
 /** Editor protection is atomic: a mutation cannot partially change locked sections. */
 export function canEditProject(before: Project, after: Project): boolean {
   const next = new Map(bandsOf(after.report).map((section) => [section.id, section]));
-  return bandsOf(before.report)
+  const updatedElements = new Map(bandsOf(after.report).flatMap(section => section.elements).map(element => [element.id, element]));
+  const lockedElementsUnchanged = bandsOf(before.report).flatMap(section => section.elements)
+    .filter(element => element.locked)
+    .every(element => {
+      const updated = updatedElements.get(element.id);
+      if (!updated) return false;
+      const { locked: _old, ...original } = element;
+      const { locked: _new, ...candidate } = updated;
+      return JSON.stringify(original) === JSON.stringify(candidate);
+    });
+  return lockedElementsUnchanged && bandsOf(before.report)
     .filter((section) => section.readOnly)
     .every((section) => {
       const updated = next.get(section.id);

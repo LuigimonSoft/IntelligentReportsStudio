@@ -14,7 +14,7 @@ pub fn install_shortcuts() {
     use wasm_bindgen::JsCast;
     let s = studio();
     let listener = window_event_listener(leptos::ev::keydown, move |event| {
-        if !s.dialog.get_untracked().is_empty() {
+        if event.default_prevented() || event.is_composing() || !s.dialog.get_untracked().is_empty() {
             return;
         }
         if let Some(element) = event
@@ -22,7 +22,7 @@ pub fn install_shortcuts() {
             .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
         {
             if element
-                .closest("input,textarea,select,[contenteditable=true]")
+                .closest("input,textarea,select,[contenteditable]:not([contenteditable=false])")
                 .ok()
                 .flatten()
                 .is_some()
@@ -34,7 +34,7 @@ pub fn install_shortcuts() {
         let key = event.key().to_lowercase();
         if command {
             match key.as_str() {
-                "a" => {
+                "a" if s.tab.get_untracked() == "Design" => {
                     event.prevent_default();
                     s.selected.set(
                         bands(&s.project.get_untracked()["report"])
@@ -44,7 +44,7 @@ pub fn install_shortcuts() {
                             .collect(),
                     );
                 }
-                "c" | "x" | "v" => {
+                "c" | "x" | "v" if s.tab.get_untracked() == "Design" => {
                     event.prevent_default();
                     s.command(
                         match key.as_str() {
@@ -73,7 +73,7 @@ pub fn install_shortcuts() {
                 }
                 _ => {}
             }
-        } else if (key == "delete" || key == "backspace") && !s.selected.get_untracked().is_empty()
+        } else if s.tab.get_untracked() == "Design" && (key == "delete" || key == "backspace") && !s.selected.get_untracked().is_empty()
         {
             event.prevent_default();
             s.command("delete", Value::Null);

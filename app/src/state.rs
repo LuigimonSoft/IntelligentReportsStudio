@@ -16,8 +16,16 @@ pub struct Studio {
     pub zoom_auto: RwSignal<bool>,
     pub design_fit_initialized: RwSignal<bool>,
     pub units: RwSignal<String>,
+    pub design_left_width: RwSignal<f64>,
+    pub design_right_width: RwSignal<f64>,
+    pub data_left_width: RwSignal<f64>,
+    pub data_right_width: RwSignal<f64>,
+    pub preview_left_width: RwSignal<f64>,
+    pub preview_right_width: RwSignal<f64>,
     pub guides: RwSignal<String>,
     pub spacing: RwSignal<f64>,
+    pub snap_grid: RwSignal<bool>,
+    pub show_margins: RwSignal<bool>,
     pub table: RwSignal<String>,
     pub relation: RwSignal<Value>,
     pub model_zoom: RwSignal<f64>,
@@ -33,11 +41,18 @@ pub struct Studio {
     pub record_count: RwSignal<usize>,
     pub record_columns: RwSignal<Vec<Value>>,
     pub record_refresh: RwSignal<usize>,
+    pub data_file_tables: RwSignal<Vec<String>>,
     pub history: RwSignal<Vec<Value>>,
     pub future: RwSignal<Vec<Value>>,
     pub dirty: RwSignal<bool>,
     pub message: RwSignal<String>,
+    pub notification: RwSignal<String>,
+    pub notification_error: RwSignal<bool>,
+    pub exporting_pdf: RwSignal<bool>,
     pub preview: RwSignal<Value>,
+    pub preview_loading: RwSignal<bool>,
+    pub preview_error: RwSignal<String>,
+    pub preview_render_revision: RwSignal<u64>,
     pub preview_page: RwSignal<usize>,
     pub preview_zoom: RwSignal<f64>,
     pub preview_fit_width: RwSignal<bool>,
@@ -88,8 +103,16 @@ impl Studio {
             zoom_auto: RwSignal::new(true),
             design_fit_initialized: RwSignal::new(false),
             units: RwSignal::new("cm".into()),
+            design_left_width: RwSignal::new(310.0),
+            design_right_width: RwSignal::new(344.0),
+            data_left_width: RwSignal::new(260.0),
+            data_right_width: RwSignal::new(292.0),
+            preview_left_width: RwSignal::new(190.0),
+            preview_right_width: RwSignal::new(292.0),
             guides: RwSignal::new("dots".into()),
             spacing: RwSignal::new(0.5 / 2.54),
+            snap_grid: RwSignal::new(false),
+            show_margins: RwSignal::new(false),
             table: RwSignal::new(table),
             relation: RwSignal::new(Value::Null),
             model_zoom: RwSignal::new(1.0),
@@ -105,11 +128,18 @@ impl Studio {
             record_count: RwSignal::new(0),
             record_columns: RwSignal::new(vec![]),
             record_refresh: RwSignal::new(0),
+            data_file_tables: RwSignal::new(vec![]),
             history: RwSignal::new(vec![]),
             future: RwSignal::new(vec![]),
             dirty: RwSignal::new(false),
             message: RwSignal::new("Ready".into()),
+            notification: RwSignal::new(String::new()),
+            notification_error: RwSignal::new(false),
+            exporting_pdf: RwSignal::new(false),
             preview: RwSignal::new(Value::Null),
+            preview_loading: RwSignal::new(false),
+            preview_error: RwSignal::new(String::new()),
+            preview_render_revision: RwSignal::new(0),
             preview_page: RwSignal::new(1),
             preview_zoom: RwSignal::new(0.66),
             preview_fit_width: RwSignal::new(false),
@@ -137,6 +167,24 @@ impl Studio {
         }
         crate::i18n::translate(&self.language.get(), key)
     }
+    fn invalidate_preview(self) {
+        self.preview_render_revision.update(|revision| *revision = revision.wrapping_add(1));
+        self.preview_loading.set(false);
+        self.preview_error.set(String::new());
+        self.preview.set(Value::Null);
+    }
+    pub fn describe_error(self, error: &str) -> String {
+        if let Some(details) = error.strip_prefix("Image could not be decoded: ") {
+            if let Some((section_id, element_id)) = details.split_once(" / ") {
+                let section = bands(&self.project.get_untracked()["report"]).iter()
+                    .find(|band| text(band, "id") == section_id)
+                    .map(|band| self.t(&text(band, "name")))
+                    .unwrap_or_else(|| section_id.to_owned());
+                return format!("{}: {} · {}", self.t("Image could not be decoded"), section, element_id);
+            }
+        }
+        self.t(error)
+    }
     pub fn commit(self, next: Value) {
         let old = self.project.get_untracked();
         if old == next {
@@ -151,7 +199,7 @@ impl Studio {
         self.future.set(vec![]);
         self.project.set(next);
         self.dirty.set(true);
-        self.preview.set(Value::Null);
+        self.invalidate_preview();
     }
     pub fn undo(self) {
         let mut h = self.history.get_untracked();
@@ -160,7 +208,7 @@ impl Studio {
             self.history.set(h);
             self.project.set(p);
             self.dirty.set(true);
-            self.preview.set(Value::Null);
+            self.invalidate_preview();
         }
     }
     pub fn redo(self) {
@@ -171,7 +219,7 @@ impl Studio {
             self.future.set(f);
             self.project.set(p);
             self.dirty.set(true);
-            self.preview.set(Value::Null);
+            self.invalidate_preview();
         }
     }
     pub fn mutate(self, change: impl FnOnce(&mut Value)) {
@@ -245,6 +293,9 @@ impl Studio {
         }
     }
     pub fn patch_element(self, key: &str, value: Value) {
+        if self.selected_element().is_some_and(|element| element["locked"] == true) {
+            return;
+        }
         if ["x", "y", "width", "height"].contains(&key)
             && self
                 .selected_element()
@@ -263,7 +314,7 @@ impl Studio {
                 }
                 if let Some(b) = band_mut(&mut p["report"], &id) {
                     for e in b["elements"].as_array_mut().into_iter().flatten() {
-                        if ids.contains(&text(e, "id")) {
+                        if ids.contains(&text(e, "id")) && e["locked"] != true {
                             e[key] = value.clone();
                         }
                     }
@@ -273,12 +324,21 @@ impl Studio {
     }
     /// Serialize asynchronous document actions so rapid clicks never overwrite edits.
     pub fn command(self, action: &str, args: Value) {
+        // Element clipboard and deletion commands operate only on the designer.
+        if matches!(action, "cut" | "copy" | "paste" | "delete") && self.tab.get_untracked() != "Design" {
+            return;
+        }
         #[cfg(feature = "csr")]
         {
-            if matches!(action, "new" | "open" | "open-recent")
-                && self.dirty.get_untracked()
-                && !crate::platform::confirm_discard(&self.t("Discard unsaved changes?"))
-            {
+            if action == "export-pdf" {
+                if self.exporting_pdf.get_untracked() { return; }
+                self.exporting_pdf.set(true);
+                self.notification_error.set(false);
+                self.notification.set(self.t("Exporting PDF..."));
+            }
+            if action == "print" && (self.tab.get_untracked() != "Preview" || self.preview.get_untracked().is_null() || self.preview_loading.get_untracked() || !self.preview_error.get_untracked().is_empty()) {
+                self.notification_error.set(true);
+                self.notification.set(self.t("Generate the preview before printing."));
                 return;
             }
             let mut action = action.to_owned();
@@ -301,6 +361,12 @@ impl Studio {
             if action == "apply-definition" && args["kind"] == "Record" {
                 args["original"] = self.original_record.get_untracked();
             }
+            if action == "preview" {
+                self.preview_render_revision.update(|revision| *revision += 1);
+                self.preview_error.set(String::new());
+                self.preview_loading.set(true);
+                self.preview.set(Value::Null);
+            }
             if action == "preview" || action == "export-pdf" {
                 args["header"] = json!(self.preview_header.get_untracked());
                 args["footer"] = json!(self.preview_footer.get_untracked());
@@ -316,7 +382,7 @@ impl Studio {
                 args["hiddenColumns"] = json!(self.hidden_columns.get_untracked());
             }
             if args.get("table").is_none()
-                && ["query", "export-data", "apply-definition", "model-settings"]
+                && ["query", "export-data", "apply-definition", "model-settings", "load-table-data", "reload-table-data"]
                     .contains(&action.as_str())
             {
                 args["table"] = json!(self.table.get_untracked());
@@ -334,6 +400,17 @@ impl Studio {
                         break;
                     };
                     self.commands.set(queue);
+                    if matches!(action.as_str(), "new" | "open" | "open-recent" | "restore-example") && self.dirty.get_untracked() {
+                        match crate::platform::confirm_discard(&self.t("Discard unsaved changes?")).await {
+                            Ok(true) => {},
+                            Ok(false) => continue,
+                            Err(error) => {
+                                self.notification_error.set(true);
+                                self.notification.set(format!("{}: {}", self.t("Unable to show confirmation"), error));
+                                continue;
+                            }
+                        }
+                    }
                     if action == "export-pdf" && !self.preview.get_untracked().is_null() {
                         args["layout"] = self.preview.get_untracked();
                     }
@@ -341,10 +418,44 @@ impl Studio {
                     let request = json!({"action":action,"project":snapshot,"selected":self.selected.get_untracked(),"band":self.band.get_untracked(),"args":args});
                     match crate::platform::call(request).await {
                         Ok(result) => {
+                            if action == "restore-example" && snapshot != self.project.get_untracked() {
+                                self.data_file_tables.set(vec![]);
+                                self.notification_error.set(true);
+                                self.notification.set(self.t("The report changed while opening the example. Save it again before continuing."));
+                                continue;
+                            }
+                            if matches!(action.as_str(), "load-table-data" | "reload-table-data") && result.get("project").is_some() {
+                                if snapshot != self.project.get_untracked() {
+                                    self.notification_error.set(true);
+                                    self.notification.set(self.t("The report changed while loading data. Try again."));
+                                    continue;
+                                }
+                                if result["pendingDataSource"] == true {
+                                    if let Err(error) = crate::platform::call(json!({"action":"accept-table-data","args":{"table":result["dataSourceTable"]}})).await {
+                                        self.notification_error.set(true);
+                                        self.notification.set(format!("{}: {}", self.t("Unable to load table data"), error));
+                                        continue;
+                                    }
+                                    if snapshot != self.project.get_untracked() {
+                                        let _ = crate::platform::call(json!({"action":"clear-table-data-sources"})).await;
+                                        self.data_file_tables.set(vec![]);
+                                        self.notification_error.set(true);
+                                        self.notification.set(self.t("The report changed while loading data. Try again."));
+                                        continue;
+                                    }
+                                }
+                                if let Some(id) = result["dataSourceTable"].as_str() {
+                                    self.data_file_tables.update(|ids| if !ids.iter().any(|item| item == id) { ids.push(id.to_owned()) });
+                                    self.record_refresh.update(|version| *version += 1);
+                                }
+                            }
+                            if matches!(action.as_str(), "new" | "open" | "open-recent" | "duplicate-report" | "replace-tables" | "restore-example") && result.get("project").is_some() {
+                                self.data_file_tables.set(vec![]);
+                            }
                             if let Some(project) = result.get("project") {
                                 self.commit(project.clone());
-                                if action == "new" || action == "open" || action == "open-recent" {
-                                    self.dirty.set(false);
+                                if matches!(action.as_str(), "new" | "open" | "open-recent" | "restore-example") {
+                                    self.dirty.set(action == "restore-example");
                                     self.history.set(vec![]);
                                     self.future.set(vec![]);
                                 }
@@ -396,12 +507,22 @@ impl Studio {
                                 });
                             }
                             if let Some(layout) = result.get("layout") {
-                                self.preview.set(layout.clone());
-                                self.preview_page.set(1);
+                                if action == "preview" && snapshot != self.project.get_untracked() {
+                                    self.preview_loading.set(false);
+                                    self.preview_error.set(self.t("The report changed while the preview was being generated. Refresh the preview."));
+                                } else {
+                                    self.preview.set(layout.clone());
+                                    self.preview_page.set(1);
+                                }
                             }
                             if let Some(message) = result["message"].as_str() {
                                 self.message.set(message.into());
+                                if matches!(action.as_str(), "export-pdf" | "load-table-data" | "reload-table-data") {
+                                    self.notification_error.set(false);
+                                    self.notification.set(self.t(message));
+                                }
                             }
+                            if action == "export-pdf" { self.exporting_pdf.set(false); }
                             if let Some(selected) = result["selected"].as_array() {
                                 self.selected.set(
                                     selected
@@ -414,7 +535,33 @@ impl Studio {
                                 self.dirty.set(false);
                             }
                         }
-                        Err(error) => self.message.set(error),
+                        Err(error) => {
+                            let translated = [
+                                "Required parameter",
+                                "Invalid boolean parameter",
+                                "Invalid numeric parameter",
+                                "Invalid date parameter",
+                            ]
+                            .iter()
+                            .find_map(|key| {
+                                error
+                                    .strip_prefix(&format!("{key}: "))
+                                    .map(|label| format!("{}: {}", self.t(key), label))
+                            })
+                            .unwrap_or(error);
+                            let translated = self.describe_error(&translated);
+                            if action == "preview" {
+                                self.preview_loading.set(false);
+                                self.preview_error.set(translated.clone());
+                            }
+                            if action == "export-pdf" || action == "print" || action == "load-table-data" || action == "reload-table-data" {
+                                if action == "export-pdf" { self.exporting_pdf.set(false); }
+                                self.notification_error.set(true);
+                                let title = if action == "print" { "Unable to print" } else if action == "export-pdf" { "Unable to export PDF" } else { "Unable to load table data" };
+                                self.notification.set(format!("{}: {}", self.t(title), translated));
+                            }
+                            self.message.set(translated);
+                        }
                     }
                 }
                 self.busy.set(false);
@@ -433,10 +580,11 @@ impl Studio {
         }
     }
     pub fn measurement_scale(self) -> f64 {
-        if self.units.get() == "cm" {
-            2.54
-        } else {
-            1.0
+        match self.units.get().as_str() {
+            "mm" => 25.4,
+            "cm" => 2.54,
+            "pt" => 72.0,
+            _ => 1.0,
         }
     }
     pub fn fit_design(self) {
@@ -549,7 +697,7 @@ impl Studio {
         if crate::platform::editor_windows::native_desktop()
             && !crate::platform::editor_windows::editor_window()
         {
-            let context = json!({"kind":kind,"title":self.t(if kind == "Query" { "Edit query" } else if kind == "Chart" { "Chart editor" } else if kind == "Data table" { "Edit table" } else if kind == "Relationship" { if crate::domain::array(&self.project.get_untracked()["relations"]).iter().any(|r| r["id"] == value["id"]) { "Edit relationship" } else { "Add relationship" } } else { kind }),"value":value,"project":self.project.get_untracked(),"language":self.language.get_untracked(),"dark":self.dark.get_untracked(),"table":self.table.get_untracked(),"selected":self.selected.get_untracked(),"band":self.band.get_untracked(),"original":self.original_record.get_untracked()});
+            let context = json!({"kind":kind,"title":self.t(if kind == "Query" { "Edit query" } else if kind == "Chart" { "Chart editor" } else if kind == "Data table" { "Edit table" } else if kind == "Relationship" { if crate::domain::array(&self.project.get_untracked()["relations"]).iter().any(|r| r["id"] == value["id"]) { "Edit relationship" } else { "Add relationship" } } else { kind }),"value":value,"project":self.project.get_untracked(),"language":self.language.get_untracked(),"units":self.units.get_untracked(),"dark":self.dark.get_untracked(),"table":self.table.get_untracked(),"selected":self.selected.get_untracked(),"band":self.band.get_untracked(),"original":self.original_record.get_untracked()});
             let kind = kind.to_owned();
             leptos::task::spawn_local(async move {
                 match crate::platform::editor_windows::call(

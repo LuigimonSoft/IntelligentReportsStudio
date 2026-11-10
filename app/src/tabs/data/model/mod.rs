@@ -126,6 +126,15 @@ pub fn DataModelTab() -> impl IntoView {
                     on:pointercancel=move |_| { drag.set(None); connection.set(None); }
                     on:lostpointercapture=move |_| drag.set(None)
                 >
+                    <Show when=move || array(&s.project.get()["datasets"]).is_empty()>
+                        <div class="model-empty-state">
+                            <crate::shared::controls::empty_state::EmptyState title="Start with a data model"
+                                description="Add a table or import JSON to connect data to your report." icon="model">
+                                <Button label="Add table" primary=true on_press=move |_| s.show_json("Add table", json!({"id":"","name":"","schema":{"fields":[{"name":"id","type":"number","sqlType":{"dialect":"mssql","name":"INT"}}]},"data":[]})) />
+                                <Button label="Import tables" on_press=move |_| s.show_json("Import tables", json!({"json":""})) />
+                            </crate::shared::controls::empty_state::EmptyState>
+                        </div>
+                    </Show>
                     <div
                         class="model-surface"
                         data-layout={
@@ -159,6 +168,7 @@ pub fn DataModelTab() -> impl IntoView {
                     </div>
                 </Show>
             </div>
+            <crate::shared::controls::panel_splitter::PanelSplitter width=s.data_right_width label="Resize properties panel" right=true />
             <ModelProperties />
         </div>
     }

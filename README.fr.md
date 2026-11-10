@@ -61,6 +61,14 @@ Les modèles JSON enregistrent les définitions des tables et les noms des sourc
 
 Consultez le [README principal](README.md) pour la structure et les commandes de test.
 
+Le JSON enregistré utilise `schemaVersion: 1`. Les anciens modèles sans cette propriété sont lus comme version 1 ; les versions de schéma non prises en charge sont rejetées. Les champs existants `version` à la racine et `report.version` restent obligatoires.
+
+Lors de l’import JSON, activez **Développer le JSON imbriqué en tables liées** pour convertir une propriété comme `customer.name` en colonne modifiable `customer_name`, et `items[].price` en colonne d’une table enfant liée. Le schéma conserve le chemin d’origine dans `sourcePath` ; les expressions du rapport utilisent le nom de colonne généré. Les tableaux doivent contenir des objets. Un tableau vide produit une table liée vide avec des clés générées. Les données restent dans la session.
+
+Dans **Conception → Champs disponibles → Modèles d’exemple**, choisissez une facture, un devis, une liste de produits ou un rapport de ventes. Les exemples utilisent des données de session modifiables ; les modèles enregistrés ne contiennent pas les enregistrements.
+
+Les sections principales de détails et le pied du rapport acceptent `pageBreakBefore: true` pour commencer sur une nouvelle page. Dans un détail répété, le saut s’applique à chaque enregistrement et les en-têtes de groupe accompagnent le contenu. Ce réglage ne s’applique pas aux en-têtes du rapport ou de page, aux pieds de page ni aux sous-sections.
+
 ## Prochaines étapes
 
 Une prochaine étape proposée est de créer une famille de bibliothèques et d’intégrations capables de générer des rapports à partir des modèles JSON créés dans IntelligentReports Studio. L’objectif est que chaque application fournisse ses propres données et génère le rapport sans nécessiter le concepteur de bureau à l’exécution.

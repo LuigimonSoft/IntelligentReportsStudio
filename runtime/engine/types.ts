@@ -3,6 +3,10 @@ export type Field = {
   name: string;
   type: 'text' | 'number' | 'boolean';
   sqlType?: import('./sqlTypes.ts').SqlType;
+  /** Original JSON property path for a flattened imported field. */
+  sourcePath?: string;
+  /** Original JSON property path for a flattened imported field. */
+  sourcePath?: string;
 };
 export type Dataset = { id: string; name: string; data: DataRow[]; schema: { fields: Field[] } };
 export type FontFamily =
@@ -23,10 +27,12 @@ export type TextStyle = {
   fontsize: number;
   bold: boolean;
   italic: boolean;
+  underline?: boolean;
+  verticalAlign?: 'top' | 'middle' | 'bottom';
   align: 'left' | 'center' | 'right';
   color: string;
   wrap: boolean;
-  format: 'text' | 'number' | 'currency';
+  format: 'text' | 'number' | 'currency' | 'percent' | 'date';
 };
 export type ShapeKind = 'circle' | 'triangle' | 'diamond' | 'rectangle';
 export type TableCellStyle = {
@@ -40,6 +46,8 @@ export type TableCellStyle = {
   format?: TextStyle['format'];
   bold?: boolean;
   italic?: boolean;
+  underline?: boolean;
+  verticalAlign?: TextStyle['verticalAlign'];
   fontsize?: number;
 };
 export type TableSettings = {
@@ -75,6 +83,10 @@ export type ChartPoint = { label: string; value: number };
 export type ReportElement = {
   id: string;
   type: 'text' | 'image' | 'line' | 'box' | 'shape' | 'chart';
+  /** Hidden elements remain editable in the designer but are omitted from output. */
+  visible?: boolean;
+  /** Prevent accidental modifications until explicitly unlocked. */
+  locked?: boolean;
   shape?: ShapeKind;
   chart?: ChartSettings;
   borderColor?: string;
@@ -99,6 +111,8 @@ export type Band = {
   sections?: Band[];
   visible?: boolean;
   readOnly?: boolean;
+  /** Start this root section on a new page when it has visible content. */
+  pageBreakBefore?: boolean;
   visibilityExpression?: string;
   background?: string;
   backgroundExpression?: string;
@@ -108,6 +122,8 @@ export type DetailSection = {
   id: string;
   dataset: string;
   band: Band;
+  /** Optional literal message shown when the bound source has no records. */
+  emptyMessage?: string;
   groups?: DetailGroup[];
   groupBy?: string;
   sortDirection?: 'asc' | 'desc';
@@ -121,6 +137,7 @@ export type ReportDefinition = {
   id: string;
   title: string;
   page: {
+    background?: string;
     width: number;
     height: number;
     margins: { top: number; right: number; bottom: number; left: number };
@@ -134,6 +151,7 @@ export type ReportDefinition = {
   details: DetailSection[];
 };
 export type ExpressionContext = {
+  parameters?: Record<string, string | number | boolean>;
   formulas?: ReportFormula[];
   formulaStack?: string[];
   row: DataRow;
@@ -155,7 +173,7 @@ export type LayoutElement = ReportElement & {
   chartData?: ChartPoint[];
 };
 export type LayoutPage = { number: number; elements: LayoutElement[] };
-export type ReportLayout = { width: number; height: number; margins?: { top: number; right: number; bottom: number; left: number }; title: string; pages: LayoutPage[] };
+export type ReportLayout = { width: number; height: number; background?: string; margins?: { top: number; right: number; bottom: number; left: number }; title: string; pages: LayoutPage[] };
 export type TableRelation = {
   id: string;
   from: { dataset: string; field: string };
@@ -183,6 +201,8 @@ export type DataModelSettings = {
 };
 export type Project = {
   version: 1;
+  /** Missing in legacy documents; new templates always write version 1. */
+  schemaVersion?: 1;
   report: ReportDefinition;
   datasets: Dataset[];
   relations?: TableRelation[];

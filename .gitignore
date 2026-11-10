@@ -23,3 +23,7 @@ playwright/.cache/
 ._*
 # Isolated Playwright runs
 end2end/test-runs/
+
+# Generated runtime chunks
+/public/vendor/chunk-*.js
+/public/vendor/sample-*.js

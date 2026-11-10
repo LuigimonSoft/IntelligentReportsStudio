@@ -16,6 +16,7 @@ pub fn run() {
             std::sync::Mutex::new(None),
             std::sync::Mutex::new(None),
         ))
+        .manage(commands::data_files::DataFiles::default())
         .manage(commands::NativeClipboard(std::sync::Mutex::new(None)))
         .plugin(tauri_plugin_log::Builder::default().build())
         .plugin(tauri_plugin_process::init())
@@ -25,10 +26,17 @@ pub fn run() {
             commands::editor_windows::finish_editor,
             commands::frontend_ready,
             file_menu::set_file_menu_labels,
+            commands::preferences::load_preferences,
+            commands::preferences::save_preferences,
             commands::save_recovery,
             commands::load_recovery,
             commands::clear_recovery,
             commands::set_document_dirty,
+            commands::confirm_discard_changes,
+            commands::data_files::choose_table_data,
+            commands::data_files::accept_table_data,
+            commands::data_files::reload_table_data,
+            commands::data_files::clear_table_data_sources,
             commands::open_report,
             commands::open_document,
             commands::list_recent_documents,

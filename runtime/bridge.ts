@@ -1,3 +1,5 @@
+import { expressionParameters } from "./shared/parameters/reportParameters.ts";
+import { JsonSyntaxError } from "./tabs/data/model/jsonSyntax.ts";
 import { importTables } from "./tabs/data/model/importTables.ts";
 import { modelQueryPlan, modelRecords } from "./tabs/data/records/modelQuery.ts";
 import { tableDefinition } from "./tabs/data/model/tableDefinition.ts";
@@ -56,6 +58,20 @@ export async function call(payload: string): Promise<string> {
   const request: Request = JSON.parse(payload);
   const args = request.args ?? {};
   switch (request.action) {
+    case "preferences-load": {
+      const preferences = (globalThis as any).__TAURI__?.core
+        ? await native("load_preferences")
+        : JSON.parse(localStorage.getItem("reportstudio:preferences") ?? "{}");
+      return JSON.stringify({ preferences });
+    }
+    case "preferences-save":
+      if ((globalThis as any).__TAURI__?.core) await native("save_preferences", { preferences: args.preferences });
+      else localStorage.setItem("reportstudio:preferences", JSON.stringify(args.preferences));
+      return "{}";
+    case "accept-table-data":
+      await native("accept_table_data", {table:args.table}); return "{}";
+    case "clear-table-data-sources":
+      await native("clear_table_data_sources"); return "{}";
     case "recent-documents":
       return JSON.stringify({ paths: await native("list_recent_documents") });
     case "recovery-load": {
@@ -69,7 +85,18 @@ export async function call(payload: string): Promise<string> {
       await native("clear_recovery");
       return "{}";
     case "import-tables-preview":
-      try { const project = importTables(request.project, args.json); return JSON.stringify({valid:true, count:project.datasets.length - request.project.datasets.length}); } catch (error) { return JSON.stringify({valid:false, error:error instanceof Error ? error.message : "Invalid JSON file."}); }
+      try {
+        const project = importTables(request.project, args.json, args.recognizeDates === true, args.expandNested === true);
+        const tables = project.datasets.slice(request.project.datasets.length).map(table => ({
+          name: table.name, recordCount: table.data.length,
+          fields: table.schema.fields.map(field => ({name:field.name, type:field.type, sqlType:field.sqlType?.name, sourcePath:field.sourcePath,
+            missingCount:table.data.reduce((count,row) => count + (Object.hasOwn(row,field.name) ? 0 : 1), 0)})),
+        }));
+        return JSON.stringify({valid:true, count:tables.length, tables});
+      } catch (error) {
+        return JSON.stringify({valid:false, error:error instanceof Error ? error.message : "Invalid JSON file.",
+          ...(error instanceof JsonSyntaxError ? { syntaxError:true, line:error.line, column:error.column } : {})});
+      }
     case "records-query-plan":
       return JSON.stringify(modelQueryPlan(request.project, args));
     case "records-query":
@@ -103,7 +130,7 @@ export async function call(payload: string): Promise<string> {
       if (formula.expression) {
         try {
           result = evaluateExpression(formula.expression, {
-            row, rows, now: new Date(), formulas,
+            row, rows, now: new Date(), formulas, parameters: expressionParameters(project.parameters),
             formulaStack: formula.name ? [formula.name] : [], dataset,
             sources: Object.fromEntries(project.datasets.map(source => [source.id, source.id === dataset ? row : source.data[0] ?? {}])),
             rowNumber: record, rowCount: rows.length, tableRowNumber: record, columnNumber: 1, pageNumber: 1, pageCount: 1,
@@ -138,7 +165,7 @@ export async function call(payload: string): Promise<string> {
       const layout =
         args.layout ?? layoutOf(request.project, pdfMeasureText, args);
       const bytes = await pdfBytes(layout);
-      const saved = await native("save_pdf", { bytes: Array.from(bytes) });
+      const saved = await native("save_pdf", { bytes: Array.from(bytes), suggestedName: layout.title });
       return JSON.stringify({
         message: saved ? "PDF exported" : "Export cancelled",
       });

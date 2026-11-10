@@ -1,3 +1,4 @@
+mod arrange_menu;
 mod subreport_tool_button;
 use subreport_tool_button::SubreportToolButton;
 mod text_tool_button;
@@ -38,6 +39,7 @@ pub fn DesignToolbar() -> impl IntoView {
             <Button label="Group data" on_press=move |_| {
                 s.show_grouping_for_section(&s.band.get_untracked());
             } />
+            <arrange_menu::ArrangeMenu />
             <span class="control-divider" />
             <Button
                 label="Zoom out"
@@ -89,15 +91,27 @@ pub fn DesignToolbar() -> impl IntoView {
             <span class="control-divider" />
             <label class="ruler-unit-control">
                 <crate::shared::icons::Icon name="ruler" size=16 />
-                <select aria-label="Units" on:change=move |e| s.units.set(event_target_value(&e))>
+                <select aria-label="Units" prop:value=move || s.units.get() on:change=move |e| s.units.set(event_target_value(&e))>
                     <option value="cm">{move || s.t("Centimeters")}</option>
+                    <option value="mm">{move || s.t("Millimeters")}</option>
                     <option value="in">{move || s.t("Inches")}</option>
+                    <option value="pt">{move || s.t("Points")}</option>
                 </select>
             </label>
             <span class="control-divider" />
+            <label class="snap-grid-control" title=move || s.t("Show page margins")>
+                <input type="checkbox" prop:checked=move || s.show_margins.get()
+                    on:change=move |e| s.show_margins.set(event_target_checked(&e)) />
+                <span>{move || s.t("Show page margins")}</span>
+            </label>
+            <label class="snap-grid-control" title=move || s.t("Snap to grid")>
+                <input type="checkbox" prop:checked=move || s.snap_grid.get()
+                    on:change=move |e| s.snap_grid.set(event_target_checked(&e)) />
+                <span>{move || s.t("Snap to grid")}</span>
+            </label>
             <div class="guide-controls">
                 <crate::shared::icons::Icon name="guides" size=16 />
-                <select aria-label="Guides" on:change=move |e| s.guides.set(event_target_value(&e))>
+                <select aria-label="Guides" prop:value=move || s.guides.get() on:change=move |e| s.guides.set(event_target_value(&e))>
                     <option value="dots">{move || s.t("Guide dots")}</option>
                     <option value="lines">{move || s.t("Dotted lines")}</option>
                     <option value="none">{move || s.t("No guides")}</option>
@@ -106,7 +120,7 @@ pub fn DesignToolbar() -> impl IntoView {
                 <select
                     aria-label="Guide spacing"
                     prop:value=move || s.spacing.get().to_string()
-                    disabled=move || s.guides.get() == "none"
+                    disabled=move || s.guides.get() == "none" && !s.snap_grid.get()
                     on:change=move |e| s.spacing.set(event_target_value(&e).parse().unwrap_or(0.25))
                 >
                     <option value=move || {
@@ -117,28 +131,30 @@ pub fn DesignToolbar() -> impl IntoView {
                                 "{} {}",
                                 format!(
                                     "{:.4}",
-                                    s.spacing.get() * if s.units.get() == "cm" { 2.54 } else { 1.0 },
+                                    s.spacing.get() * s.measurement_scale(),
                                 )
                                     .trim_end_matches('0')
                                     .trim_end_matches('.'),
-                                if s.units.get() == "cm" { "cm" } else { "″" },
+                                if s.units.get() == "in" { "″".into() } else { s.units.get() },
                             )
                         }}
                     </option>
                     {move || {
-                        let cm = s.units.get() == "cm";
-                        let steps = if cm {
-                            vec![0.1, 0.2, 0.25, 0.5, 1.0, 2.0, 5.0]
-                        } else {
-                            vec![0.0625, 0.125, 0.25, 0.5, 1.0, 2.0]
+                        let unit = s.units.get();
+                        let scale = s.measurement_scale();
+                        let suffix = if unit == "in" { "″" } else { unit.as_str() };
+                        let steps = match unit.as_str() {
+                            "mm" => vec![1.0, 2.0, 2.5, 5.0, 10.0, 20.0, 50.0],
+                            "cm" => vec![0.1, 0.2, 0.25, 0.5, 1.0, 2.0, 5.0],
+                            "pt" => vec![3.0, 6.0, 9.0, 12.0, 18.0, 36.0, 72.0],
+                            _ => vec![0.0625, 0.125, 0.25, 0.5, 1.0, 2.0],
                         };
                         steps
                             .into_iter()
                             .map(|v| {
                                 view! {
-                                    <option value=(v / if cm { 2.54 } else { 1.0 })
-                                        .to_string()>
-                                        {format!("{} {}", v, if cm { "cm" } else { "″" })}
+                                    <option value=(v / scale).to_string()>
+                                        {format!("{} {}", v, suffix)}
                                     </option>
                                 }
                             })
