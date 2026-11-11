@@ -156,6 +156,8 @@ pub fn FieldsSidebar() -> impl IntoView {
                         <option value="quotation">{move || s.t("Quotation example")}</option>
                         <option value="products">{move || s.t("Product list example")}</option>
                         <option value="sales">{move || s.t("Sales report example")}</option>
+                        <option value="awb-form">{move || s.t("AWB example with form")}</option>
+                        <option value="awb-data-only">{move || s.t("AWB example data only")}</option>
                     </select>
                 </label>
             </div>

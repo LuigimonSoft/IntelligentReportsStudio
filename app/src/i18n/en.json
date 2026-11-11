@@ -1128,5 +1128,7 @@
   "Nested arrays must contain JSON objects.": "Nested arrays must contain JSON objects.",
   "Nested JSON contains inconsistent object or array types.": "Nested JSON contains inconsistent object or array types.",
   "Nested JSON fields produce duplicate column names.": "Nested JSON fields produce duplicate column names.",
-  "Unable to show confirmation": "Unable to show confirmation"
+  "Unable to show confirmation": "Unable to show confirmation",
+  "AWB example with form": "AWB example with form",
+  "AWB example data only": "AWB example data only"
 }

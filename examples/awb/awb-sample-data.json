@@ -1,0 +1,139 @@
+{
+  "awb": [
+    {
+      "id": 1001,
+      "number": "999-12345675",
+      "houseNumber": "RS-10247",
+      "shipperId": 1,
+      "consigneeId": 2,
+      "agentId": 3,
+      "originId": 10,
+      "destinationId": 20,
+      "airlineId": 30,
+      "currency": "USD",
+      "flight": "RS 101 / 12 / ATL",
+      "flight2": "RS 205 / 13 / ORD",
+      "flight3": "RS 301 / 14 / YYZ",
+      "flightDate": "12 NOV 2026",
+      "notify": "DEMO IMPORTS SA - TORONTO",
+      "reference": "REF-TEST-1001",
+      "declaredCarriage": "NVD",
+      "declaredCustoms": "NCV",
+      "insurance": "NIL",
+      "handling": "GENERAL CARGO · KEEP DRY",
+      "pieces": 12,
+      "grossWeight": 465,
+      "chargeableWeight": 500,
+      "commodity": "GENERAL CARGO",
+      "weightCharge": 1250,
+      "valuationCharge": 0,
+      "tax": 62.5,
+      "otherCharges": 40,
+      "totalPrepaid": 1352.5,
+      "executedDate": "10 NOV 2026",
+      "executedPlace": "MIAMI, FL"
+    }
+  ],
+  "shipper": [
+    {
+      "id": 1,
+      "name": "NORTHSTAR EXPORTS LLC",
+      "address": "100 SAMPLE AVENUE",
+      "city": "MIAMI, FL 33101",
+      "country": "UNITED STATES",
+      "account": "SHP-100"
+    }
+  ],
+  "consignee": [
+    {
+      "id": 2,
+      "name": "DEMO IMPORTS SA",
+      "address": "200 EXAMPLE ROAD",
+      "city": "TORONTO, ON M5V 2T6",
+      "country": "CANADA",
+      "account": "CNE-200"
+    }
+  ],
+  "agent": [
+    {
+      "id": 3,
+      "name": "EXAMPLE FREIGHT SERVICES",
+      "address": "300 AIRPORT WAY",
+      "city": "MIAMI, FL 33126",
+      "iataCode": "0123456",
+      "account": "AGT-300"
+    }
+  ],
+  "origin_airport": [
+    {
+      "id": 10,
+      "code": "MIA",
+      "name": "MIAMI INTERNATIONAL AIRPORT",
+      "countryId": 1
+    }
+  ],
+  "destination_airport": [
+    {
+      "id": 20,
+      "code": "YYZ",
+      "name": "TORONTO PEARSON INTERNATIONAL AIRPORT",
+      "countryId": 2
+    }
+  ],
+  "origin_country": [
+    {
+      "id": 1,
+      "code": "US",
+      "name": "UNITED STATES"
+    }
+  ],
+  "destination_country": [
+    {
+      "id": 2,
+      "code": "CA",
+      "name": "CANADA"
+    }
+  ],
+  "airline": [
+    {
+      "id": 30,
+      "code": "RS",
+      "name": "REPORT STUDIO AIR CARGO"
+    }
+  ],
+  "goods": [
+    {
+      "id": 1,
+      "awbId": 1001,
+      "pieces": 4,
+      "grossWeight": 150,
+      "rateClass": "N",
+      "chargeableWeight": 160,
+      "rate": 2.5,
+      "total": 400,
+      "description": "ELECTRONIC EQUIPMENT\n4 CARTONS · NON-HAZARDOUS"
+    },
+    {
+      "id": 2,
+      "awbId": 1001,
+      "pieces": 5,
+      "grossWeight": 200,
+      "rateClass": "N",
+      "chargeableWeight": 220,
+      "rate": 2.5,
+      "total": 550,
+      "description": "MACHINE PARTS\n5 CARTONS · NON-HAZARDOUS"
+    },
+    {
+      "id": 3,
+      "awbId": 1001,
+      "pieces": 3,
+      "grossWeight": 115,
+      "rateClass": "N",
+      "chargeableWeight": 120,
+      "rate": 2.5,
+      "total": 300,
+      "description": "PRINTED MATERIAL\n3 CARTONS · NON-HAZARDOUS"
+    }
+  ]
+}

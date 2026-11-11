@@ -1128,5 +1128,7 @@
   "Nested arrays must contain JSON objects.": "Los arreglos anidados deben contener objetos JSON.",
   "Nested JSON contains inconsistent object or array types.": "El JSON anidado contiene tipos de objeto o arreglo inconsistentes.",
   "Nested JSON fields produce duplicate column names.": "Los campos del JSON anidado producen nombres de columna duplicados.",
-  "Unable to show confirmation": "No se pudo mostrar la confirmación"
+  "Unable to show confirmation": "No se pudo mostrar la confirmación",
+  "AWB example with form": "Ejemplo de guía aérea con formulario",
+  "AWB example data only": "Ejemplo de guía aérea solo datos"
 }

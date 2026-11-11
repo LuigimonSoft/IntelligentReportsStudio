@@ -1,9 +1,11 @@
-import { rootBandsOf, type Band, type Project } from './types.ts';
+import { type Band, type Project } from './types.ts';
 import { expressionFieldReferences } from './expressions.ts';
 
 export type FieldDiagnostic = {
   kind: 'missing-field' | 'missing-values';
   section: string;
+  bandId: string;
+  elementId?: string;
   field: string;
 };
 
@@ -15,49 +17,71 @@ export function fieldDiagnostics(project: Project): FieldDiagnostic[] {
   const warnings: FieldDiagnostic[] = [];
   const seen = new Set<string>();
   const missingCache = new Map<string, boolean>();
-  function add(kind: FieldDiagnostic['kind'], section: string, field: string) {
-    const key = JSON.stringify([kind, section, field]);
+  function add(kind: FieldDiagnostic['kind'], band: Band, field: string, elementId?: string) {
+    const key = JSON.stringify([kind, band.id, elementId, field]);
     if (!seen.has(key) && warnings.length < 50) {
       seen.add(key);
-      warnings.push({ kind, section, field });
+      warnings.push({kind, section:band.name, bandId:band.id, ...(elementId ? {elementId} : {}), field});
     }
   }
-  function inspect(expression: string, section: string, visited = new Set<string>()) {
+  function inspect(expression: string, band: Band, dataset?: string, elementId?: string, visited = new Set<string>()) {
     let refs: string[];
     try { refs = expressionFieldReferences(expression); } catch { return; }
     for (const reference of refs) {
       if (special.has(reference)) continue;
       const formula = formulas.get(reference);
       if (formula !== undefined) {
-        if (!visited.has(reference)) inspect(formula, section, new Set([...visited, reference]));
+        if (!visited.has(reference)) inspect(formula, band, dataset, elementId, new Set([...visited, reference]));
         continue;
       }
       const parts = reference.split('.');
       const qualified = parts.length === 2;
       const field = qualified ? parts[1] : parts[0];
-      const tables = datasets.filter(table => (!qualified || table.id === parts[0]) && table.schema.fields.some(column => column.name === field));
-      if (!tables.length) {
-        add('missing-field', section, reference);
-        continue;
-      }
-      // For unqualified names, avoid attributing missing values to an ambiguous source.
+      // Unqualified references in a detail resolve against that detail's row,
+      // even if another table happens to contain a field with the same name.
+      const tables = datasets.filter(table =>
+        (qualified ? table.id === parts[0] : !dataset || table.id === dataset) &&
+        table.schema.fields.some(column => column.name === field));
+      if (!tables.length) { add('missing-field', band, reference, elementId); continue; }
       if (tables.length !== 1) continue;
-      const table = tables[0];
-      const key = JSON.stringify([table.id, field]);
+      const table = tables[0], key = JSON.stringify([table.id, field]);
       if (!missingCache.has(key)) missingCache.set(key, table.data.some(row => !Object.hasOwn(row, field)));
-      if (missingCache.get(key)) add('missing-values', section, reference);
+      if (missingCache.get(key)) add('missing-values', band, reference, elementId);
     }
   }
-  function visit(band: Band) {
-    if (band.visible === false) return;
-    if (band.visibilityExpression) inspect(band.visibilityExpression, band.name);
-    if (band.backgroundExpression) inspect(band.backgroundExpression, band.name);
+  function visit(band: Band | undefined, dataset?: string) {
+    if (!band || band.visible === false) return;
+    if (band.visibilityExpression) inspect(band.visibilityExpression, band, dataset);
+    if (band.backgroundExpression) inspect(band.backgroundExpression, band, dataset);
     for (const element of band.elements) {
-      if (element.visible === false || element.type !== 'text') continue;
-      for (const match of element.text.matchAll(/\[([^\[\]]+)\]/g)) inspect(match[1], band.name);
+      if (element.visible === false) continue;
+      if (element.type === 'text')
+        for (const match of element.text.matchAll(/\[([^\[\]]+)\]/g)) inspect(match[1], band, dataset, element.id);
+      if (element.type === 'chart' && element.chart) {
+        const source = datasets.find(table => table.id === element.chart!.dataset);
+        for (const field of [element.chart.category, element.chart.value]) {
+          if (!field) continue;
+          if (!source?.schema.fields.some(column => column.name === field)) add('missing-field', band, `${element.chart.dataset}.${field}`, element.id);
+          else if (source.data.some(row => !Object.hasOwn(row, field))) add('missing-values', band, `${element.chart.dataset}.${field}`, element.id);
+        }
+      }
+      if (element.table && element.cell && element.type === 'box') {
+        const {row, column} = element.cell;
+        const styles = element.table.styles;
+        const expression = {...styles.table, ...styles[`column:${column}`], ...styles[`row:${row}`], ...styles[`cell:${row}:${column}`]}.backgroundExpression;
+        if (expression) inspect(expression.replace(/^\[(.*)\]$/s, '$1').replace(/^\{(.*)\}$/s, '$1'), band, dataset, element.id);
+      }
     }
-    for (const child of band.sections ?? []) visit(child);
+    for (const child of band.sections ?? []) visit(child, dataset);
   }
-  for (const band of rootBandsOf(report)) visit(band);
+  visit(report.header); visit(report.pageHeader);
+  for (const detail of report.details) {
+    visit(detail.groupHeader, detail.dataset);
+    for (const group of detail.groups ?? []) visit(group.header, detail.dataset);
+    visit(detail.band, detail.dataset);
+    for (const group of detail.groups ?? []) visit(group.footer, detail.dataset);
+    visit(detail.groupFooter, detail.dataset);
+  }
+  visit(report.pageFooter); visit(report.footer);
   return warnings;
 }

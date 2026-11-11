@@ -860,5 +860,7 @@
   "Empty category": "Categoría vacía",
   "Color for {0}": "Color de {0}",
   "Reset color for {0}": "Restablecer color de {0}",
-  "Maximum 1000 category colors.": "Máximo de 1000 colores por categoría."
+  "Maximum 1000 category colors.": "Máximo de 1000 colores por categoría.",
+  "AWB example with form": "Ejemplo de guía aérea con formulario",
+  "AWB example data only": "Ejemplo de guía aérea solo datos"
 }

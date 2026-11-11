@@ -2,7 +2,7 @@ import {createHash} from 'node:crypto';
 import {readdir,readFile,stat} from 'node:fs/promises';
 import path from 'node:path';
 
-export const frontendInputs=['app/src','frontend/src','runtime','public','index.html','Cargo.toml','app/Cargo.toml','frontend/Cargo.toml','Trunk.toml'];
+export const frontendInputs=['app/src','frontend/src','runtime','examples/awb/awb-full-form-template.json','examples/awb/awb-data-only-template.json','examples/awb/awb-sample-data.json','public','index.html','Cargo.toml','app/Cargo.toml','frontend/Cargo.toml','Trunk.toml'];
 
 /** Directory/access-time notifications are hints, not edits. Compare file bytes. */
 export class SourceSnapshot {

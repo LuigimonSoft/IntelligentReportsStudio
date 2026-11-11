@@ -60,7 +60,21 @@ pub fn PreviewSidebar() -> impl IntoView {
                     <ul>
                         {move || array(&s.preview.get()["fieldDiagnostics"]).into_iter().map(|warning| {
                             let kind = if warning["kind"] == "missing-values" { "Missing in some records" } else { "Field not found" };
-                            view! { <li><strong>{text(&warning,"field")}</strong><br />{s.t(kind)}" · "{s.t(&text(&warning,"section"))}</li> }
+                            let band = text(&warning, "bandId");
+                            let element = text(&warning, "elementId");
+                            view! { <li><strong>{text(&warning,"field")}</strong><br />{s.t(kind)}" · "{s.t(&text(&warning,"section"))}
+                                <div><Button label="Review element" on_press=move |_| {
+                                    s.band.set(band.clone());
+                                    s.selected.set(if element.is_empty() { vec![] } else { vec![element.clone()] });
+                                    s.tab.set("Design".into());
+                                    let section_id = band.clone();
+                                    request_animation_frame(move || {
+                                        if let Some(section) = document().get_element_by_id(&format!("report-section-{section_id}")) {
+                                            section.scroll_into_view_with_bool(false);
+                                        }
+                                    });
+                                } /></div>
+                            </li> }
                         }).collect_view()}
                     </ul>
                 </details>

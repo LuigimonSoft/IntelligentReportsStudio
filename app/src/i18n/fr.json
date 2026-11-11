@@ -1128,5 +1128,7 @@
   "Nested arrays must contain JSON objects.": "Les tableaux imbriqués doivent contenir des objets JSON.",
   "Nested JSON contains inconsistent object or array types.": "Le JSON imbriqué contient des types d’objet ou de tableau incohérents.",
   "Nested JSON fields produce duplicate column names.": "Les champs JSON imbriqués produisent des noms de colonne en double.",
-  "Unable to show confirmation": "Impossible d’afficher la confirmation"
+  "Unable to show confirmation": "Impossible d’afficher la confirmation",
+  "AWB example with form": "Exemple de lettre de transport aérien avec formulaire",
+  "AWB example data only": "Exemple de lettre de transport aérien sans formulaire"
 }

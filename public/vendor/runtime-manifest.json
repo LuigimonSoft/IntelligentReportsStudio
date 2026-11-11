@@ -297,7 +297,7 @@
       "format": "esm"
     },
     "i18n/es.json": {
-      "bytes": 45983,
+      "bytes": 46117,
       "imports": [],
       "format": "esm",
       "with": {
@@ -378,12 +378,12 @@
       "format": "esm"
     },
     "engine/fieldDiagnostics.ts": {
-      "bytes": 2939,
+      "bytes": 4694,
       "imports": [
         {
-          "path": "engine/types.ts",
+          "path": "./types.ts",
           "kind": "import-statement",
-          "original": "./types.ts"
+          "external": true
         },
         {
           "path": "engine/expressions.ts",
@@ -554,6 +554,30 @@
       ],
       "format": "esm"
     },
+    "../examples/awb/awb-full-form-template.json": {
+      "bytes": 129613,
+      "imports": [],
+      "format": "esm",
+      "with": {
+        "type": "json"
+      }
+    },
+    "../examples/awb/awb-data-only-template.json": {
+      "bytes": 43158,
+      "imports": [],
+      "format": "esm",
+      "with": {
+        "type": "json"
+      }
+    },
+    "../examples/awb/awb-sample-data.json": {
+      "bytes": 2999,
+      "imports": [],
+      "format": "esm",
+      "with": {
+        "type": "json"
+      }
+    },
     "data/tables.ts": {
       "bytes": 3092,
       "imports": [
@@ -566,7 +590,7 @@
       "format": "esm"
     },
     "domain/report/sample.ts": {
-      "bytes": 621,
+      "bytes": 1354,
       "imports": [
         {
           "path": "domain/report/sampleCatalog.ts",
@@ -585,6 +609,35 @@
           "path": "data/sources.ts",
           "kind": "import-statement",
           "original": "../../data/sources.ts"
+        },
+        {
+          "path": "../examples/awb/awb-full-form-template.json",
+          "kind": "import-statement",
+          "original": "../../../examples/awb/awb-full-form-template.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "../examples/awb/awb-data-only-template.json",
+          "kind": "import-statement",
+          "original": "../../../examples/awb/awb-data-only-template.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "../examples/awb/awb-sample-data.json",
+          "kind": "import-statement",
+          "original": "../../../examples/awb/awb-sample-data.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "engine/index.ts",
+          "kind": "import-statement",
+          "original": "@reportstudio/mini-reports"
         },
         {
           "path": "data/tables.ts",
@@ -863,7 +916,7 @@
     "../public/vendor/reportstudio-runtime.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-ZTQQABIW.js",
+          "path": "../public/vendor/chunk-44222WDZ.js",
           "kind": "import-statement"
         },
         {
@@ -899,10 +952,10 @@
       },
       "bytes": 524141
     },
-    "../public/vendor/sample-HIMDMQA5.js": {
+    "../public/vendor/sample-6NDF62OC.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-ZTQQABIW.js",
+          "path": "../public/vendor/chunk-44222WDZ.js",
           "kind": "import-statement"
         }
       ],
@@ -923,19 +976,28 @@
         "data/sources.ts": {
           "bytesInOutput": 0
         },
+        "../examples/awb/awb-full-form-template.json": {
+          "bytesInOutput": 53713
+        },
+        "../examples/awb/awb-data-only-template.json": {
+          "bytesInOutput": 18126
+        },
+        "../examples/awb/awb-sample-data.json": {
+          "bytesInOutput": 1869
+        },
         "data/tables.ts": {
           "bytesInOutput": 1344
         },
         "domain/report/sample.ts": {
-          "bytesInOutput": 72
+          "bytesInOutput": 241
         }
       },
-      "bytes": 44126
+      "bytes": 118004
     },
-    "../public/vendor/chunk-ZTQQABIW.js": {
+    "../public/vendor/chunk-44222WDZ.js": {
       "imports": [
         {
-          "path": "../public/vendor/sample-HIMDMQA5.js",
+          "path": "../public/vendor/sample-6NDF62OC.js",
           "kind": "dynamic-import"
         }
       ],
@@ -1032,7 +1094,7 @@
           "bytesInOutput": 680
         },
         "engine/fieldDiagnostics.ts": {
-          "bytesInOutput": 1180
+          "bytesInOutput": 2031
         },
         "tabs/data/model/nestedReload.ts": {
           "bytesInOutput": 4887
@@ -1077,7 +1139,7 @@
           "bytesInOutput": 23424
         }
       },
-      "bytes": 97139
+      "bytes": 97990
     },
     "../public/vendor/renderChart-7BOQJLCP.js": {
       "imports": [

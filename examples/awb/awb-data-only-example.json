@@ -1,0 +1,1823 @@
+{
+  "version": 1,
+  "schemaVersion": 1,
+  "dataModel": {
+    "tables": {
+      "awb": {
+        "x": 80,
+        "y": 280
+      },
+      "shipper": {
+        "x": 350,
+        "y": 30
+      },
+      "consignee": {
+        "x": 350,
+        "y": 250
+      },
+      "agent": {
+        "x": 350,
+        "y": 470
+      },
+      "origin_airport": {
+        "x": 350,
+        "y": 690
+      },
+      "destination_airport": {
+        "x": 640,
+        "y": 30
+      },
+      "origin_country": {
+        "x": 640,
+        "y": 250
+      },
+      "destination_country": {
+        "x": 640,
+        "y": 470
+      },
+      "airline": {
+        "x": 640,
+        "y": 690
+      },
+      "goods": {
+        "x": 930,
+        "y": 30
+      }
+    },
+    "rootDataset": "awb"
+  },
+  "report": {
+    "version": 1,
+    "id": "report-625f511e-906d-4705-bed6-67f9709c19b4",
+    "title": "AWB example - data only",
+    "locale": "en-US",
+    "currency": "USD",
+    "page": {
+      "width": 8.5,
+      "height": 11.7,
+      "margins": {
+        "top": 0.2,
+        "bottom": 0.2,
+        "left": 0.27,
+        "right": 0.27
+      }
+    },
+    "details": [
+      {
+        "id": "detail-757f6ee4-15e2-4c8a-92e9-038b5f4eed65",
+        "dataset": "goods",
+        "band": {
+          "id": "band-957a8147-4994-4f69-a8be-3523b6ceb57e",
+          "name": "Details",
+          "height": 0.3,
+          "elements": [
+            {
+              "id": "el-60c5e149-e4f5-4943-8089-c1924b246275",
+              "type": "text",
+              "x": 0.035,
+              "y": 0.035,
+              "width": 0.48000000000000004,
+              "height": 0.16,
+              "text": "[pieces]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 0
+              }
+            },
+            {
+              "id": "el-55b01baa-a943-42c3-829c-f378d7d20f51",
+              "type": "text",
+              "x": 0.5850000000000001,
+              "y": 0.035,
+              "width": 0.5299999999999998,
+              "height": 0.16,
+              "text": "[grossWeight]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 1
+              }
+            },
+            {
+              "id": "el-09e69331-4c51-4cde-bcf0-7ae0b522ebf9",
+              "type": "text",
+              "x": 1.1849999999999998,
+              "y": 0.035,
+              "width": 0.07000000000000012,
+              "height": 0.16,
+              "text": "K",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 2
+              }
+            },
+            {
+              "id": "el-9c2103d6-07b4-45f4-a5f2-079d2c032ab5",
+              "type": "text",
+              "x": 1.325,
+              "y": 0.035,
+              "width": 0.72,
+              "height": 0.16,
+              "text": "[rateClass]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 3
+              }
+            },
+            {
+              "id": "el-1d902191-f611-41bb-a3d6-9c31a8acd4c2",
+              "type": "text",
+              "x": 2.115,
+              "y": 0.035,
+              "width": 0.8899999999999999,
+              "height": 0.16,
+              "text": "[chargeableWeight]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 4
+              }
+            },
+            {
+              "id": "el-48850ab3-6c10-453f-9e54-962684dc8b1d",
+              "type": "text",
+              "x": 3.075,
+              "y": 0.035,
+              "width": 0.7699999999999998,
+              "height": 0.16,
+              "text": "[rate]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 5
+              }
+            },
+            {
+              "id": "el-e5c75a2e-9cf7-4627-b3d4-9fe42cb59851",
+              "type": "text",
+              "x": 3.915,
+              "y": 0.035,
+              "width": 1.3,
+              "height": 0.16,
+              "text": "[total]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 6
+              }
+            },
+            {
+              "id": "el-335d6bfd-dcd7-446a-8ea7-9395e506f338",
+              "type": "text",
+              "x": 5.285,
+              "y": 0.035,
+              "width": 2.64,
+              "height": 0.24,
+              "text": "[description]",
+              "src": "",
+              "style": {
+                "fontsize": 6.3,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 7
+              }
+            },
+            {
+              "id": "el-60fd56f2-f5a2-4c60-909d-43b77f293d9d",
+              "type": "box",
+              "x": 0,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#ffffff",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 0
+              }
+            }
+          ]
+        },
+        "groupHeader": {
+          "id": "band-80d6101c-ada1-4db0-bade-71b0dd94baa1",
+          "name": "Details header",
+          "height": 0.32,
+          "elements": [],
+          "visible": true
+        },
+        "groupFooter": {
+          "id": "band-d5883cf3-8722-4119-8855-569315f4a1b3",
+          "name": "Details footer",
+          "height": 2.01,
+          "elements": [
+            {
+              "id": "el-e1aa57eb-5569-4e88-b6c4-a31745e50377",
+              "type": "text",
+              "x": 0.035,
+              "y": 1.78,
+              "width": 0.48000000000000004,
+              "height": 0.17,
+              "text": "[awb.pieces]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-1873f8ee-0d2b-4487-be35-2818c2fca533",
+              "type": "text",
+              "x": 0.5850000000000001,
+              "y": 1.78,
+              "width": 0.53,
+              "height": 0.17,
+              "text": "[awb.grossWeight]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-78b1b101-1496-4aa0-a44e-58b4167bb65a",
+              "type": "text",
+              "x": 3.915,
+              "y": 1.78,
+              "width": 1.3,
+              "height": 0.17,
+              "text": "[awb.weightCharge]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "number"
+              }
+            }
+          ],
+          "visible": true
+        },
+        "emptyMessage": "No goods records"
+      }
+    ],
+    "header": {
+      "id": "band-0db8941c-96c3-48f6-93b9-7311379fc537",
+      "name": "Report header",
+      "height": 4.77,
+      "elements": [
+        {
+          "id": "el-e68fef90-2fa1-43ed-8175-6cde4d70c284",
+          "type": "text",
+          "x": 0.885,
+          "y": 0,
+          "width": 1.63,
+          "height": 0.17,
+          "text": "[awb.number]",
+          "src": "",
+          "style": {
+            "fontsize": 9,
+            "bold": true,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-82479bec-7d50-416e-bc2a-b37a26ad83e1",
+          "type": "text",
+          "x": 6.485,
+          "y": 0,
+          "width": 1.3299999999999998,
+          "height": 0.17,
+          "text": "[awb.houseNumber]",
+          "src": "",
+          "style": {
+            "fontsize": 9,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-1bbe9078-cf9f-4ef1-8d0b-1956e414e493",
+          "type": "text",
+          "x": 2.365,
+          "y": 0.34,
+          "width": 1.3299999999999998,
+          "height": 0.17,
+          "text": "[shipper.account]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": true,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f919053d-f8f7-4c6d-acad-ded830e14892",
+          "type": "text",
+          "x": 0.035,
+          "y": 0.48,
+          "width": 3.58,
+          "height": 0.58,
+          "text": "[shipper.name]\\n[shipper.address]\\n[shipper.city]\\n[shipper.country]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-e22e03ec-caf3-4b31-8980-0c5f4969c13c",
+          "type": "text",
+          "x": 3.795,
+          "y": 0.7,
+          "width": 4.029999999999999,
+          "height": 0.4,
+          "text": "[airline.name]\\n[agent.address]\\n[agent.city]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-c871cdf5-2b21-4f08-b1e2-e3e88dee8b18",
+          "type": "text",
+          "x": 2.365,
+          "y": 1.25,
+          "width": 1.3299999999999998,
+          "height": 0.17,
+          "text": "[consignee.account]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": true,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-1b0643b3-81fc-4a7b-b19e-58fa23149790",
+          "type": "text",
+          "x": 0.035,
+          "y": 1.39,
+          "width": 3.58,
+          "height": 0.53,
+          "text": "[consignee.name]\\n[consignee.address]\\n[consignee.city]\\n[consignee.country]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-cf6ad931-5b00-4339-a214-39627e2edfb1",
+          "type": "text",
+          "x": 0.035,
+          "y": 2.12,
+          "width": 3.58,
+          "height": 0.43,
+          "text": "[agent.name]\\n[agent.address]\\n[agent.city]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-56935c1a-c14c-4770-9c0e-93c3ec879110",
+          "type": "text",
+          "x": 3.795,
+          "y": 2.19,
+          "width": 0.5199999999999998,
+          "height": 0.17,
+          "text": "[awb.currency]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-df4f948e-3f1f-4230-bff3-82ed8a796914",
+          "type": "text",
+          "x": 4.385,
+          "y": 2.19,
+          "width": 0.8400000000000001,
+          "height": 0.17,
+          "text": "[awb.declaredCarriage]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-38538422-2cd1-4865-a6ca-efde22d6a315",
+          "type": "text",
+          "x": 5.295,
+          "y": 2.19,
+          "width": 0.9200000000000002,
+          "height": 0.17,
+          "text": "[awb.declaredCustoms]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-fb8ea82c-4a28-4e4a-b050-54ed316a830e",
+          "type": "text",
+          "x": 6.285,
+          "y": 2.19,
+          "width": 0.7900000000000003,
+          "height": 0.17,
+          "text": "[awb.insurance]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-e7a95ce3-a05c-4f74-9339-3dee02863a4b",
+          "type": "text",
+          "x": 7.1450000000000005,
+          "y": 2.19,
+          "width": 0.7799999999999996,
+          "height": 0.17,
+          "text": "[agent.iataCode]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-38da0ebc-b270-4912-9492-8ba945f4e581",
+          "type": "text",
+          "x": 0.035,
+          "y": 2.82,
+          "width": 1.78,
+          "height": 0.26,
+          "text": "[origin_airport.code] - [origin_airport.name]",
+          "src": "",
+          "style": {
+            "fontsize": 6.4,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-dadcc135-cc73-4d11-bdb3-83cd1c644d1a",
+          "type": "text",
+          "x": 1.885,
+          "y": 2.82,
+          "width": 1.8399999999999996,
+          "height": 0.26,
+          "text": "[destination_airport.code] - [destination_airport.name]",
+          "src": "",
+          "style": {
+            "fontsize": 6.4,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-d89ded86-e283-47dc-80e9-b33444deb3ea",
+          "type": "text",
+          "x": 3.795,
+          "y": 2.82,
+          "width": 1.3300000000000003,
+          "height": 0.26,
+          "text": "[awb.flight]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-5942933e-ed0c-4f62-9859-7cd39866ec1f",
+          "type": "text",
+          "x": 5.195,
+          "y": 2.82,
+          "width": 1.3299999999999994,
+          "height": 0.26,
+          "text": "[awb.flight2]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-0fc66eaa-d9ad-463e-8a70-18f70375bb5e",
+          "type": "text",
+          "x": 6.595,
+          "y": 2.82,
+          "width": 1.3300000000000003,
+          "height": 0.26,
+          "text": "[awb.flight3]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-bfbf5033-2ed4-4cfb-accf-719e64dbbb12",
+          "type": "text",
+          "x": 0.035,
+          "y": 3.29,
+          "width": 3.5300000000000002,
+          "height": 0.17,
+          "text": "[awb.reference]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b4e84328-a3ee-479f-b058-962c8b45996b",
+          "type": "text",
+          "x": 3.795,
+          "y": 3.29,
+          "width": 3.98,
+          "height": 0.52,
+          "text": "[awb.handling]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        }
+      ],
+      "visible": true
+    },
+    "pageHeader": {
+      "id": "band-c4432983-a72a-4f23-80a1-aadff5c0f196",
+      "name": "Page header",
+      "height": 0.05,
+      "elements": [],
+      "visible": false
+    },
+    "pageFooter": {
+      "id": "band-b6dbb1bb-4e23-4077-a475-e1798644b608",
+      "name": "Page footer",
+      "height": 0.05,
+      "elements": [],
+      "visible": false
+    },
+    "footer": {
+      "id": "band-7b25eef7-4f6e-4c45-9eed-fb5a3a86418b",
+      "name": "Report footer",
+      "height": 3.3,
+      "elements": [
+        {
+          "id": "el-4d962e45-cfee-456a-b1c6-d07c63e8c985",
+          "type": "text",
+          "x": 0.035,
+          "y": 0.16,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.weightCharge]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-95b0e883-3ab4-4763-90f3-aae45d4f03ce",
+          "type": "text",
+          "x": 0.035,
+          "y": 0.6,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.valuationCharge]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-579a6338-1024-45e1-8115-e05327176b53",
+          "type": "text",
+          "x": 0.035,
+          "y": 1.04,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.tax]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-7ca07a72-f5ba-46e6-a13b-52830dfad1c9",
+          "type": "text",
+          "x": 0.035,
+          "y": 1.48,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.otherCharges]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-b4de7c57-df68-45fd-8748-ede04a1bf74c",
+          "type": "text",
+          "x": 0.035,
+          "y": 1.92,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.totalPrepaid]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-4ee8332b-c297-44fd-a4c7-d00cb47b3a92",
+          "type": "text",
+          "x": 3.1550000000000002,
+          "y": 0.18,
+          "width": 4.63,
+          "height": 0.17,
+          "text": "[awb.otherCharges] USD - AGENT CHARGES",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-daa8e0b7-876b-47f2-844a-288394ddb695",
+          "type": "text",
+          "x": 3.1550000000000002,
+          "y": 1.55,
+          "width": 4.63,
+          "height": 0.17,
+          "text": "[awb.executedDate]            [awb.executedPlace]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-97b3a12a-db55-4311-b830-c3a1e6e4a9fd",
+          "type": "text",
+          "x": 0.035,
+          "y": 2.39,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.totalPrepaid]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        }
+      ],
+      "visible": true
+    }
+  },
+  "datasets": [
+    {
+      "id": "awb",
+      "name": "Air waybills",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "number",
+            "type": "text"
+          },
+          {
+            "name": "houseNumber",
+            "type": "text"
+          },
+          {
+            "name": "shipperId",
+            "type": "number"
+          },
+          {
+            "name": "consigneeId",
+            "type": "number"
+          },
+          {
+            "name": "agentId",
+            "type": "number"
+          },
+          {
+            "name": "originId",
+            "type": "number"
+          },
+          {
+            "name": "destinationId",
+            "type": "number"
+          },
+          {
+            "name": "airlineId",
+            "type": "number"
+          },
+          {
+            "name": "currency",
+            "type": "text"
+          },
+          {
+            "name": "flight",
+            "type": "text"
+          },
+          {
+            "name": "flight2",
+            "type": "text"
+          },
+          {
+            "name": "flight3",
+            "type": "text"
+          },
+          {
+            "name": "flightDate",
+            "type": "text"
+          },
+          {
+            "name": "notify",
+            "type": "text"
+          },
+          {
+            "name": "reference",
+            "type": "text"
+          },
+          {
+            "name": "declaredCarriage",
+            "type": "text"
+          },
+          {
+            "name": "declaredCustoms",
+            "type": "text"
+          },
+          {
+            "name": "insurance",
+            "type": "text"
+          },
+          {
+            "name": "handling",
+            "type": "text"
+          },
+          {
+            "name": "pieces",
+            "type": "number"
+          },
+          {
+            "name": "grossWeight",
+            "type": "number"
+          },
+          {
+            "name": "chargeableWeight",
+            "type": "number"
+          },
+          {
+            "name": "commodity",
+            "type": "text"
+          },
+          {
+            "name": "weightCharge",
+            "type": "number"
+          },
+          {
+            "name": "valuationCharge",
+            "type": "number"
+          },
+          {
+            "name": "tax",
+            "type": "number"
+          },
+          {
+            "name": "otherCharges",
+            "type": "number"
+          },
+          {
+            "name": "totalPrepaid",
+            "type": "number"
+          },
+          {
+            "name": "executedDate",
+            "type": "text"
+          },
+          {
+            "name": "executedPlace",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 1001,
+          "number": "999-12345675",
+          "houseNumber": "RS-10247",
+          "shipperId": 1,
+          "consigneeId": 2,
+          "agentId": 3,
+          "originId": 10,
+          "destinationId": 20,
+          "airlineId": 30,
+          "currency": "USD",
+          "flight": "RS 101 / 12 / ATL",
+          "flight2": "RS 205 / 13 / ORD",
+          "flight3": "RS 301 / 14 / YYZ",
+          "flightDate": "12 NOV 2026",
+          "notify": "DEMO IMPORTS SA - TORONTO",
+          "reference": "REF-TEST-1001",
+          "declaredCarriage": "NVD",
+          "declaredCustoms": "NCV",
+          "insurance": "NIL",
+          "handling": "GENERAL CARGO · KEEP DRY",
+          "pieces": 12,
+          "grossWeight": 465,
+          "chargeableWeight": 500,
+          "commodity": "GENERAL CARGO",
+          "weightCharge": 1250,
+          "valuationCharge": 0,
+          "tax": 62.5,
+          "otherCharges": 40,
+          "totalPrepaid": 1352.5,
+          "executedDate": "10 NOV 2026",
+          "executedPlace": "MIAMI, FL"
+        }
+      ]
+    },
+    {
+      "id": "shipper",
+      "name": "Shippers",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "address",
+            "type": "text"
+          },
+          {
+            "name": "city",
+            "type": "text"
+          },
+          {
+            "name": "country",
+            "type": "text"
+          },
+          {
+            "name": "account",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 1,
+          "name": "NORTHSTAR EXPORTS LLC",
+          "address": "100 SAMPLE AVENUE",
+          "city": "MIAMI, FL 33101",
+          "country": "UNITED STATES",
+          "account": "SHP-100"
+        }
+      ]
+    },
+    {
+      "id": "consignee",
+      "name": "Consignees",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "address",
+            "type": "text"
+          },
+          {
+            "name": "city",
+            "type": "text"
+          },
+          {
+            "name": "country",
+            "type": "text"
+          },
+          {
+            "name": "account",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 2,
+          "name": "DEMO IMPORTS SA",
+          "address": "200 EXAMPLE ROAD",
+          "city": "TORONTO, ON M5V 2T6",
+          "country": "CANADA",
+          "account": "CNE-200"
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "name": "Freight agents",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "address",
+            "type": "text"
+          },
+          {
+            "name": "city",
+            "type": "text"
+          },
+          {
+            "name": "iataCode",
+            "type": "text"
+          },
+          {
+            "name": "account",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 3,
+          "name": "EXAMPLE FREIGHT SERVICES",
+          "address": "300 AIRPORT WAY",
+          "city": "MIAMI, FL 33126",
+          "iataCode": "0123456",
+          "account": "AGT-300"
+        }
+      ]
+    },
+    {
+      "id": "origin_airport",
+      "name": "Origin airports",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "countryId",
+            "type": "number"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 10,
+          "code": "MIA",
+          "name": "MIAMI INTERNATIONAL AIRPORT",
+          "countryId": 1
+        }
+      ]
+    },
+    {
+      "id": "destination_airport",
+      "name": "Destination airports",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "countryId",
+            "type": "number"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 20,
+          "code": "YYZ",
+          "name": "TORONTO PEARSON INTERNATIONAL AIRPORT",
+          "countryId": 2
+        }
+      ]
+    },
+    {
+      "id": "origin_country",
+      "name": "Origin countries",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 1,
+          "code": "US",
+          "name": "UNITED STATES"
+        }
+      ]
+    },
+    {
+      "id": "destination_country",
+      "name": "Destination countries",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 2,
+          "code": "CA",
+          "name": "CANADA"
+        }
+      ]
+    },
+    {
+      "id": "airline",
+      "name": "Airlines",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 30,
+          "code": "RS",
+          "name": "REPORT STUDIO AIR CARGO"
+        }
+      ]
+    },
+    {
+      "id": "goods",
+      "name": "Goods",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "awbId",
+            "type": "number"
+          },
+          {
+            "name": "pieces",
+            "type": "number"
+          },
+          {
+            "name": "grossWeight",
+            "type": "number"
+          },
+          {
+            "name": "rateClass",
+            "type": "text"
+          },
+          {
+            "name": "chargeableWeight",
+            "type": "number"
+          },
+          {
+            "name": "rate",
+            "type": "number"
+          },
+          {
+            "name": "total",
+            "type": "number"
+          },
+          {
+            "name": "description",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 1,
+          "awbId": 1001,
+          "pieces": 4,
+          "grossWeight": 150,
+          "rateClass": "N",
+          "chargeableWeight": 160,
+          "rate": 2.5,
+          "total": 400,
+          "description": "ELECTRONIC EQUIPMENT\n4 CARTONS · NON-HAZARDOUS"
+        },
+        {
+          "id": 2,
+          "awbId": 1001,
+          "pieces": 5,
+          "grossWeight": 200,
+          "rateClass": "N",
+          "chargeableWeight": 220,
+          "rate": 2.5,
+          "total": 550,
+          "description": "MACHINE PARTS\n5 CARTONS · NON-HAZARDOUS"
+        },
+        {
+          "id": 3,
+          "awbId": 1001,
+          "pieces": 3,
+          "grossWeight": 115,
+          "rateClass": "N",
+          "chargeableWeight": 120,
+          "rate": 2.5,
+          "total": 300,
+          "description": "PRINTED MATERIAL\n3 CARTONS · NON-HAZARDOUS"
+        }
+      ]
+    }
+  ],
+  "dataSource": {
+    "name": "AWB example (synthetic)"
+  },
+  "relations": [
+    {
+      "id": "awb-relation-1",
+      "from": {
+        "dataset": "awb",
+        "field": "shipperId"
+      },
+      "to": {
+        "dataset": "shipper",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-2",
+      "from": {
+        "dataset": "awb",
+        "field": "consigneeId"
+      },
+      "to": {
+        "dataset": "consignee",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-3",
+      "from": {
+        "dataset": "awb",
+        "field": "agentId"
+      },
+      "to": {
+        "dataset": "agent",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-4",
+      "from": {
+        "dataset": "awb",
+        "field": "originId"
+      },
+      "to": {
+        "dataset": "origin_airport",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-5",
+      "from": {
+        "dataset": "awb",
+        "field": "destinationId"
+      },
+      "to": {
+        "dataset": "destination_airport",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-6",
+      "from": {
+        "dataset": "awb",
+        "field": "airlineId"
+      },
+      "to": {
+        "dataset": "airline",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-7",
+      "from": {
+        "dataset": "awb",
+        "field": "id"
+      },
+      "to": {
+        "dataset": "goods",
+        "field": "awbId"
+      },
+      "cardinality": "1:n"
+    },
+    {
+      "id": "awb-relation-8",
+      "from": {
+        "dataset": "origin_airport",
+        "field": "countryId"
+      },
+      "to": {
+        "dataset": "origin_country",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-9",
+      "from": {
+        "dataset": "destination_airport",
+        "field": "countryId"
+      },
+      "to": {
+        "dataset": "destination_country",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    }
+  ]
+}

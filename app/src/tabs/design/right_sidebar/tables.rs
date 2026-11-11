@@ -97,6 +97,12 @@ pub fn TableProperties(element: Value) -> impl IntoView {
         .into_iter()
         .find(|d| d["id"] == table["dataset"])
         .unwrap_or_default();
+    // Empty-state messages belong to the repeating detail section, so every
+    // table in that section shares the same behavior when its source is empty.
+    let empty_detail = array(&s.project.get()["report"]["details"])
+        .into_iter()
+        .find(|detail| !text(detail, "dataset").is_empty()
+            && array(&detail["band"]["elements"]).iter().any(|item| item["id"] == element["id"]));
     let content = table["contents"][format!("{row}:{col}")]
         .as_str()
         .unwrap_or_else(|| element["text"].as_str().unwrap_or(""))
@@ -214,6 +220,14 @@ pub fn TableProperties(element: Value) -> impl IntoView {
         </section>
         <section class="inspector-section table-properties">
             <h3>{s.t("Table properties")}</h3>
+            {empty_detail.map(|detail| {
+                let id = text(&detail, "id");
+                view! {
+                    <TextField label="Message when no records" value=text(&detail, "emptyMessage") multiline=true
+                        on_change=move |value: String| s.command("detail-settings", json!({"id":id,"emptyMessage":value})) />
+                    <p class="helper">{s.t("Leave blank to show no message when the data source is empty.")}</p>
+                }
+            })}
             <CheckField
                 label="Show headers"
                 checked=table["headers"] == true

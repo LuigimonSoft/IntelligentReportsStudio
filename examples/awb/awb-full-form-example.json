@@ -1,0 +1,5022 @@
+{
+  "version": 1,
+  "schemaVersion": 1,
+  "dataModel": {
+    "tables": {
+      "awb": {
+        "x": 80,
+        "y": 280
+      },
+      "shipper": {
+        "x": 350,
+        "y": 30
+      },
+      "consignee": {
+        "x": 350,
+        "y": 250
+      },
+      "agent": {
+        "x": 350,
+        "y": 470
+      },
+      "origin_airport": {
+        "x": 350,
+        "y": 690
+      },
+      "destination_airport": {
+        "x": 640,
+        "y": 30
+      },
+      "origin_country": {
+        "x": 640,
+        "y": 250
+      },
+      "destination_country": {
+        "x": 640,
+        "y": 470
+      },
+      "airline": {
+        "x": 640,
+        "y": 690
+      },
+      "goods": {
+        "x": 930,
+        "y": 30
+      }
+    },
+    "rootDataset": "awb"
+  },
+  "report": {
+    "version": 1,
+    "id": "report-05e73f68-47fb-4a97-bf2d-69c63f0b69bc",
+    "title": "AWB example - complete form",
+    "locale": "en-US",
+    "currency": "USD",
+    "page": {
+      "width": 8.5,
+      "height": 11.7,
+      "margins": {
+        "top": 0.2,
+        "bottom": 0.2,
+        "left": 0.27,
+        "right": 0.27
+      }
+    },
+    "details": [
+      {
+        "id": "detail-8e5e0c1d-bf59-4d84-9cf7-65bbb38b136d",
+        "dataset": "goods",
+        "band": {
+          "id": "band-b8be60b5-5d69-4120-8592-742e032fbe1d",
+          "name": "Details",
+          "height": 0.3,
+          "elements": [
+            {
+              "id": "el-a8d02626-90d6-4a9b-bd7b-2a6506978c2d",
+              "type": "box",
+              "x": 0,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 0
+              }
+            },
+            {
+              "id": "el-9ef96a60-4651-49e2-9b42-5b8b1ca8d934",
+              "type": "box",
+              "x": 0.55,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 1
+              }
+            },
+            {
+              "id": "el-9009d546-46fe-4d82-92a4-04ff48222ad6",
+              "type": "box",
+              "x": 1.15,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 2
+              }
+            },
+            {
+              "id": "el-3b2314b7-2b65-462e-aeba-9154fc59eedf",
+              "type": "box",
+              "x": 1.29,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 3
+              }
+            },
+            {
+              "id": "el-08d30c0a-e0f2-4d68-a27f-5e1f6b2e7a75",
+              "type": "box",
+              "x": 2.08,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 4
+              }
+            },
+            {
+              "id": "el-d21d892e-4d0b-4036-835a-e2399a8a7773",
+              "type": "box",
+              "x": 3.04,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 5
+              }
+            },
+            {
+              "id": "el-9a08c551-b173-454b-99ce-449ba4771414",
+              "type": "box",
+              "x": 3.88,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 6
+              }
+            },
+            {
+              "id": "el-a894e1ce-4855-4eed-81ee-e3f533d3198f",
+              "type": "box",
+              "x": 5.25,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 7
+              }
+            },
+            {
+              "id": "el-a862b528-3dfa-44eb-aca9-8ecbf0757a6f",
+              "type": "box",
+              "x": 7.95,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.3,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 7
+              }
+            },
+            {
+              "id": "el-6d8f0ba2-0e0d-4b72-b5a1-722cc3e6a1a0",
+              "type": "text",
+              "x": 0.035,
+              "y": 0.035,
+              "width": 0.48000000000000004,
+              "height": 0.16,
+              "text": "[pieces]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 0
+              }
+            },
+            {
+              "id": "el-ad320fee-e26c-4b53-af6c-94585f81abdf",
+              "type": "text",
+              "x": 0.5850000000000001,
+              "y": 0.035,
+              "width": 0.5299999999999998,
+              "height": 0.16,
+              "text": "[grossWeight]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 1
+              }
+            },
+            {
+              "id": "el-73f87371-e9c6-465a-b263-f9d6813fb6a6",
+              "type": "text",
+              "x": 1.1849999999999998,
+              "y": 0.035,
+              "width": 0.07000000000000012,
+              "height": 0.16,
+              "text": "K",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 2
+              }
+            },
+            {
+              "id": "el-cabb8765-bbd2-452d-b034-e776f1788666",
+              "type": "text",
+              "x": 1.325,
+              "y": 0.035,
+              "width": 0.72,
+              "height": 0.16,
+              "text": "[rateClass]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 3
+              }
+            },
+            {
+              "id": "el-1443d033-4865-417b-9066-9f3e19b10fd6",
+              "type": "text",
+              "x": 2.115,
+              "y": 0.035,
+              "width": 0.8899999999999999,
+              "height": 0.16,
+              "text": "[chargeableWeight]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 4
+              }
+            },
+            {
+              "id": "el-46fcea70-a733-4b74-9ca5-cb4764fb4a77",
+              "type": "text",
+              "x": 3.075,
+              "y": 0.035,
+              "width": 0.7699999999999998,
+              "height": 0.16,
+              "text": "[rate]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 5
+              }
+            },
+            {
+              "id": "el-7135e3d8-bd78-40fb-b491-9a70acf47162",
+              "type": "text",
+              "x": 3.915,
+              "y": 0.035,
+              "width": 1.3,
+              "height": 0.16,
+              "text": "[total]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 6
+              }
+            },
+            {
+              "id": "el-768da5e1-31da-4b07-b0b1-b70593bf35af",
+              "type": "text",
+              "x": 5.285,
+              "y": 0.035,
+              "width": 2.64,
+              "height": 0.24,
+              "text": "[description]",
+              "src": "",
+              "style": {
+                "fontsize": 6.3,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              },
+              "groupId": "awb-goods-table",
+              "table": {
+                "dataset": "goods",
+                "rows": 1,
+                "columns": 8,
+                "headers": false,
+                "width": 7.96,
+                "rowHeight": 0.3,
+                "columnWidths": [
+                  0.55,
+                  0.5999999999999999,
+                  0.14000000000000012,
+                  0.79,
+                  0.96,
+                  0.8399999999999999,
+                  1.37,
+                  2.71
+                ],
+                "styles": {},
+                "contents": {
+                  "0:0": "[pieces]",
+                  "0:1": "[grossWeight]",
+                  "0:2": "K",
+                  "0:3": "[rateClass]",
+                  "0:4": "[chargeableWeight]",
+                  "0:5": "[rate]",
+                  "0:6": "[total]",
+                  "0:7": "[description]"
+                }
+              },
+              "cell": {
+                "row": 0,
+                "column": 7
+              }
+            }
+          ]
+        },
+        "groupHeader": {
+          "id": "band-a0c1ed5c-40a7-4113-a125-efd4449ec9a3",
+          "name": "Details header",
+          "height": 0.32,
+          "elements": [
+            {
+              "id": "el-bf5c2cd7-e1ab-42fb-9ee3-3e723d1f1353",
+              "type": "box",
+              "x": 0,
+              "y": 0,
+              "width": 7.96,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#d9d9d9",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-084cdb26-ee32-4e32-b54d-306d8e62572e",
+              "type": "box",
+              "x": 0,
+              "y": 0,
+              "width": 7.96,
+              "height": 0.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-e105411b-4f49-4a28-8869-e3b324ee85dc",
+              "type": "box",
+              "x": 0,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-9d75db54-670c-4ea5-9799-cb015ffb835e",
+              "type": "box",
+              "x": 7.95,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-2b8dcf0e-a695-44f0-9a18-52d9f077f212",
+              "type": "box",
+              "x": 0,
+              "y": 0.31,
+              "width": 7.96,
+              "height": 0.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-4ba18f6d-847f-4163-aca7-3d20d3cce744",
+              "type": "box",
+              "x": 0.55,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-fc413047-f9c9-494a-97f0-c04c91cbfebc",
+              "type": "box",
+              "x": 1.15,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-4baf743b-a8b6-44cd-8229-517336591a45",
+              "type": "box",
+              "x": 1.29,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-bad0e967-dcaa-4d5d-9db6-33baba97d2af",
+              "type": "box",
+              "x": 2.08,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-1ab73b6e-17b3-4272-ae37-7d22f61ea00d",
+              "type": "box",
+              "x": 3.04,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-a86a1567-8995-431d-afa0-150e9d03b785",
+              "type": "box",
+              "x": 3.88,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-e9dd0e60-1a43-48e3-9163-60d69d6708e3",
+              "type": "box",
+              "x": 5.25,
+              "y": 0,
+              "width": 0.01,
+              "height": 0.32,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-8efd5a6a-b407-4183-8b9d-b67c53eea67f",
+              "type": "text",
+              "x": 0.025,
+              "y": 0.018,
+              "width": 0.5,
+              "height": 0.26,
+              "text": "No. of\nPieces",
+              "src": "",
+              "style": {
+                "fontsize": 5,
+                "bold": false,
+                "italic": false,
+                "align": "center",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-7fb25e12-f7b6-470d-894c-7c609a032133",
+              "type": "text",
+              "x": 0.5750000000000001,
+              "y": 0.018,
+              "width": 0.5499999999999998,
+              "height": 0.26,
+              "text": "Gross\nWeight",
+              "src": "",
+              "style": {
+                "fontsize": 5,
+                "bold": false,
+                "italic": false,
+                "align": "center",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-7f906176-343f-4f53-8f8c-9aa487644936",
+              "type": "text",
+              "x": 1.1749999999999998,
+              "y": 0.018,
+              "width": 0.09000000000000012,
+              "height": 0.26,
+              "text": "kg\nlb",
+              "src": "",
+              "style": {
+                "fontsize": 5,
+                "bold": false,
+                "italic": false,
+                "align": "center",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-69b6a8e0-dde3-44b9-9465-56fb91fa7138",
+              "type": "text",
+              "x": 1.315,
+              "y": 0.018,
+              "width": 0.74,
+              "height": 0.26,
+              "text": "Rate Class",
+              "src": "",
+              "style": {
+                "fontsize": 5,
+                "bold": false,
+                "italic": false,
+                "align": "center",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-69046f62-37c7-4a1b-82ca-99fb7f52d384",
+              "type": "text",
+              "x": 2.105,
+              "y": 0.018,
+              "width": 0.9099999999999999,
+              "height": 0.26,
+              "text": "Chargeable\nWeight",
+              "src": "",
+              "style": {
+                "fontsize": 5,
+                "bold": false,
+                "italic": false,
+                "align": "center",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-684aba3e-b0eb-4fc6-b2be-7d6f38a61f10",
+              "type": "text",
+              "x": 3.065,
+              "y": 0.018,
+              "width": 0.7899999999999998,
+              "height": 0.26,
+              "text": "Rate /\nCharge",
+              "src": "",
+              "style": {
+                "fontsize": 5,
+                "bold": false,
+                "italic": false,
+                "align": "center",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-dc66def9-2913-444e-b912-4758ff809d30",
+              "type": "text",
+              "x": 3.905,
+              "y": 0.018,
+              "width": 1.32,
+              "height": 0.26,
+              "text": "Total",
+              "src": "",
+              "style": {
+                "fontsize": 5,
+                "bold": false,
+                "italic": false,
+                "align": "center",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-bcc9f73d-eefc-4777-abf0-7283cb9f176b",
+              "type": "text",
+              "x": 5.275,
+              "y": 0.018,
+              "width": 2.66,
+              "height": 0.26,
+              "text": "Nature and Quantity of Goods\n(incl. Dimensions or Volume)",
+              "src": "",
+              "style": {
+                "fontsize": 5,
+                "bold": false,
+                "italic": false,
+                "align": "center",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            }
+          ],
+          "visible": true
+        },
+        "groupFooter": {
+          "id": "band-a71f3aae-bd39-4e51-baf3-4cb6e2924b9d",
+          "name": "Details footer",
+          "height": 2.01,
+          "elements": [
+            {
+              "id": "el-16229c66-7bce-4251-ae23-0607230016fa",
+              "type": "box",
+              "x": 0,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-ca435402-9e14-4341-942a-c57a675da675",
+              "type": "box",
+              "x": 0.55,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-29a06ad2-9187-4d87-bf2c-9bd769a4a10b",
+              "type": "box",
+              "x": 1.15,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-c0f8a70d-fc3b-44a4-9a04-04efd06b4d22",
+              "type": "box",
+              "x": 1.29,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-51475223-8450-433b-a4a3-834ff0a4ec62",
+              "type": "box",
+              "x": 2.08,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-2ee29315-ef99-483c-b739-dec7df24803e",
+              "type": "box",
+              "x": 3.04,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-e21509eb-34b4-44a8-acdc-adb0211bbd41",
+              "type": "box",
+              "x": 3.88,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-5d7ab467-622b-4323-96eb-aae60e935d0b",
+              "type": "box",
+              "x": 5.25,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-38525f2c-9553-40ac-8a5c-915c0bccf900",
+              "type": "box",
+              "x": 7.95,
+              "y": 0,
+              "width": 0.01,
+              "height": 2.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-5201af5d-d429-433a-a113-725e14ba811d",
+              "type": "box",
+              "x": 0,
+              "y": 1.73,
+              "width": 7.96,
+              "height": 0.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-02165c16-ca88-4042-bafb-82a09f1305c5",
+              "type": "box",
+              "x": 0,
+              "y": 2,
+              "width": 7.96,
+              "height": 0.01,
+              "text": "Text",
+              "src": "",
+              "style": {
+                "fontsize": 10,
+                "bold": false,
+                "italic": false,
+                "align": "left",
+                "color": "#202020",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-7077e591-a4c4-4e2e-ab53-dae54a4cf9ec",
+              "type": "text",
+              "x": 0.035,
+              "y": 1.78,
+              "width": 0.48000000000000004,
+              "height": 0.17,
+              "text": "[awb.pieces]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-84713708-1bd5-4bd7-8f01-e69b443d950d",
+              "type": "text",
+              "x": 0.5850000000000001,
+              "y": 1.78,
+              "width": 0.53,
+              "height": 0.17,
+              "text": "[awb.grossWeight]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "text"
+              }
+            },
+            {
+              "id": "el-89f84259-cd58-4075-a223-3491fb688eeb",
+              "type": "text",
+              "x": 3.915,
+              "y": 1.78,
+              "width": 1.3,
+              "height": 0.17,
+              "text": "[awb.weightCharge]",
+              "src": "",
+              "style": {
+                "fontsize": 7,
+                "bold": false,
+                "italic": false,
+                "align": "right",
+                "color": "#111111",
+                "wrap": true,
+                "format": "number"
+              }
+            }
+          ],
+          "visible": true
+        },
+        "emptyMessage": "No goods records"
+      }
+    ],
+    "header": {
+      "id": "band-fb824c93-0d3c-4798-9e88-dadfea89ab72",
+      "name": "Report header",
+      "height": 4.77,
+      "elements": [
+        {
+          "id": "el-23ff82ae-4832-4c63-a110-cee56e381d0a",
+          "type": "text",
+          "x": 0.025,
+          "y": 0.018,
+          "width": 0.95,
+          "height": 0.11,
+          "text": "MAWB No.:",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-fc0bbf32-34d8-4850-b103-630ac35e93fc",
+          "type": "text",
+          "x": 0.885,
+          "y": 0,
+          "width": 1.63,
+          "height": 0.17,
+          "text": "[awb.number]",
+          "src": "",
+          "style": {
+            "fontsize": 9,
+            "bold": true,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-8e2b3a4f-aa4e-4a1e-86f9-ea59c0347566",
+          "type": "text",
+          "x": 5.675000000000001,
+          "y": 0.018,
+          "width": 0.85,
+          "height": 0.11,
+          "text": "HAWB No.:",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-dbf0fd62-e182-4770-82d6-1b4dc108ce76",
+          "type": "text",
+          "x": 6.485,
+          "y": 0,
+          "width": 1.3299999999999998,
+          "height": 0.17,
+          "text": "[awb.houseNumber]",
+          "src": "",
+          "style": {
+            "fontsize": 9,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6d28f8bd-f2ad-4fb9-9ce3-e2d8b7565e80",
+          "type": "box",
+          "x": 0,
+          "y": 0.23,
+          "width": 3.76,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-07222974-8cac-4ada-b542-cd259b195069",
+          "type": "box",
+          "x": 0,
+          "y": 0.23,
+          "width": 0.01,
+          "height": 0.91,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f87faf6f-99a8-4f45-aae4-323cfeee2583",
+          "type": "box",
+          "x": 3.75,
+          "y": 0.23,
+          "width": 0.01,
+          "height": 0.91,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-47f336c5-1351-4e3a-a450-8ef87226e425",
+          "type": "box",
+          "x": 0,
+          "y": 1.1300000000000001,
+          "width": 3.76,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f1f18117-1f58-4a0f-b9db-c8ec9ef374a1",
+          "type": "box",
+          "x": 3.76,
+          "y": 0.23,
+          "width": 4.2,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-fa158d92-b249-4a2e-a830-7daa19fac62e",
+          "type": "box",
+          "x": 3.76,
+          "y": 0.23,
+          "width": 0.01,
+          "height": 0.91,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-a9e5c2fa-6364-4d20-a3f3-ab2dde43601c",
+          "type": "box",
+          "x": 7.95,
+          "y": 0.23,
+          "width": 0.01,
+          "height": 0.91,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-5c9a6e23-6508-411c-9b62-a3b3787c5c43",
+          "type": "box",
+          "x": 3.76,
+          "y": 1.1300000000000001,
+          "width": 4.2,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-933113b0-2483-4cb5-ac43-d12d877f5430",
+          "type": "text",
+          "x": 0.025,
+          "y": 0.248,
+          "width": 2.35,
+          "height": 0.11,
+          "text": "Shipper's Name and Address",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-0d3eab3c-5941-4845-9ea2-6ca308043974",
+          "type": "text",
+          "x": 2.355,
+          "y": 0.248,
+          "width": 1.38,
+          "height": 0.11,
+          "text": "Shipper's Account Number",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-651fa130-11ad-4d62-a08c-5bc3c9d0e53c",
+          "type": "box",
+          "x": 2.32,
+          "y": 0.23,
+          "width": 0.01,
+          "height": 0.24,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-586e92b5-8cc8-4abc-9c1c-912791ea960c",
+          "type": "box",
+          "x": 2.32,
+          "y": 0.46,
+          "width": 1.44,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-336a7559-823a-44a8-8677-71adde44859e",
+          "type": "text",
+          "x": 2.365,
+          "y": 0.34,
+          "width": 1.3299999999999998,
+          "height": 0.17,
+          "text": "[shipper.account]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": true,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-2efe3638-2c20-4582-a6ab-e730d0137cae",
+          "type": "text",
+          "x": 0.035,
+          "y": 0.48,
+          "width": 3.58,
+          "height": 0.58,
+          "text": "[shipper.name]\\n[shipper.address]\\n[shipper.city]\\n[shipper.country]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6b416125-f00f-4f95-9b75-036628e8deb1",
+          "type": "text",
+          "x": 3.7849999999999997,
+          "y": 0.248,
+          "width": 1.95,
+          "height": 0.11,
+          "text": "Not Negotiable",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-690a1656-6e38-4d0c-ad29-29e61fccdbda",
+          "type": "text",
+          "x": 3.8,
+          "y": 0.36,
+          "width": 2.3,
+          "height": 0.18,
+          "text": "House Air Waybill",
+          "src": "",
+          "style": {
+            "fontsize": 11,
+            "bold": true,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-9d8f4c8a-a699-410c-8962-2411d8f12659",
+          "type": "text",
+          "x": 3.7849999999999997,
+          "y": 0.608,
+          "width": 1.95,
+          "height": 0.11,
+          "text": "Issued by",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-44685a5c-778b-4624-b6b1-760a99768b11",
+          "type": "text",
+          "x": 3.795,
+          "y": 0.7,
+          "width": 4.029999999999999,
+          "height": 0.4,
+          "text": "[airline.name]\\n[agent.address]\\n[agent.city]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-a3bc2d97-025a-45e1-8553-1533e538b5d4",
+          "type": "box",
+          "x": 0,
+          "y": 1.14,
+          "width": 3.76,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-dc6fcff5-357a-41e0-b9c8-4387515bd8cf",
+          "type": "box",
+          "x": 0,
+          "y": 1.14,
+          "width": 0.01,
+          "height": 0.83,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-4f5cd510-7583-4e23-bab6-e35f97fa9de4",
+          "type": "box",
+          "x": 3.75,
+          "y": 1.14,
+          "width": 0.01,
+          "height": 0.83,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-cf6a351a-575f-4810-8c27-0f8572f691fc",
+          "type": "box",
+          "x": 0,
+          "y": 1.9599999999999997,
+          "width": 3.76,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-d11872d5-d0b7-4c70-bfc8-d18a69e0cee2",
+          "type": "box",
+          "x": 3.76,
+          "y": 1.14,
+          "width": 4.2,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-7962b8af-2edf-4e09-bccb-464ef48cdd0c",
+          "type": "box",
+          "x": 3.76,
+          "y": 1.14,
+          "width": 0.01,
+          "height": 0.83,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-ad60fed5-a653-41a9-ab83-1aa26dd4bae8",
+          "type": "box",
+          "x": 7.95,
+          "y": 1.14,
+          "width": 0.01,
+          "height": 0.83,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-8270c70e-2b86-4343-926a-9dbdfd0983a0",
+          "type": "box",
+          "x": 3.76,
+          "y": 1.9599999999999997,
+          "width": 4.2,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-2cde1e8d-34df-4c7b-959b-fa6b8f6d4eda",
+          "type": "text",
+          "x": 0.025,
+          "y": 1.158,
+          "width": 2.35,
+          "height": 0.11,
+          "text": "Consignee's Name and Address",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6974b7fb-fdd2-47c2-9549-b55778fd926f",
+          "type": "text",
+          "x": 2.355,
+          "y": 1.158,
+          "width": 1.38,
+          "height": 0.11,
+          "text": "Consignee's Account Number",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f4704953-a834-4354-95bb-0af735a1e589",
+          "type": "box",
+          "x": 2.32,
+          "y": 1.14,
+          "width": 0.01,
+          "height": 0.24,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-26696a46-10ff-474a-99be-ac3d7d488a3b",
+          "type": "box",
+          "x": 2.32,
+          "y": 1.37,
+          "width": 1.44,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-a8937352-3718-4185-b6a6-764a99e7ee1c",
+          "type": "text",
+          "x": 2.365,
+          "y": 1.25,
+          "width": 1.3299999999999998,
+          "height": 0.17,
+          "text": "[consignee.account]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": true,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-60f951c0-79ab-4598-9f95-b8e3c90abe4a",
+          "type": "text",
+          "x": 0.035,
+          "y": 1.39,
+          "width": 3.58,
+          "height": 0.53,
+          "text": "[consignee.name]\\n[consignee.address]\\n[consignee.city]\\n[consignee.country]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6ef1850d-e0b0-4467-9f3a-b7b421f5ff37",
+          "type": "text",
+          "x": 3.7849999999999997,
+          "y": 1.158,
+          "width": 4.15,
+          "height": 0.11,
+          "text": "Copies 1, 2 and 3 of this Air Waybill are originals.",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-bb454270-c49e-404e-8465-b2399ab4ea23",
+          "type": "text",
+          "x": 3.8,
+          "y": 1.29,
+          "width": 4.12,
+          "height": 0.65,
+          "text": "It is agreed that the goods described herein are accepted in apparent good order and condition, subject to the conditions of contract on the reverse of this Air Waybill. All goods may be carried by any other means unless instructions are given hereon by the shipper.",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-5f65b28b-4ba3-40e6-81a6-abd04fae535a",
+          "type": "box",
+          "x": 0,
+          "y": 1.97,
+          "width": 3.76,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b4cbdcec-935a-47e0-bda1-dc0d092e1cb4",
+          "type": "box",
+          "x": 0,
+          "y": 1.97,
+          "width": 0.01,
+          "height": 0.64,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-e7ecae28-9a13-4fa6-b614-3713f41707a7",
+          "type": "box",
+          "x": 3.75,
+          "y": 1.97,
+          "width": 0.01,
+          "height": 0.64,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-5ed16959-eb93-416a-b635-e67536272ddb",
+          "type": "box",
+          "x": 0,
+          "y": 2.6,
+          "width": 3.76,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-fc74fe85-9cc0-49c8-8a2e-3569ad9cb8cb",
+          "type": "box",
+          "x": 3.76,
+          "y": 1.97,
+          "width": 4.2,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-07c895d2-18c3-4d42-ab89-280b499471fd",
+          "type": "box",
+          "x": 3.76,
+          "y": 1.97,
+          "width": 0.01,
+          "height": 0.64,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f38451d1-7bfe-452b-88d0-647158f4c1b9",
+          "type": "box",
+          "x": 7.95,
+          "y": 1.97,
+          "width": 0.01,
+          "height": 0.64,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-0d144173-698c-43a6-830a-d198a81c5caf",
+          "type": "box",
+          "x": 3.76,
+          "y": 2.6,
+          "width": 4.2,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-fc2daaca-65b7-4ba4-bdb5-66d0c5a36f2d",
+          "type": "text",
+          "x": 0.025,
+          "y": 1.988,
+          "width": 3.71,
+          "height": 0.11,
+          "text": "Notify / issuing carrier’s agent",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-ce59a2bf-7e6d-4f16-9b05-768093305fe1",
+          "type": "text",
+          "x": 0.035,
+          "y": 2.12,
+          "width": 3.58,
+          "height": 0.43,
+          "text": "[agent.name]\\n[agent.address]\\n[agent.city]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-1d3fba85-868c-4071-a03a-bce9f56e5614",
+          "type": "text",
+          "x": 3.7849999999999997,
+          "y": 1.988,
+          "width": 0.5399999999999998,
+          "height": 0.11,
+          "text": "Currency",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-480612f0-be93-4789-acc4-24aba4dab9ec",
+          "type": "box",
+          "x": 4.35,
+          "y": 1.97,
+          "width": 0.01,
+          "height": 0.64,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b8ce82dc-e818-453f-aa16-d99131e02832",
+          "type": "text",
+          "x": 4.375,
+          "y": 1.988,
+          "width": 0.8600000000000001,
+          "height": 0.11,
+          "text": "Declared value for carriage",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-83db6230-ad6e-486b-bcda-5637eb1319e0",
+          "type": "box",
+          "x": 5.26,
+          "y": 1.97,
+          "width": 0.01,
+          "height": 0.64,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-bdd8a08d-2990-4a66-a892-922ef9ea1aa5",
+          "type": "text",
+          "x": 5.285,
+          "y": 1.988,
+          "width": 0.9400000000000002,
+          "height": 0.11,
+          "text": "Declared value for customs",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-8076736a-95f7-4765-bb12-370ad7910012",
+          "type": "box",
+          "x": 6.25,
+          "y": 1.97,
+          "width": 0.01,
+          "height": 0.64,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b1f38c81-ca17-4918-865a-dc118310b5d2",
+          "type": "text",
+          "x": 6.275,
+          "y": 1.988,
+          "width": 0.8100000000000003,
+          "height": 0.11,
+          "text": "Insurance",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6a8b31c9-0d7d-4331-b4a6-62a6fbe5b229",
+          "type": "box",
+          "x": 7.11,
+          "y": 1.97,
+          "width": 0.01,
+          "height": 0.64,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-5129f621-21c8-45e5-a3e1-62ffd822c9a2",
+          "type": "text",
+          "x": 7.135000000000001,
+          "y": 1.988,
+          "width": 0.7999999999999996,
+          "height": 0.11,
+          "text": "Agent IATA",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-1af19469-66f7-4a46-a7bb-2a1e407fdbf7",
+          "type": "text",
+          "x": 3.795,
+          "y": 2.19,
+          "width": 0.5199999999999998,
+          "height": 0.17,
+          "text": "[awb.currency]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-4cd666fb-32d9-4682-baec-3d36d1bbc051",
+          "type": "text",
+          "x": 4.385,
+          "y": 2.19,
+          "width": 0.8400000000000001,
+          "height": 0.17,
+          "text": "[awb.declaredCarriage]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-44e680b8-b6dc-4846-85e5-5264ebdc499f",
+          "type": "text",
+          "x": 5.295,
+          "y": 2.19,
+          "width": 0.9200000000000002,
+          "height": 0.17,
+          "text": "[awb.declaredCustoms]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-8a7330b7-3d59-4d0a-b018-0bf526f2ab62",
+          "type": "text",
+          "x": 6.285,
+          "y": 2.19,
+          "width": 0.7900000000000003,
+          "height": 0.17,
+          "text": "[awb.insurance]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-c95d9e43-4efb-4aa7-bebb-02073675f010",
+          "type": "text",
+          "x": 7.1450000000000005,
+          "y": 2.19,
+          "width": 0.7799999999999996,
+          "height": 0.17,
+          "text": "[agent.iataCode]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-e489a0a2-12f6-4ef2-a5b5-dd0b1c2a038a",
+          "type": "box",
+          "x": 0,
+          "y": 2.61,
+          "width": 7.96,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-69214699-878d-4efa-80cf-2659fae5b460",
+          "type": "box",
+          "x": 0,
+          "y": 2.61,
+          "width": 0.01,
+          "height": 0.51,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-204d993b-1300-44b2-8843-92f1950aff07",
+          "type": "box",
+          "x": 7.95,
+          "y": 2.61,
+          "width": 0.01,
+          "height": 0.51,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b732b0cc-88b0-480d-9dd5-049bb0292ac8",
+          "type": "box",
+          "x": 0,
+          "y": 3.1100000000000003,
+          "width": 7.96,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-488dd5d6-7e8e-4a97-a394-6f046023e906",
+          "type": "box",
+          "x": 1.85,
+          "y": 2.61,
+          "width": 0.01,
+          "height": 0.51,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-c53a503b-68b8-46a3-aea1-78b19ec578a9",
+          "type": "box",
+          "x": 3.76,
+          "y": 2.61,
+          "width": 0.01,
+          "height": 0.51,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-972f47d7-2b39-4db7-8c52-b2153f7d4fd2",
+          "type": "box",
+          "x": 5.16,
+          "y": 2.61,
+          "width": 0.01,
+          "height": 0.51,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-7cc7bf39-3775-46e3-909e-38f32ca03d59",
+          "type": "box",
+          "x": 6.56,
+          "y": 2.61,
+          "width": 0.01,
+          "height": 0.51,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6e2c74f1-fd6f-4d77-be0e-d0e6b30d4705",
+          "type": "text",
+          "x": 0.025,
+          "y": 2.6279999999999997,
+          "width": 1.8,
+          "height": 0.11,
+          "text": "Origin station",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-a5e71f99-6b4b-42a3-98b7-91304125452f",
+          "type": "text",
+          "x": 0.035,
+          "y": 2.82,
+          "width": 1.78,
+          "height": 0.26,
+          "text": "[origin_airport.code] - [origin_airport.name]",
+          "src": "",
+          "style": {
+            "fontsize": 6.4,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-8d91982c-c880-4f12-be3b-f5da4c3c1fd9",
+          "type": "text",
+          "x": 1.875,
+          "y": 2.6279999999999997,
+          "width": 1.8599999999999997,
+          "height": 0.11,
+          "text": "Destination station",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-92d3738b-1d1d-4a15-a278-9f433824319f",
+          "type": "text",
+          "x": 1.885,
+          "y": 2.82,
+          "width": 1.8399999999999996,
+          "height": 0.26,
+          "text": "[destination_airport.code] - [destination_airport.name]",
+          "src": "",
+          "style": {
+            "fontsize": 6.4,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-1afb353a-f01d-456f-a33f-aa726e79655d",
+          "type": "text",
+          "x": 3.7849999999999997,
+          "y": 2.6279999999999997,
+          "width": 1.3500000000000003,
+          "height": 0.11,
+          "text": "Flight 1 / date / via",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-7a2b9ac2-01f7-4623-9e98-bd9f253c9349",
+          "type": "text",
+          "x": 3.795,
+          "y": 2.82,
+          "width": 1.3300000000000003,
+          "height": 0.26,
+          "text": "[awb.flight]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-376c86f9-a2f6-43c1-afee-32b811b26181",
+          "type": "text",
+          "x": 5.1850000000000005,
+          "y": 2.6279999999999997,
+          "width": 1.3499999999999994,
+          "height": 0.11,
+          "text": "Flight 2 / date / via",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-a9496256-df29-4ef0-92fc-fa2766abb57e",
+          "type": "text",
+          "x": 5.195,
+          "y": 2.82,
+          "width": 1.3299999999999994,
+          "height": 0.26,
+          "text": "[awb.flight2]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-7f232f38-a331-453c-81b0-9e9279ea98a7",
+          "type": "text",
+          "x": 6.585,
+          "y": 2.6279999999999997,
+          "width": 1.3500000000000003,
+          "height": 0.11,
+          "text": "Flight 3 / date / via",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-07f97d44-3218-4906-a94e-de745ca8f817",
+          "type": "text",
+          "x": 6.595,
+          "y": 2.82,
+          "width": 1.3300000000000003,
+          "height": 0.26,
+          "text": "[awb.flight3]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-718ffbb9-8190-4d6a-8aaf-9a40f55a7e1e",
+          "type": "box",
+          "x": 0,
+          "y": 3.12,
+          "width": 3.76,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-07f72d83-8f21-4eca-9e77-c2016798155d",
+          "type": "box",
+          "x": 0,
+          "y": 3.12,
+          "width": 0.01,
+          "height": 1.65,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6ba82dd4-305f-4213-9d6e-37833921c84c",
+          "type": "box",
+          "x": 3.75,
+          "y": 3.12,
+          "width": 0.01,
+          "height": 1.65,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-8496df69-ff48-400a-a690-83bb26cfa794",
+          "type": "box",
+          "x": 0,
+          "y": 4.76,
+          "width": 3.76,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-51649698-cb64-41bb-a082-98bf720e2155",
+          "type": "box",
+          "x": 3.76,
+          "y": 3.12,
+          "width": 4.2,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6cfbf7ea-c505-4473-b8ce-f2a17fc72070",
+          "type": "box",
+          "x": 3.76,
+          "y": 3.12,
+          "width": 0.01,
+          "height": 1.65,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f0b844a0-fbb1-4105-9609-dc2d02dfc47c",
+          "type": "box",
+          "x": 7.95,
+          "y": 3.12,
+          "width": 0.01,
+          "height": 1.65,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-5d2ecaba-97e4-4891-b677-818a7d43b2f7",
+          "type": "box",
+          "x": 3.76,
+          "y": 4.76,
+          "width": 4.2,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b9c402d6-6ec5-4598-a0a9-4c706648f5a2",
+          "type": "text",
+          "x": 0.025,
+          "y": 3.138,
+          "width": 3.71,
+          "height": 0.11,
+          "text": "Reference Number(s)",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-197cddd1-2c5a-4c0c-ba41-5dc92684699b",
+          "type": "text",
+          "x": 0.035,
+          "y": 3.29,
+          "width": 3.5300000000000002,
+          "height": 0.17,
+          "text": "[awb.reference]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-3beaf635-285a-4dce-82ac-7f986c365522",
+          "type": "text",
+          "x": 3.7849999999999997,
+          "y": 3.138,
+          "width": 4.15,
+          "height": 0.11,
+          "text": "Handling Information",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f29a40a6-b42d-4917-8173-58a7fdc22ec3",
+          "type": "text",
+          "x": 3.795,
+          "y": 3.29,
+          "width": 3.98,
+          "height": 0.52,
+          "text": "[awb.handling]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-416a93b2-8372-417e-a7be-a1ec950f826d",
+          "type": "box",
+          "x": 6.88,
+          "y": 4.48,
+          "width": 1.08,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-0e551f1a-cba2-4907-8857-80196e822885",
+          "type": "box",
+          "x": 6.88,
+          "y": 4.48,
+          "width": 0.01,
+          "height": 0.29,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-c4386246-97dc-4872-8059-b94229535a2b",
+          "type": "box",
+          "x": 7.95,
+          "y": 4.48,
+          "width": 0.01,
+          "height": 0.29,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f191c1da-9cfd-46d2-855b-a91f366bd4f7",
+          "type": "box",
+          "x": 6.88,
+          "y": 4.760000000000001,
+          "width": 1.08,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-2dc65035-37b1-4afa-b198-62c41ac28c05",
+          "type": "text",
+          "x": 6.905,
+          "y": 4.498,
+          "width": 1.03,
+          "height": 0.11,
+          "text": "SCI",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        }
+      ],
+      "visible": true
+    },
+    "pageHeader": {
+      "id": "band-c556d5ba-5b19-42aa-a7b1-d68b7885b2a6",
+      "name": "Page header",
+      "height": 0.05,
+      "elements": [],
+      "visible": false
+    },
+    "pageFooter": {
+      "id": "band-6edc5857-b276-4118-bd20-53d78afa8a6c",
+      "name": "Page footer",
+      "height": 0.05,
+      "elements": [],
+      "visible": false
+    },
+    "footer": {
+      "id": "band-7582ce59-6b49-4020-bb85-be5dfac826d8",
+      "name": "Report footer",
+      "height": 3.3,
+      "elements": [
+        {
+          "id": "el-0fde6190-e5a9-42dc-8a6d-6223a537ef1a",
+          "type": "box",
+          "x": 0,
+          "y": 0,
+          "width": 3.12,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-cd3168d8-521c-4a4b-9089-2d4feba6a238",
+          "type": "box",
+          "x": 0,
+          "y": 0,
+          "width": 0.01,
+          "height": 2.2,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-ad236a9b-349e-4729-8ead-b855d6dbb228",
+          "type": "box",
+          "x": 3.1100000000000003,
+          "y": 0,
+          "width": 0.01,
+          "height": 2.2,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f1e7d067-987b-4fdc-835e-1fc47b7434ce",
+          "type": "box",
+          "x": 0,
+          "y": 2.1900000000000004,
+          "width": 3.12,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-9ff89b92-0fc7-42f5-b2b4-97721754217e",
+          "type": "box",
+          "x": 3.12,
+          "y": 0,
+          "width": 4.84,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-792d80d9-58c9-43d2-a2f2-dc09bb42e453",
+          "type": "box",
+          "x": 3.12,
+          "y": 0,
+          "width": 0.01,
+          "height": 1.35,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-335d8dd7-ceec-432c-846c-cc2319cd8d12",
+          "type": "box",
+          "x": 7.95,
+          "y": 0,
+          "width": 0.01,
+          "height": 1.35,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-bbb8b500-21c8-4a0a-ab1e-1ec19802c176",
+          "type": "box",
+          "x": 3.12,
+          "y": 1.34,
+          "width": 4.84,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-18eb2a23-e664-4230-8b2f-ae412171dc75",
+          "type": "box",
+          "x": 3.12,
+          "y": 1.35,
+          "width": 4.84,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-d6f6729a-5655-4cbb-9d48-e13b7fa736ce",
+          "type": "box",
+          "x": 3.12,
+          "y": 1.35,
+          "width": 0.01,
+          "height": 0.85,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-82197632-91f4-4bbb-a75c-491764039d6b",
+          "type": "box",
+          "x": 7.95,
+          "y": 1.35,
+          "width": 0.01,
+          "height": 0.85,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b94cf4f7-651c-44a1-9536-35242c7455de",
+          "type": "box",
+          "x": 3.12,
+          "y": 2.1900000000000004,
+          "width": 4.84,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b7be1a70-4135-4c29-a6b8-a0f689b976db",
+          "type": "box",
+          "x": 1.56,
+          "y": 0,
+          "width": 0.01,
+          "height": 2.2,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-60a14361-6a22-4646-8a6d-8631e8f6b7e0",
+          "type": "text",
+          "x": 0.025,
+          "y": 0.018,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "Prepaid / weight charge",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-982b5b8a-9c3a-429f-8d85-79cd0f464975",
+          "type": "text",
+          "x": 1.585,
+          "y": 0.018,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "Collect",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-9586eb2d-da29-4dfd-bc44-4066b33fbaa2",
+          "type": "text",
+          "x": 0.035,
+          "y": 0.16,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.weightCharge]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-cebd8254-fd5c-4628-b01e-c7b62befc8b0",
+          "type": "box",
+          "x": 0,
+          "y": 0.44,
+          "width": 3.12,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-c7069ea6-5a5a-4adf-b8ea-1ed000b546e0",
+          "type": "text",
+          "x": 0.025,
+          "y": 0.458,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "Valuation charges",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-8193d116-27ed-493a-bebd-43ffa9e41162",
+          "type": "text",
+          "x": 1.585,
+          "y": 0.458,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-e5ae612c-e527-4f1a-aada-7a475acaebcd",
+          "type": "text",
+          "x": 0.035,
+          "y": 0.6,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.valuationCharge]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-7ec3e75c-95d3-4b12-878d-9e66cea7bc79",
+          "type": "box",
+          "x": 0,
+          "y": 0.88,
+          "width": 3.12,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6a991054-4cf6-41b6-973c-68b6c5d00a89",
+          "type": "text",
+          "x": 0.025,
+          "y": 0.898,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "Tax",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-7f93197b-fce9-4397-a5ee-6fc5185708c1",
+          "type": "text",
+          "x": 1.585,
+          "y": 0.898,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-276cad0d-f659-4fb5-9e74-7871f9842ade",
+          "type": "text",
+          "x": 0.035,
+          "y": 1.04,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.tax]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-faf63f0b-461d-4e4d-90b4-9d2c3f114845",
+          "type": "box",
+          "x": 0,
+          "y": 1.32,
+          "width": 3.12,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f1182d8d-0b85-4279-8542-5a0e4d4ab7a1",
+          "type": "text",
+          "x": 0.025,
+          "y": 1.338,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "Other charges due agent",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-8dbe121c-28fb-495c-b33c-895504b9eacf",
+          "type": "text",
+          "x": 1.585,
+          "y": 1.338,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-e30e5c47-91d3-477d-b158-4deb694d77b3",
+          "type": "text",
+          "x": 0.035,
+          "y": 1.48,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.otherCharges]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-3405332e-ce23-4cd4-9ccc-04671badd435",
+          "type": "box",
+          "x": 0,
+          "y": 1.76,
+          "width": 3.12,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-5696618c-6497-4f16-83a5-54a861f81b79",
+          "type": "text",
+          "x": 0.025,
+          "y": 1.778,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "Total prepaid",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-6fa2641b-4935-4a00-a872-349eaeea480c",
+          "type": "text",
+          "x": 1.585,
+          "y": 1.778,
+          "width": 1.51,
+          "height": 0.11,
+          "text": "",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-1c02f3dc-ed84-4e52-bbc1-3a616208580e",
+          "type": "text",
+          "x": 0.035,
+          "y": 1.92,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.totalPrepaid]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-3707bb97-7ba6-479e-85b7-e30106053c19",
+          "type": "text",
+          "x": 3.145,
+          "y": 0.018,
+          "width": 4.79,
+          "height": 0.11,
+          "text": "Other Charges breakdown",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-12c19d34-0c98-4ef7-a896-e3d1adc5b643",
+          "type": "text",
+          "x": 3.1550000000000002,
+          "y": 0.18,
+          "width": 4.63,
+          "height": 0.17,
+          "text": "[awb.otherCharges] USD - AGENT CHARGES",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-a4bc5da8-f1ec-4da3-bd50-2ace2d0133ae",
+          "type": "text",
+          "x": 3.145,
+          "y": 1.368,
+          "width": 4.79,
+          "height": 0.11,
+          "text": "Executed on / at / signature of issuing carrier or its agent",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-2e9885ae-7b60-4258-8ab5-60b0c0ab21a0",
+          "type": "text",
+          "x": 3.1550000000000002,
+          "y": 1.55,
+          "width": 4.63,
+          "height": 0.17,
+          "text": "[awb.executedDate]            [awb.executedPlace]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-f5678e7d-fb39-4211-900d-5b767ed6c3b6",
+          "type": "text",
+          "x": 3.17,
+          "y": 1.9,
+          "width": 4.7,
+          "height": 0.16,
+          "text": "Shipper certifies that the particulars on the face hereof are correct.",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-a04adff2-fe44-4890-bae8-547c2f728897",
+          "type": "box",
+          "x": 0,
+          "y": 2.2,
+          "width": 7.96,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-b59d85a1-014a-4d4b-99b4-a2aa27cff5cd",
+          "type": "box",
+          "x": 0,
+          "y": 2.2,
+          "width": 0.01,
+          "height": 0.47,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-c7094ac5-1560-4e85-afcb-0138875ff2e9",
+          "type": "box",
+          "x": 7.95,
+          "y": 2.2,
+          "width": 0.01,
+          "height": 0.47,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-7c66a51b-ab8f-4e21-8e08-e5f74ef23b82",
+          "type": "box",
+          "x": 0,
+          "y": 2.66,
+          "width": 7.96,
+          "height": 0.01,
+          "text": "Text",
+          "src": "",
+          "style": {
+            "fontsize": 10,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#202020",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-629fb49b-07f4-4c12-ac97-d19a0b4bda8e",
+          "type": "text",
+          "x": 0.025,
+          "y": 2.218,
+          "width": 3.0700000000000003,
+          "height": 0.11,
+          "text": "Total prepaid / collect",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "left",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-16f3731d-037e-42f6-9fed-952aba0997f1",
+          "type": "text",
+          "x": 0.035,
+          "y": 2.39,
+          "width": 1.46,
+          "height": 0.17,
+          "text": "[awb.totalPrepaid]",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "number"
+          }
+        },
+        {
+          "id": "el-9d3202d7-ff32-45ec-bfe5-8eaad97fa62b",
+          "type": "text",
+          "x": 3.145,
+          "y": 2.218,
+          "width": 4.79,
+          "height": 0.11,
+          "text": "Signature of shipper or agent",
+          "src": "",
+          "style": {
+            "fontsize": 5,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-abc256bc-752e-49a8-bd52-071007c8913d",
+          "type": "text",
+          "x": 0,
+          "y": 2.75,
+          "width": 7.96,
+          "height": 0.16,
+          "text": "EXAMPLE AIR CARGO  -  SERVICE DOCUMENT",
+          "src": "",
+          "style": {
+            "fontsize": 8,
+            "bold": true,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        },
+        {
+          "id": "el-d3369697-b648-4394-81e7-d5c5e8991705",
+          "type": "text",
+          "x": 0,
+          "y": 2.98,
+          "width": 7.96,
+          "height": 0.16,
+          "text": "Original 3 - for shipper     ·     This is not an invoice",
+          "src": "",
+          "style": {
+            "fontsize": 7,
+            "bold": false,
+            "italic": false,
+            "align": "center",
+            "color": "#111111",
+            "wrap": true,
+            "format": "text"
+          }
+        }
+      ],
+      "visible": true
+    }
+  },
+  "datasets": [
+    {
+      "id": "awb",
+      "name": "Air waybills",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "number",
+            "type": "text"
+          },
+          {
+            "name": "houseNumber",
+            "type": "text"
+          },
+          {
+            "name": "shipperId",
+            "type": "number"
+          },
+          {
+            "name": "consigneeId",
+            "type": "number"
+          },
+          {
+            "name": "agentId",
+            "type": "number"
+          },
+          {
+            "name": "originId",
+            "type": "number"
+          },
+          {
+            "name": "destinationId",
+            "type": "number"
+          },
+          {
+            "name": "airlineId",
+            "type": "number"
+          },
+          {
+            "name": "currency",
+            "type": "text"
+          },
+          {
+            "name": "flight",
+            "type": "text"
+          },
+          {
+            "name": "flight2",
+            "type": "text"
+          },
+          {
+            "name": "flight3",
+            "type": "text"
+          },
+          {
+            "name": "flightDate",
+            "type": "text"
+          },
+          {
+            "name": "notify",
+            "type": "text"
+          },
+          {
+            "name": "reference",
+            "type": "text"
+          },
+          {
+            "name": "declaredCarriage",
+            "type": "text"
+          },
+          {
+            "name": "declaredCustoms",
+            "type": "text"
+          },
+          {
+            "name": "insurance",
+            "type": "text"
+          },
+          {
+            "name": "handling",
+            "type": "text"
+          },
+          {
+            "name": "pieces",
+            "type": "number"
+          },
+          {
+            "name": "grossWeight",
+            "type": "number"
+          },
+          {
+            "name": "chargeableWeight",
+            "type": "number"
+          },
+          {
+            "name": "commodity",
+            "type": "text"
+          },
+          {
+            "name": "weightCharge",
+            "type": "number"
+          },
+          {
+            "name": "valuationCharge",
+            "type": "number"
+          },
+          {
+            "name": "tax",
+            "type": "number"
+          },
+          {
+            "name": "otherCharges",
+            "type": "number"
+          },
+          {
+            "name": "totalPrepaid",
+            "type": "number"
+          },
+          {
+            "name": "executedDate",
+            "type": "text"
+          },
+          {
+            "name": "executedPlace",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 1001,
+          "number": "999-12345675",
+          "houseNumber": "RS-10247",
+          "shipperId": 1,
+          "consigneeId": 2,
+          "agentId": 3,
+          "originId": 10,
+          "destinationId": 20,
+          "airlineId": 30,
+          "currency": "USD",
+          "flight": "RS 101 / 12 / ATL",
+          "flight2": "RS 205 / 13 / ORD",
+          "flight3": "RS 301 / 14 / YYZ",
+          "flightDate": "12 NOV 2026",
+          "notify": "DEMO IMPORTS SA - TORONTO",
+          "reference": "REF-TEST-1001",
+          "declaredCarriage": "NVD",
+          "declaredCustoms": "NCV",
+          "insurance": "NIL",
+          "handling": "GENERAL CARGO · KEEP DRY",
+          "pieces": 12,
+          "grossWeight": 465,
+          "chargeableWeight": 500,
+          "commodity": "GENERAL CARGO",
+          "weightCharge": 1250,
+          "valuationCharge": 0,
+          "tax": 62.5,
+          "otherCharges": 40,
+          "totalPrepaid": 1352.5,
+          "executedDate": "10 NOV 2026",
+          "executedPlace": "MIAMI, FL"
+        }
+      ]
+    },
+    {
+      "id": "shipper",
+      "name": "Shippers",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "address",
+            "type": "text"
+          },
+          {
+            "name": "city",
+            "type": "text"
+          },
+          {
+            "name": "country",
+            "type": "text"
+          },
+          {
+            "name": "account",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 1,
+          "name": "NORTHSTAR EXPORTS LLC",
+          "address": "100 SAMPLE AVENUE",
+          "city": "MIAMI, FL 33101",
+          "country": "UNITED STATES",
+          "account": "SHP-100"
+        }
+      ]
+    },
+    {
+      "id": "consignee",
+      "name": "Consignees",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "address",
+            "type": "text"
+          },
+          {
+            "name": "city",
+            "type": "text"
+          },
+          {
+            "name": "country",
+            "type": "text"
+          },
+          {
+            "name": "account",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 2,
+          "name": "DEMO IMPORTS SA",
+          "address": "200 EXAMPLE ROAD",
+          "city": "TORONTO, ON M5V 2T6",
+          "country": "CANADA",
+          "account": "CNE-200"
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "name": "Freight agents",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "address",
+            "type": "text"
+          },
+          {
+            "name": "city",
+            "type": "text"
+          },
+          {
+            "name": "iataCode",
+            "type": "text"
+          },
+          {
+            "name": "account",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 3,
+          "name": "EXAMPLE FREIGHT SERVICES",
+          "address": "300 AIRPORT WAY",
+          "city": "MIAMI, FL 33126",
+          "iataCode": "0123456",
+          "account": "AGT-300"
+        }
+      ]
+    },
+    {
+      "id": "origin_airport",
+      "name": "Origin airports",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "countryId",
+            "type": "number"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 10,
+          "code": "MIA",
+          "name": "MIAMI INTERNATIONAL AIRPORT",
+          "countryId": 1
+        }
+      ]
+    },
+    {
+      "id": "destination_airport",
+      "name": "Destination airports",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          },
+          {
+            "name": "countryId",
+            "type": "number"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 20,
+          "code": "YYZ",
+          "name": "TORONTO PEARSON INTERNATIONAL AIRPORT",
+          "countryId": 2
+        }
+      ]
+    },
+    {
+      "id": "origin_country",
+      "name": "Origin countries",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 1,
+          "code": "US",
+          "name": "UNITED STATES"
+        }
+      ]
+    },
+    {
+      "id": "destination_country",
+      "name": "Destination countries",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 2,
+          "code": "CA",
+          "name": "CANADA"
+        }
+      ]
+    },
+    {
+      "id": "airline",
+      "name": "Airlines",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "code",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 30,
+          "code": "RS",
+          "name": "REPORT STUDIO AIR CARGO"
+        }
+      ]
+    },
+    {
+      "id": "goods",
+      "name": "Goods",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "name": "awbId",
+            "type": "number"
+          },
+          {
+            "name": "pieces",
+            "type": "number"
+          },
+          {
+            "name": "grossWeight",
+            "type": "number"
+          },
+          {
+            "name": "rateClass",
+            "type": "text"
+          },
+          {
+            "name": "chargeableWeight",
+            "type": "number"
+          },
+          {
+            "name": "rate",
+            "type": "number"
+          },
+          {
+            "name": "total",
+            "type": "number"
+          },
+          {
+            "name": "description",
+            "type": "text"
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": 1,
+          "awbId": 1001,
+          "pieces": 4,
+          "grossWeight": 150,
+          "rateClass": "N",
+          "chargeableWeight": 160,
+          "rate": 2.5,
+          "total": 400,
+          "description": "ELECTRONIC EQUIPMENT\n4 CARTONS · NON-HAZARDOUS"
+        },
+        {
+          "id": 2,
+          "awbId": 1001,
+          "pieces": 5,
+          "grossWeight": 200,
+          "rateClass": "N",
+          "chargeableWeight": 220,
+          "rate": 2.5,
+          "total": 550,
+          "description": "MACHINE PARTS\n5 CARTONS · NON-HAZARDOUS"
+        },
+        {
+          "id": 3,
+          "awbId": 1001,
+          "pieces": 3,
+          "grossWeight": 115,
+          "rateClass": "N",
+          "chargeableWeight": 120,
+          "rate": 2.5,
+          "total": 300,
+          "description": "PRINTED MATERIAL\n3 CARTONS · NON-HAZARDOUS"
+        }
+      ]
+    }
+  ],
+  "dataSource": {
+    "name": "AWB example (synthetic)"
+  },
+  "relations": [
+    {
+      "id": "awb-relation-1",
+      "from": {
+        "dataset": "awb",
+        "field": "shipperId"
+      },
+      "to": {
+        "dataset": "shipper",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-2",
+      "from": {
+        "dataset": "awb",
+        "field": "consigneeId"
+      },
+      "to": {
+        "dataset": "consignee",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-3",
+      "from": {
+        "dataset": "awb",
+        "field": "agentId"
+      },
+      "to": {
+        "dataset": "agent",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-4",
+      "from": {
+        "dataset": "awb",
+        "field": "originId"
+      },
+      "to": {
+        "dataset": "origin_airport",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-5",
+      "from": {
+        "dataset": "awb",
+        "field": "destinationId"
+      },
+      "to": {
+        "dataset": "destination_airport",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-6",
+      "from": {
+        "dataset": "awb",
+        "field": "airlineId"
+      },
+      "to": {
+        "dataset": "airline",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-7",
+      "from": {
+        "dataset": "awb",
+        "field": "id"
+      },
+      "to": {
+        "dataset": "goods",
+        "field": "awbId"
+      },
+      "cardinality": "1:n"
+    },
+    {
+      "id": "awb-relation-8",
+      "from": {
+        "dataset": "origin_airport",
+        "field": "countryId"
+      },
+      "to": {
+        "dataset": "origin_country",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    },
+    {
+      "id": "awb-relation-9",
+      "from": {
+        "dataset": "destination_airport",
+        "field": "countryId"
+      },
+      "to": {
+        "dataset": "destination_country",
+        "field": "id"
+      },
+      "cardinality": "n:1"
+    }
+  ]
+}
