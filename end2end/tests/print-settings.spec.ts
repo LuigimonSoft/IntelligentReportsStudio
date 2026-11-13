@@ -152,14 +152,27 @@ test('preview image and exported PDF honor all four margins', async ({page}) => 
     await first.render({canvasContext:image.getContext('2d'), canvas:image, viewport}).promise;
     const a = preview.getContext('2d')!.getImageData(0, 0, preview.width, preview.height).data;
     const b = image.getContext('2d')!.getImageData(0, 0, image.width, image.height).data;
-    let differences = 0;
-    for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) differences++;
+    const repeated = document.createElement('canvas'); repeated.width = image.width; repeated.height = image.height;
+    const repeatedContext = repeated.getContext('2d')!;
+    await first.render({canvasContext:repeatedContext, canvas:repeated, viewport}).promise;
+    const c = repeatedContext.getImageData(0, 0, repeated.width, repeated.height).data;
+    let differences = 0, repeatDifferences = 0, differentPixels = 0, maxDelta = 0, totalDelta = 0;
+    let minX=image.width, minY=image.height, maxX=-1, maxY=-1;
+    for (let i = 0; i < a.length; i += 4) {
+      let changed = false;
+      for (let channel = 0; channel < 4; channel++) {
+        const delta = Math.abs(a[i + channel] - b[i + channel]);
+        if (delta) { differences++; changed = true; maxDelta = Math.max(maxDelta, delta); totalDelta += delta; }
+        if (b[i + channel] !== c[i + channel]) repeatDifferences++;
+      }
+      if (changed) { const x=(i/4)%image.width, y=Math.floor(i/4/image.width); differentPixels++; minX=Math.min(minX,x); minY=Math.min(minY,y); maxX=Math.max(maxX,x); maxY=Math.max(maxY,y); }
+    }
     await loading.destroy();
-    return {width:image.width,height:image.height,differences};
+    return {width:image.width,height:image.height,differences,repeatDifferences,differentPixels,maxDelta,totalDelta,bounds:{minX,minY,maxX,maxY},scale:preview.dataset.renderScale};
   });
   expect(saved.width).toBe(after.width);
   expect(saved.height).toBe(after.height);
-  expect(saved.differences).toBe(0);
+  expect(saved.differences, JSON.stringify(saved)).toBe(0);
 });
 
 test('paper names follow the selected language in both selectors', async ({page}) => {

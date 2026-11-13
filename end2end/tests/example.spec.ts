@@ -211,10 +211,27 @@ test('exported PDF pixels match the PDF shown in preview',async({page})=>{
       await pdfPage.render({canvas:exported,canvasContext:context,viewport:pdfPage.getViewport({scale:Number(actual.dataset.renderScale)})}).promise;
       const expected=actual.getContext('2d')!.getImageData(0,0,actual.width,actual.height).data;
       const result=context.getImageData(0,0,exported.width,exported.height).data;
-      return result.reduce((count:number,value:number,index:number)=>count+(value!==expected[index]?1:0),0);
+      // A second render of the same page distinguishes renderer nondeterminism
+      // from a discrepancy between the preview and the exported document.
+      const repeated=document.createElement('canvas'); repeated.width=actual.width; repeated.height=actual.height;
+      const repeatedContext=repeated.getContext('2d')!;
+      await pdfPage.render({canvas:repeated,canvasContext:repeatedContext,viewport:pdfPage.getViewport({scale:Number(actual.dataset.renderScale)})}).promise;
+      const again=repeatedContext.getImageData(0,0,repeated.width,repeated.height).data;
+      let differentPixels=0, maxDelta=0, totalDelta=0, repeatDifferences=0;
+      let minX=actual.width,minY=actual.height,maxX=-1,maxY=-1;
+      for(let i=0;i<result.length;i+=4){
+        let changed=false;
+        for(let c=0;c<4;c++){
+          const delta=Math.abs(result[i+c]-expected[i+c]);
+          if(delta){changed=true;totalDelta+=delta;maxDelta=Math.max(maxDelta,delta);}
+          if(result[i+c]!==again[i+c]) repeatDifferences++;
+        }
+        if(changed){const x=(i/4)%actual.width,y=Math.floor(i/4/actual.width);differentPixels++;minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
+      }
+      return {differentChannels:result.reduce((count:number,value:number,index:number)=>count+(value!==expected[index]?1:0),0),differentPixels,maxDelta,totalDelta,repeatDifferences,width:actual.width,height:actual.height,bounds:{minX,minY,maxX,maxY},scale:actual.dataset.renderScale};
     }finally{await task.destroy();}
   });
-  expect(difference).toBe(0);
+  expect(difference.differentChannels, JSON.stringify(difference)).toBe(0);
 });
 
 test('column groups, numeric sorting and CSV export use the same filtered records',async({page})=>{
