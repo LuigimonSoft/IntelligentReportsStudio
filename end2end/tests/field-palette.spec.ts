@@ -4,7 +4,7 @@ test('palette displays groups, search, formulas and special tokens',async({page}
  const palette=page.locator('.palette');await expect(palette.locator('.field-group[open]')).toHaveCount(0);
  await palette.getByPlaceholder('Search fields…').fill(' print date ');await expect(palette.locator('.field-group')).toHaveCount(1);await expect(palette.locator('[data-field-text]')).toHaveAttribute('data-field-text',"[=FORMAT(DATE(), 'dd/mm/yyyy')]");
  await palette.getByPlaceholder('Search fields…').fill('');await expect(palette.locator('.field-group[open]')).toHaveCount(0);
- await palette.locator('summary').filter({hasText:'Special fields'}).click();await expect(palette.locator('.field-kind-special .field-name')).toHaveText(['Print date','Page number','Page count','Row number','Row count']);
+ await palette.locator('summary').filter({hasText:'Special fields'}).click();await expect(palette.locator('.field-group').filter({has:page.locator('summary').filter({hasText:'Special fields'})}).locator('.field-kind-special .field-name')).toHaveText(['Print date','Page number','Page count','Row number','Row count']);
  await palette.locator('summary').filter({hasText:'Formulas'}).click();await expect(palette.locator('.field-kind-formula')).toHaveCount(2);
  await palette.locator('[data-field-text="[=quantity * unitPrice]"]').click();await expect(page.locator('.inspector').getByLabel('Value format',{exact:true})).toHaveValue('currency');
  await palette.locator('[data-field-text="[PAGE_NUMBER]"]').click();await expect(page.locator('.inspector').getByLabel('Text or expression',{exact:true})).toHaveValue('[PAGE_NUMBER]');

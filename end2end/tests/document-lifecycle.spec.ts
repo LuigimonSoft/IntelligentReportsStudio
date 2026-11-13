@@ -5,6 +5,7 @@ test.beforeEach(async ({page}) => {
     (window as any).__TAURI__ = {core: {invoke: async (command: string, args: any = {}) => {
       const storage = window.localStorage;
       switch (command) {
+        case 'confirm_discard_changes': return window.confirm(args.message);
         case 'load_recovery': return storage.getItem('test-recovery');
         case 'save_recovery': storage.setItem('test-recovery', JSON.stringify(args.document)); return;
         case 'clear_recovery': storage.removeItem('test-recovery'); return;

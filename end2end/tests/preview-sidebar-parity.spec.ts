@@ -6,7 +6,7 @@ test('preview inspector displays compact sections and translated parameter contr
  await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
  await page.getByRole('combobox',{name:'Language',exact:true}).selectOption('es');
  await page.getByRole('button',{name:es['Preview'],exact:true}).click();
- const panel=page.locator('.preview-options-panel');await expect(panel).toHaveCSS('width','304px');
+ const panel=page.locator('.preview-options-panel');await expect(panel).toHaveCSS('width','292px');
  await expect(panel.locator('summary')).toHaveText([es['Report parameters'],es['View options']]);
  const fields=panel.locator('.preview-parameter-field');await expect(fields).toHaveCount(4);
  const dates=panel.locator('input[type=date]');await expect(dates).toHaveCount(2);

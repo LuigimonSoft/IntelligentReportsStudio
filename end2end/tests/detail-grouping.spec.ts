@@ -85,7 +85,7 @@ test('group edit button sends the existing group to the native modal',async({pag
 test('legacy group remains editable after opening an older report',async({page})=>{
  const project=JSON.parse(readFileSync(path.resolve(__dirname,'../../app/src/data/exampleInvoice.json'),'utf8'));
  project.report.details[0].groupBy='category';
- await page.addInitScript(project=>{(window as any).__TAURI__={core:{invoke:async(command:string)=>command==='open_report'?JSON.stringify(project):true}};},project);
+ await page.addInitScript(project=>{(window as any).__TAURI__={core:{invoke:async(command:string)=>command==='open_document'?JSON.stringify(project):true}};},project);
  await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
  await page.getByRole('button',{name:'Open',exact:true}).click();
  const header=page.locator('.sections-bar .section-card').filter({hasText:'Details header'}).first();

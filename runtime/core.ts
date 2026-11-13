@@ -509,6 +509,7 @@ export async function act(request: Request): Promise<any> {
         (d) =>
           d.id === p.report.details.find((d) => d.band.id === band.id)?.dataset,
       ) ??
+        p.datasets.find((d) => d.id === p.report.details.find(detail => detail.dataset)?.dataset) ??
         p.datasets.find((d) =>
           d.schema.fields.some((f) => f.type === "number"),
         ) ??
@@ -759,6 +760,13 @@ export async function act(request: Request): Promise<any> {
       let settings = structuredClone(first.table);
       const row = first.cell?.row ?? 0, column = first.cell?.column ?? 0;
       const elements = allBands.flatMap(b => b.elements).filter(e => e.groupId === first.groupId);
+      // Existing tables may have implicit cell text rather than explicit contents.
+      // Preserve it before rebuilding, including when the dataset schema changes.
+      for (const element of elements) {
+        if (element.type !== 'text' || !element.cell) continue;
+        const key = `${element.cell.row}:${element.cell.column}`;
+        if (!Object.hasOwn(settings.contents, key)) settings.contents[key] = element.text;
+      }
       if (request.action === 'table-settings') {
         if (typeof args.headers === 'boolean') {
           const fields = p.datasets.find(d => d.id === settings.dataset)?.schema.fields.map(f => f.name) ?? [];

@@ -9,7 +9,8 @@ export function defaultChart(dataset?: Dataset): ChartSettings {
       dataset?.schema.fields.find((field) => field.type === 'text')?.name ??
       dataset?.schema.fields[0]?.name ??
       '',
-    value: dataset?.schema.fields.find((field) => field.type === 'number')?.name ?? '',
+    value: (dataset?.schema.fields.find((field) => field.type === 'number' && !/(?:^id$|_id$|Id$)/.test(field.name)) ??
+      dataset?.schema.fields.find((field) => field.type === 'number'))?.name ?? '',
     aggregation: 'sum',
     sort: 'source',
     limit: 12,

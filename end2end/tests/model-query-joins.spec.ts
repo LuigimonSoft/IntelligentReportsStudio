@@ -8,6 +8,7 @@ const records=JSON.parse(readFileSync(path.join(root,'app/src/data/exampleData.j
 fixture.datasets.forEach((table:any)=>{table.data=records.find((source:any)=>source.id===table.id)?.data ?? [];});
 fixture.datasets.find((table:any)=>table.id==='invoiceInfo').data[0].issueDate='2026-10-15';
 fixture.dataSource={name:'Test source'};
+fixture.dataModel={...fixture.dataModel,rootDataset:'invoice'};
 fixture.relations=[
  {id:'customer',from:{dataset:'invoice',field:'client'},to:{dataset:'addresses',field:'name'},cardinality:'n:1'},
  {id:'date',from:{dataset:'invoice',field:'date'},to:{dataset:'invoiceInfo',field:'issueDate'},cardinality:'n:1'},
@@ -15,7 +16,7 @@ fixture.relations=[
 
 test('query editor, related columns, filtering and export share model joins',async({page})=>{
  await page.addInitScript(project=>{(window as any).exports=[];(window as any).__TAURI__={core:{invoke:async(command:string,args:any)=>{
-  if(command==='open_report')return JSON.stringify(project);
+  if(command==='open_document')return JSON.stringify(project);
   if(command==='save_csv'){(window as any).exports.push(args);return true;}
   return true;
  }}};},fixture);
@@ -39,13 +40,13 @@ test('query editor, related columns, filtering and export share model joins',asy
 
 test('parent selection follows joins, survives save and controls the records query',async({page})=>{
  await page.addInitScript(project=>{(window as any).saved=[];(window as any).__TAURI__={core:{invoke:async(command:string,args:any)=>{
-  if(command==='open_report')return JSON.stringify(project);
+  if(command==='open_document')return JSON.stringify(project);
   if(command==='save_report'){(window as any).saved.push(args.document);return true;} return true;
  }}};},fixture);
  await page.goto('/');await page.waitForFunction(()=>(window as any).reportstudioReady);
  await page.getByRole('button',{name:'Open',exact:true}).click();
  await page.getByRole('button',{name:'Data',exact:true}).click();
- const parent=page.getByLabel('Parent table',{exact:true});await expect(parent).toHaveValue('');
+ const parent=page.getByLabel('Parent table',{exact:true});await expect(parent).toHaveValue('invoice');
  await parent.selectOption('addresses');
  await expect(page.locator('.model-card[data-table-id="addresses"]')).toHaveAttribute('data-hierarchy','parent');
  await expect(page.locator('.model-card[data-table-id="invoice"]')).toHaveAttribute('data-hierarchy','child');

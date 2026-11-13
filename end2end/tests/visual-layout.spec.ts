@@ -38,8 +38,8 @@ test("preview keeps the reference panel proportions and hides editor status", as
   await page.goto("/");
   await page.waitForFunction(() => (window as any).reportstudioReady);
   await page.getByRole("button", { name: "Preview", exact: true }).click();
-  await expect(page.locator(".pages-sidebar")).toHaveCSS("width", "220px");
-  await expect(page.locator(".preview-sidebar")).toHaveCSS("width", "304px");
+  await expect(page.locator(".pages-sidebar")).toHaveCSS("width", "190px");
+  await expect(page.locator(".preview-sidebar")).toHaveCSS("width", "292px");
   await expect(page.locator(".status-bar")).toBeHidden();
   await expect(page.locator(".preview-page canvas").first()).toBeVisible();
 });

@@ -72,8 +72,12 @@ export function setTableHeaders(
   if (enabled) {
     const result = editTableStructure(table, elements, 'row', 0, 'insert');
     result.headers = true;
-    for (let column = 0; column < result.columns; column++)
-      result.contents[`0:${column}`] = fields[column] ?? '';
+    for (let column = 0; column < result.columns; column++) {
+      // Prefer the field already bound to the first body cell over schema order.
+      const body = result.contents[`1:${column}`] ?? '';
+      const binding = /^\[([A-Za-z_][A-Za-z_0-9]*(?:\.[A-Za-z_][A-Za-z_0-9]*)?)\]$/.exec(body);
+      result.contents[`0:${column}`] = binding ? binding[1].split('.').at(-1)! : (fields[column] ?? '');
+    }
     return result;
   }
   if (table.rows > 1) {

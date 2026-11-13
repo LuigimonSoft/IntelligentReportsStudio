@@ -6,6 +6,11 @@ import { whitespaceProject } from './fixtures/footerWhitespace.ts';
 import { templateOnly } from '../data/sources.ts';
 
 const source = { id:'sales',name:'Sales',schema:{fields:[{name:'category',type:'text' as const},{name:'amount',type:'number' as const}]},data:[{category:'A',amount:10},{category:'B',amount:-4},{category:'A',amount:20},{category:'C',amount:null}] };
+test('chart defaults prefer measures over identifiers, but allow identifier-only sources',()=>{
+ const fields=[{name:'id',type:'number' as const},{name:'invoiceId',type:'number' as const},{name:'category',type:'text' as const},{name:'amount',type:'number' as const}];
+ assert.equal(defaultChart({...source,schema:{fields}}).value,'amount');
+ assert.equal(defaultChart({...source,schema:{fields:fields.slice(0,2)}}).value,'id');
+});
 test('chart bindings aggregate current rows, handle nulls, counts, sorting and limits',()=>{
  const settings=defaultChart(source);
  assert.deepEqual(chartPoints(settings,[source]),[{label:'A',value:30},{label:'B',value:-4}]);

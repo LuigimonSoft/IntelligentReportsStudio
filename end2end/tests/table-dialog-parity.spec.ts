@@ -69,7 +69,7 @@ test('drag handles reorder table columns and keyboard moves keep focus',async({p
  await dialog.getByRole('button',{name:'Save changes',exact:true}).click();
  await expect(dialog).toHaveCount(0);
  await page.getByRole('button',{name:'Records',exact:true}).click();
- await expect.poll(async()=>page.locator('.records-grid thead th button').allTextContents()).toEqual([before[1],before[0],before[2],...before.slice(3)]);
+ await expect.poll(async()=> (await page.locator('.records-grid thead th button').allTextContents()).filter(name=>name.startsWith('Details.')).map(name=>name.slice('Details.'.length))).toEqual([before[1],before[0],before[2],...before.slice(3)]);
  await expect(page.locator('.records-grid tbody tr')).not.toHaveCount(0);
 });
 
@@ -127,5 +127,5 @@ test('mouse drag moves the entire row while held and reorders before release',as
  await expect.poll(names).toEqual([before[1],before[2],before[0],...before.slice(3)]);
  await dialog.getByRole('button',{name:'Save changes',exact:true}).click();await expect(dialog).toHaveCount(0);
  await page.getByRole('button',{name:'Records',exact:true}).click();
- await expect.poll(async()=>page.locator('.records-grid thead th button').allTextContents()).toEqual([before[1],before[2],before[0],...before.slice(3)]);
+ await expect.poll(async()=> (await page.locator('.records-grid thead th button').allTextContents()).filter(name=>name.startsWith('Details.')).map(name=>name.slice('Details.'.length))).toEqual([before[1],before[2],before[0],...before.slice(3)]);
 });

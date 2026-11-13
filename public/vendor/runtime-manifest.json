@@ -48,7 +48,7 @@
       "format": "esm"
     },
     "engine/charts.ts": {
-      "bytes": 2689,
+      "bytes": 2805,
       "imports": [],
       "format": "esm"
     },
@@ -496,7 +496,7 @@
       "format": "esm"
     },
     "tabs/design/report-area/table/tableEditing.ts": {
-      "bytes": 3965,
+      "bytes": 4252,
       "imports": [],
       "format": "esm"
     },
@@ -648,7 +648,7 @@
       "format": "esm"
     },
     "core.ts": {
-      "bytes": 44228,
+      "bytes": 44765,
       "imports": [
         {
           "path": "engine/resourceDiagnostics.ts",
@@ -916,7 +916,7 @@
     "../public/vendor/reportstudio-runtime.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-44222WDZ.js",
+          "path": "../public/vendor/chunk-EVE77U2K.js",
           "kind": "import-statement"
         },
         {
@@ -952,10 +952,10 @@
       },
       "bytes": 524141
     },
-    "../public/vendor/sample-6NDF62OC.js": {
+    "../public/vendor/sample-IMMCBD7H.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-44222WDZ.js",
+          "path": "../public/vendor/chunk-EVE77U2K.js",
           "kind": "import-statement"
         }
       ],
@@ -994,10 +994,10 @@
       },
       "bytes": 118004
     },
-    "../public/vendor/chunk-44222WDZ.js": {
+    "../public/vendor/chunk-EVE77U2K.js": {
       "imports": [
         {
-          "path": "../public/vendor/sample-6NDF62OC.js",
+          "path": "../public/vendor/sample-IMMCBD7H.js",
           "kind": "dynamic-import"
         }
       ],
@@ -1037,7 +1037,7 @@
           "bytesInOutput": 8316
         },
         "engine/charts.ts": {
-          "bytesInOutput": 1311
+          "bytesInOutput": 1393
         },
         "engine/sqlTypes.ts": {
           "bytesInOutput": 2754
@@ -1127,7 +1127,7 @@
           "bytesInOutput": 550
         },
         "tabs/design/report-area/table/tableEditing.ts": {
-          "bytesInOutput": 1743
+          "bytesInOutput": 1872
         },
         "domain/report/elementTransfer.ts": {
           "bytesInOutput": 4331
@@ -1136,10 +1136,10 @@
           "bytesInOutput": 2034
         },
         "core.ts": {
-          "bytesInOutput": 23424
+          "bytesInOutput": 23641
         }
       },
-      "bytes": 97990
+      "bytes": 98418
     },
     "../public/vendor/renderChart-7BOQJLCP.js": {
       "imports": [

@@ -3,6 +3,7 @@ import {test, expect} from '@playwright/test';
 test.beforeEach(async ({page}) => {
   await page.goto('/');
   await page.waitForFunction(() => (window as any).reportstudioReady === true);
+  await page.getByRole('combobox', {name:'Units', exact:true}).selectOption('mm');
   await page.getByRole('button', {name:'Preview', exact:true}).click();
 });
 
@@ -13,11 +14,11 @@ test('page settings apply individual margins, orientation, and custom dimensions
   await expect(dialog).toBeVisible();
   await dialog.getByLabel('Paper size', {exact:true}).selectOption('Letter');
   await dialog.getByLabel('Orientation', {exact:true}).selectOption('landscape');
-  await expect(dialog.getByLabel('Width (mm)', {exact:true})).toHaveValue('279.4');
-  await dialog.getByLabel('Top margin (mm)', {exact:true}).fill('15');
-  await dialog.getByLabel('Bottom margin (mm)', {exact:true}).fill('20');
-  await dialog.getByLabel('Left margin (mm)', {exact:true}).fill('25');
-  await dialog.getByLabel('Right margin (mm)', {exact:true}).fill('30');
+  await expect(dialog.getByLabel('Width', {exact:true})).toHaveValue('279.4');
+  await dialog.getByLabel('Top margin', {exact:true}).fill('15');
+  await dialog.getByLabel('Bottom margin', {exact:true}).fill('20');
+  await dialog.getByLabel('Left margin', {exact:true}).fill('25');
+  await dialog.getByLabel('Right margin', {exact:true}).fill('30');
   await dialog.getByRole('button', {name:'Apply', exact:true}).click();
   await expect(dialog).toHaveCount(0);
   await expect(page.getByLabel('Page size', {exact:true})).toHaveValue('Letter');
@@ -32,28 +33,28 @@ test('page settings apply individual margins, orientation, and custom dimensions
   dialog = page.getByRole('dialog');
   await expect(dialog.getByLabel('Orientation', {exact:true})).toHaveValue('landscape');
   for (const [label, value] of [['Top','15'],['Bottom','20'],['Left','25'],['Right','30']])
-    await expect(dialog.getByLabel(`${label} margin (mm)`, {exact:true})).toHaveValue(value);
-  await dialog.getByLabel('Width (mm)', {exact:true}).fill('250');
+    await expect(dialog.getByLabel(`${label} margin`, {exact:true})).toHaveValue(value);
+  await dialog.getByLabel('Width', {exact:true}).fill('250');
   await dialog.getByRole('button', {name:'Cancel', exact:true}).click();
   await open();
-  await expect(page.getByRole('dialog').getByLabel('Width (mm)', {exact:true})).toHaveValue('279.4');
-  await page.getByRole('dialog').getByLabel('Width (mm)', {exact:true}).fill('250');
+  await expect(page.getByRole('dialog').getByLabel('Width', {exact:true})).toHaveValue('279.4');
+  await page.getByRole('dialog').getByLabel('Width', {exact:true}).fill('250');
   await page.getByRole('dialog').getByRole('button', {name:'Apply', exact:true}).click();
   await expect(page.getByLabel('Page size', {exact:true})).toHaveValue('Custom');
   await open();
-  await expect(page.getByRole('dialog').getByLabel('Width (mm)', {exact:true})).toHaveValue('250');
+  await expect(page.getByRole('dialog').getByLabel('Width', {exact:true})).toHaveValue('250');
 });
 
 test('invalid margins cannot be applied', async ({page}) => {
   await page.getByRole('button', {name:'Print settings', exact:true}).click();
   const dialog = page.getByRole('dialog');
-  await dialog.getByLabel('Left margin (mm)', {exact:true}).fill('200');
+  await dialog.getByLabel('Left margin', {exact:true}).fill('200');
   await dialog.getByRole('button', {name:'Apply', exact:true}).click();
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole('status')).toContainText('12.7 mm');
   await dialog.getByRole('button', {name:'Cancel', exact:true}).click();
   await page.getByRole('button', {name:'Print settings', exact:true}).click();
-  await expect(page.getByRole('dialog').getByLabel('Left margin (mm)', {exact:true})).not.toHaveValue('200');
+  await expect(page.getByRole('dialog').getByLabel('Left margin', {exact:true})).not.toHaveValue('200');
 });
 
 test('native editor returns settings to the report', async ({page}) => {
@@ -91,7 +92,7 @@ test('standalone native editor validates and returns the edited page', async ({p
   await page.goto('/index.html?editor=1');
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
-  await dialog.getByLabel('Top margin (mm)', {exact:true}).fill('25.4');
+  await dialog.getByLabel('Top margin', {exact:true}).fill('25.4');
   await dialog.getByRole('button', {name:'Apply', exact:true}).click();
   await expect.poll(() => page.evaluate(() => (window as any).editorCalls.some((call:any) => call.command === 'finish_editor'))).toBe(true);
   const result = await page.evaluate(() => (window as any).editorCalls.find((call:any) => call.command === 'finish_editor').args.result);
@@ -118,7 +119,7 @@ test('preview image and exported PDF honor all four margins', async ({page}) => 
   await page.getByRole('button', {name:'Print settings', exact:true}).click();
   const dialog = page.getByRole('dialog');
   for (const side of ['Top','Bottom','Left','Right'])
-    await dialog.getByLabel(`${side} margin (mm)`, {exact:true}).fill('30');
+    await dialog.getByLabel(`${side} margin`, {exact:true}).fill('30');
   await dialog.getByRole('button', {name:'Apply', exact:true}).click();
   await expect(dialog).toHaveCount(0);
   await expect(canvas).toHaveAttribute('data-rendered', 'true');

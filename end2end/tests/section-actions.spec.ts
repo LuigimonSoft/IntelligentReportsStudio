@@ -23,6 +23,7 @@ test('Add section creates and selects a detail group, including on a blank docum
  await expect(dock.locator('.section-card')).toHaveCount(before+3);
  await expect(dock.locator('.section-card.selected')).toContainText('Details');
  await expect(menu).not.toHaveAttribute('open','');
+ page.once('dialog', dialog=>dialog.accept());
  await page.getByRole('button',{name:'New',exact:true}).click();
  await expect(dock.locator('.section-card')).toHaveCount(7);
  await dock.getByLabel('Add section',{exact:true}).click();

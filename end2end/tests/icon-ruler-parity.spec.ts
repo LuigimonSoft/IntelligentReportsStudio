@@ -173,11 +173,14 @@ test("model and record toolbar buttons operate on zoom, filters and visible colu
   ).toBeVisible();
   const menu = page.locator(".records-menu:not(.records-export-menu)");
   await menu.locator("summary").click();
+  const columns = page.locator(".records-grid thead th");
+  const initialCount = await columns.count();
+  expect(initialCount).toBeGreaterThan(1);
   const first = menu.getByRole("checkbox").first();
   await first.uncheck();
-  await expect(page.locator(".records-grid thead th")).toHaveCount(9);
+  await expect(columns).toHaveCount(initialCount - 1);
   await menu.getByRole("button", { name: "Show all", exact: true }).click();
-  await expect(page.locator(".records-grid thead th")).toHaveCount(10);
+  await expect(columns).toHaveCount(initialCount);
 });
 
 test("record export menu saves CSV and JSON through the native boundary", async ({

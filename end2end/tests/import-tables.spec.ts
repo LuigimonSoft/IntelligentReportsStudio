@@ -4,7 +4,7 @@ test('imports JSON files atomically and displays the schema example', async ({ p
   await page.waitForFunction(() => (window as any).reportstudioReady);
   await page.getByRole('button', {name:'New', exact:true}).click();
   await page.getByRole('button', {name:'Data', exact:true}).click();
-  await page.getByRole('button', {name:'Import tables', exact:true}).click();
+  await page.getByRole('toolbar', {name:'Data model tools'}).getByRole('button', {name:'Import tables', exact:true}).click();
   const dialog=page.getByRole('dialog');
   await expect(dialog).toContainText('JSON example');
   const apply=dialog.getByRole('button',{name:'Import tables',exact:true});

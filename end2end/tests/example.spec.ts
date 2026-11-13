@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
       requests.push({command,args});
       if(command==='write_clipboard'){clipboard=args.text;return;}
       if(command==='read_clipboard')return clipboard;
-      if(command==='open_report'||command==='open_image')return null;
+      if(command==='open_document'||command==='open_image')return null;
       return true;
     }}};
   });
@@ -174,7 +174,7 @@ test('record form changes a row in place rather than appending a duplicate',asyn
   await expect(rows).not.toHaveCount(0);
   const count=await rows.count();
   await rows.first().dblclick();
-  const input=page.locator('.record-editor input').first();
+  const input=page.getByRole('dialog').getByRole('textbox',{name:'number',exact:true});
   await input.fill('Changed in form');
   await input.press('Tab');
   await page.getByRole('dialog').getByRole('button',{name:'Save changes',exact:true}).click();

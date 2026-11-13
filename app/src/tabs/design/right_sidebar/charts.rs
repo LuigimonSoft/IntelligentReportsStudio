@@ -99,7 +99,11 @@ pub fn ChartFields(chart: Value, #[prop(optional)] detailed: bool) -> impl IntoV
                         .unwrap_or_default();
                     let value = fields
                         .iter()
-                        .find(|f| f["type"] == "number")
+                        .find(|f| {
+                            let name = text(f, "name");
+                            f["type"] == "number" && name != "id" && !name.ends_with("Id") && !name.ends_with("_id")
+                        })
+                        .or_else(|| fields.iter().find(|f| f["type"] == "number"))
                         .map(|f| text(f, "name"))
                         .unwrap_or_default();
                     patch(json!({"dataset":id,"category":category,"value":value}), detailed);
