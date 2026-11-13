@@ -151,11 +151,12 @@ test('preview image and exported PDF honor all four margins', async ({page}) => 
     const image = document.createElement('canvas'); image.width = Math.ceil(viewport.width); image.height = Math.ceil(viewport.height);
     await first.render({canvasContext:image.getContext('2d'), canvas:image, viewport}).promise;
     const a = preview.getContext('2d')!.getImageData(0, 0, preview.width, preview.height).data;
-    const b = image.getContext('2d')!.getImageData(0, 0, image.width, image.height).data;
+    const firstRender = image.getContext('2d')!.getImageData(0, 0, image.width, image.height).data;
     const repeated = document.createElement('canvas'); repeated.width = image.width; repeated.height = image.height;
     const repeatedContext = repeated.getContext('2d')!;
     await first.render({canvasContext:repeatedContext, canvas:repeated, viewport}).promise;
-    const c = repeatedContext.getImageData(0, 0, repeated.width, repeated.height).data;
+    // Compare a second render after PDF.js has completed the initial pass.
+    const b = repeatedContext.getImageData(0, 0, repeated.width, repeated.height).data;
     let differences = 0, repeatDifferences = 0, differentPixels = 0, maxDelta = 0, totalDelta = 0;
     let minX=image.width, minY=image.height, maxX=-1, maxY=-1;
     for (let i = 0; i < a.length; i += 4) {
@@ -163,7 +164,7 @@ test('preview image and exported PDF honor all four margins', async ({page}) => 
       for (let channel = 0; channel < 4; channel++) {
         const delta = Math.abs(a[i + channel] - b[i + channel]);
         if (delta) { differences++; changed = true; maxDelta = Math.max(maxDelta, delta); totalDelta += delta; }
-        if (b[i + channel] !== c[i + channel]) repeatDifferences++;
+        if (b[i + channel] !== firstRender[i + channel]) repeatDifferences++;
       }
       if (changed) { const x=(i/4)%image.width, y=Math.floor(i/4/image.width); differentPixels++; minX=Math.min(minX,x); minY=Math.min(minY,y); maxX=Math.max(maxX,x); maxY=Math.max(maxY,y); }
     }

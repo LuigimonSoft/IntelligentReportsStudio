@@ -30,6 +30,9 @@ pub fn ChartProperties(chart: Value) -> impl IntoView {
         <Button
             label="Edit chart details"
             primary=true
+            // The editor snapshots the chart. Wait until pending property edits
+            // have been committed so that it cannot reopen an older snapshot.
+            disabled=Signal::derive(move || s.busy.get())
             on_press=move |_| {
                 let chart = s
                     .selected_element()

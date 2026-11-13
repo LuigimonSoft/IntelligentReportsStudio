@@ -210,13 +210,13 @@ test('exported PDF pixels match the PDF shown in preview',async({page})=>{
       const context=exported.getContext('2d')!;
       await pdfPage.render({canvas:exported,canvasContext:context,viewport:pdfPage.getViewport({scale:Number(actual.dataset.renderScale)})}).promise;
       const expected=actual.getContext('2d')!.getImageData(0,0,actual.width,actual.height).data;
-      const result=context.getImageData(0,0,exported.width,exported.height).data;
-      // A second render of the same page distinguishes renderer nondeterminism
-      // from a discrepancy between the preview and the exported document.
+      const firstRender=context.getImageData(0,0,exported.width,exported.height).data;
+      // PDF.js may finish the first Linux WebKit render before its fonts settle.
+      // Compare a second render of the same exported page pixel for pixel.
       const repeated=document.createElement('canvas'); repeated.width=actual.width; repeated.height=actual.height;
       const repeatedContext=repeated.getContext('2d')!;
       await pdfPage.render({canvas:repeated,canvasContext:repeatedContext,viewport:pdfPage.getViewport({scale:Number(actual.dataset.renderScale)})}).promise;
-      const again=repeatedContext.getImageData(0,0,repeated.width,repeated.height).data;
+      const result=repeatedContext.getImageData(0,0,repeated.width,repeated.height).data;
       let differentPixels=0, maxDelta=0, totalDelta=0, repeatDifferences=0;
       let minX=actual.width,minY=actual.height,maxX=-1,maxY=-1;
       for(let i=0;i<result.length;i+=4){
@@ -224,7 +224,7 @@ test('exported PDF pixels match the PDF shown in preview',async({page})=>{
         for(let c=0;c<4;c++){
           const delta=Math.abs(result[i+c]-expected[i+c]);
           if(delta){changed=true;totalDelta+=delta;maxDelta=Math.max(maxDelta,delta);}
-          if(result[i+c]!==again[i+c]) repeatDifferences++;
+          if(result[i+c]!==firstRender[i+c]) repeatDifferences++;
         }
         if(changed){const x=(i/4)%actual.width,y=Math.floor(i/4/actual.width);differentPixels++;minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
       }
