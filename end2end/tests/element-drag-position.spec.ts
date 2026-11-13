@@ -7,6 +7,9 @@ test('moving a report element preserves its offset, crosses sections and cancels
  const start=(await element.boundingBox())!;let x=start.x+5,y=start.y+5;
  await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+35,y,{steps:8});await page.mouse.up();
  await expect.poll(async()=>{const b=await element.boundingBox();return Math.abs(b!.x-start.x-35)}).toBeLessThan(3);
+ // Wait for the committed geometry, not just the transient drag transform.
+ await expect.poll(()=>element.evaluate(el=>getComputedStyle(el).transform)).toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
+ await expect.poll(async()=>{const b=await element.boundingBox();return Math.abs(b!.x-start.x-35)}).toBeLessThan(3);
  let moved=(await element.boundingBox())!;const dest=(await second.boundingBox())!;
  x=moved.x+5;y=moved.y+5;const ty=dest.y+Math.min(8,dest.height/2);
  await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+15,ty,{steps:12});await page.mouse.up();

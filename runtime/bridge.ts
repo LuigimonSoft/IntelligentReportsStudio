@@ -19,40 +19,62 @@ import { evaluateExpression, chartPoints, validateProject } from "./engine/index
 import { chartCategoryColor } from "./charts/chartColors.ts";
 import { renderChart } from "./charts/renderChart.ts";
 import type { ReportLayout } from "./engine/types.ts";
+// Preview and export share the exact bytes for the same compiled layout.
+// The cache contains only the current report and is replaced on any layout change.
+let cachedPdf: { key: string; bytes: Promise<Uint8Array> } | undefined;
+function pdfForLayout(layout: ReportLayout): Promise<Uint8Array> {
+  const key = JSON.stringify(layout);
+  if (cachedPdf?.key === key) return cachedPdf.bytes;
+  const entry = { key, bytes: pdfBytes(layout) };
+  cachedPdf = entry;
+  entry.bytes.catch(() => { if (cachedPdf === entry) cachedPdf = undefined; });
+  return entry.bytes;
+}
+
 let renderVersion = 0;
+let renderQueue: Promise<void> = Promise.resolve();
 async function renderPdf(layout: ReportLayout, zoom: number) {
   const version = ++renderVersion;
-  const { getDocument, GlobalWorkerOptions } = await import("pdfjs-dist");
-  GlobalWorkerOptions.workerSrc = "/vendor/pdf.worker.min.mjs";
-  const loadingTask = getDocument({ data: (await pdfBytes(layout)).slice() });
-  const document = await loadingTask.promise;
-  try {
-    for (let i = 1; i <= document.numPages; i++) {
-      if (version !== renderVersion) return;
-      const page = await document.getPage(i);
-      for (const [id, scale] of [
-        [`pdf-page-${i}`, (96 / 72) * zoom],
-        [`pdf-thumbnail-${i}`, 0.21],
-      ] as const) {
-        const canvas = globalThis.document.getElementById(
-          id,
-        ) as HTMLCanvasElement | null;
-        if (!canvas) continue;
-        canvas.dataset.rendered = "false";
-        canvas.dataset.renderScale = String(scale);
-        const viewport = page.getViewport({ scale });
-        canvas.width = Math.ceil(viewport.width);
-        canvas.height = Math.ceil(viewport.height);
-        const context = canvas.getContext("2d");
-        if (context)
-          await page.render({ canvasContext: context, canvas, viewport })
-            .promise;
-        canvas.dataset.rendered = "true";
+  // Invalidate old canvases before asynchronous PDF generation begins.
+  for (const canvas of globalThis.document.querySelectorAll<HTMLCanvasElement>('#pdf-pages canvas, [id^="pdf-thumbnail-"]'))
+    canvas.dataset.rendered = "false";
+  // PDF.js cannot render two generations into the same canvas concurrently.
+  const work = renderQueue.catch(() => {}).then(async () => {
+    if (version !== renderVersion) return;
+    const { getDocument, GlobalWorkerOptions } = await import("pdfjs-dist");
+    GlobalWorkerOptions.workerSrc = "/vendor/pdf.worker.min.mjs";
+    const bytes = await pdfForLayout(layout);
+    if (version !== renderVersion) return;
+    const loadingTask = getDocument({ data: bytes.slice() });
+    const document = await loadingTask.promise;
+    try {
+      for (let i = 1; i <= document.numPages; i++) {
+        if (version !== renderVersion) return;
+        const page = await document.getPage(i);
+        for (const [id, scale] of [
+          [`pdf-page-${i}`, (96 / 72) * zoom],
+          [`pdf-thumbnail-${i}`, 0.21],
+        ] as const) {
+          if (version !== renderVersion) return;
+          const canvas = globalThis.document.getElementById(id) as HTMLCanvasElement | null;
+          if (!canvas) continue;
+          canvas.dataset.rendered = "false";
+          canvas.dataset.renderScale = String(scale);
+          const viewport = page.getViewport({ scale });
+          canvas.width = Math.ceil(viewport.width);
+          canvas.height = Math.ceil(viewport.height);
+          const context = canvas.getContext("2d");
+          if (context) await page.render({ canvasContext: context, canvas, viewport }).promise;
+          if (version !== renderVersion) return;
+          canvas.dataset.rendered = "true";
+        }
       }
+    } finally {
+      await loadingTask.destroy();
     }
-  } finally {
-    await loadingTask.destroy();
-  }
+  });
+  renderQueue = work.catch(() => {});
+  await work;
 }
 export async function call(payload: string): Promise<string> {
   const request: Request = JSON.parse(payload);
@@ -164,7 +186,7 @@ export async function call(payload: string): Promise<string> {
     case "export-pdf": {
       const layout =
         args.layout ?? layoutOf(request.project, pdfMeasureText, args);
-      const bytes = await pdfBytes(layout);
+      const bytes = await pdfForLayout(layout);
       const saved = await native("save_pdf", { bytes: Array.from(bytes), suggestedName: layout.title });
       return JSON.stringify({
         message: saved ? "PDF exported" : "Export cancelled",

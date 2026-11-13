@@ -836,7 +836,7 @@
       "format": "esm"
     },
     "bridge.ts": {
-      "bytes": 9377,
+      "bytes": 10652,
       "imports": [
         {
           "path": "shared/parameters/reportParameters.ts",
@@ -947,10 +947,10 @@
           "bytesInOutput": 3403
         },
         "bridge.ts": {
-          "bytesInOutput": 5020
+          "bytesInOutput": 5471
         }
       },
-      "bytes": 524141
+      "bytes": 524592
     },
     "../public/vendor/sample-IMMCBD7H.js": {
       "imports": [
