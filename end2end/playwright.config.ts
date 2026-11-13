@@ -16,6 +16,7 @@ export default defineConfig({
   webServer: externalURL ? undefined : {
     command: 'node end2end/serve-static.mjs',
     cwd: '..',
+    env: { ...process.env, REPORTSTUDIO_PORT: String(port) },
     url: baseURL,
     timeout: 120000,
     reuseExistingServer: false,
