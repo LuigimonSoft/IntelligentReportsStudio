@@ -51,6 +51,7 @@ pub fn ReportArea() -> impl IntoView {
                     <div
                         node_ref=paper
                         class="report-paper"
+                        aria-busy=move || s.busy.get().to_string()
                         data-guides=move || s.guides.get()
                         data-layout={
                             let layout = crate::platform::layout_styles::LayoutStyle::new();

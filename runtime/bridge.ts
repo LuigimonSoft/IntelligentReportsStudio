@@ -45,6 +45,10 @@ async function renderPdf(layout: ReportLayout, zoom: number) {
     GlobalWorkerOptions.workerSrc = "/vendor/pdf.worker.min.mjs";
     const bytes = await pdfForLayout(layout);
     if (version !== renderVersion) return;
+    // Diagnostic fingerprint identifies the bytes actually shown in a canvas.
+    let pdfHash = 2166136261;
+    for (const byte of bytes) pdfHash = Math.imul(pdfHash ^ byte, 16777619);
+    const pdfFingerprint = `${bytes.length}:${pdfHash >>> 0}`;
     const loadingTask = getDocument({ data: bytes.slice() });
     const document = await loadingTask.promise;
     try {
@@ -60,6 +64,7 @@ async function renderPdf(layout: ReportLayout, zoom: number) {
           if (!canvas) continue;
           canvas.dataset.rendered = "false";
           canvas.dataset.renderScale = String(scale);
+          canvas.dataset.pdfFingerprint = pdfFingerprint;
           const viewport = page.getViewport({ scale });
           canvas.width = Math.ceil(viewport.width);
           canvas.height = Math.ceil(viewport.height);

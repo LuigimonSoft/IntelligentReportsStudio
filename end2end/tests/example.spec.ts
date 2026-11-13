@@ -228,9 +228,11 @@ test('exported PDF pixels match the PDF shown in preview',async({page})=>{
         }
         if(changed){const x=(i/4)%actual.width,y=Math.floor(i/4/actual.width);differentPixels++;minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
       }
-      return {differentChannels:result.reduce((count:number,value:number,index:number)=>count+(value!==expected[index]?1:0),0),differentPixels,maxDelta,totalDelta,repeatDifferences,width:actual.width,height:actual.height,bounds:{minX,minY,maxX,maxY},scale:actual.dataset.renderScale};
+      let hash=2166136261; for(const byte of bytes) hash=Math.imul(hash^byte,16777619);
+      return {differentChannels:result.reduce((count:number,value:number,index:number)=>count+(value!==expected[index]?1:0),0),differentPixels,maxDelta,totalDelta,repeatDifferences,width:actual.width,height:actual.height,bounds:{minX,minY,maxX,maxY},scale:actual.dataset.renderScale,previewPdf:actual.dataset.pdfFingerprint,exportedPdf:`${bytes.length}:${hash>>>0}`};
     }finally{await task.destroy();}
   });
+  expect(difference.previewPdf, JSON.stringify(difference)).toBe(difference.exportedPdf);
   expect(difference.differentChannels, JSON.stringify(difference)).toBe(0);
 });
 
