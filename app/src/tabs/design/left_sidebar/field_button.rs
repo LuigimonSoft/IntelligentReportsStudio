@@ -15,6 +15,7 @@ pub fn FieldButton(token: Value) -> impl IntoView {
         label.clone()
     };
     let payload = token.to_string();
+    let drag_token = token.clone();
     let (symbol, badge) = match kind.as_str() {
         "number" => ("#", "NUM"),
         "boolean" => ("✓", "✓"),
@@ -30,12 +31,14 @@ pub fn FieldButton(token: Value) -> impl IntoView {
             title=format!("{label}: {expression}")
             data-field-text=expression.clone()
             on:dragstart=move |event| {
+                s.dragged_field.set(Some(drag_token.clone()));
                 if let Some(data) = event.data_transfer() {
                     let _ = data.set_data("application/x-reportstudio-field", &payload);
                     let _ = data.set_data("text/plain", &expression);
                     data.set_effect_allowed("copy");
                 }
             }
+            on:dragend=move |_| s.dragged_field.set(None)
             on:click=move |_| s.command("add-field", json!({"field":token}))
         >
             <span class="field-symbol">{symbol}</span>

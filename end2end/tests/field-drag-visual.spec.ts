@@ -16,7 +16,10 @@ test('dragged fields appear at the drop point and stay inside the page', async (
  const current=(await detail.boundingBox())!;
  await other.dragTo(detail,{targetPosition:{x:current.width-5,y:Math.min(10,current.height/2)}});
  const text=detail.locator('.report-element').filter({hasText:'[description]'});await expect(text).toHaveCount(1);
- const textBox=(await text.boundingBox())!, paper=(await page.locator('.report-paper').boundingBox())!;
- expect(textBox.x+textBox.width).toBeLessThanOrEqual(paper.x+paper.width+1);
+ // The external CSSOM geometry can be applied after insertion on slower WebViews.
+ await expect.poll(async()=>{
+   const field=await text.boundingBox(), sheet=await page.locator('.report-paper').boundingBox();
+   return field && sheet ? field.x+field.width-(sheet.x+sheet.width) : Infinity;
+ }).toBeLessThanOrEqual(1);
  await page.screenshot({path:test.info().outputPath('irs-drag-fixed.png')});
 });

@@ -181,8 +181,16 @@ pub fn ReportArea() -> impl IntoView {
                                         s.band.set(id);
                                         if let Some(action) = token.strip_prefix("reportstudio-tool:") {
                                             s.command(action, json!({"x":x,"y":y}));
-                                        } else if let Ok(field) = serde_json::from_str::<serde_json::Value>(&data.get_data("application/x-reportstudio-field").unwrap_or_default()) {
-                                            let hit = e.target().and_then(|target| target.dyn_into::<web_sys::Element>().ok()).and_then(|element| element.closest(".report-element").ok().flatten()).and_then(|element| element.get_attribute("data-element"));
+                                        } else if let Some(field) = serde_json::from_str::<serde_json::Value>(&data.get_data("application/x-reportstudio-field").unwrap_or_default()).ok().or_else(|| {
+                                            // Some WebKit ports omit custom MIME types during native drags.
+                                            // Match the plain-text token so external text cannot reuse stale state.
+                                            s.dragged_field.get_untracked().filter(|field| field["text"].as_str() == Some(token.as_str()))
+                                        }) {
+                                            let target_at_point = document().element_from_point(e.client_x() as f32, e.client_y() as f32)
+                                                .and_then(|element| element.closest(".report-element").ok().flatten());
+                                            let event_target = e.target().and_then(|target| target.dyn_into::<web_sys::Element>().ok())
+                                                .and_then(|element| element.closest(".report-element").ok().flatten());
+                                            let hit = target_at_point.or(event_target).and_then(|element| element.get_attribute("data-element"));
                                             let project = s.project.get_untracked();
                                             let item = hit.as_ref().and_then(|id| bands(&project["report"]).into_iter().flat_map(|band| array(&band["elements"])).find(|element| text(element, "id") == *id));
                                             if let Some(element) = item.filter(|element| element["cell"].is_object() && element["table"].is_object()) {

@@ -62,6 +62,8 @@ pub struct Studio {
     pub draft: RwSignal<String>,
     pub original_record: RwSignal<Value>,
     pub clipboard: RwSignal<Value>,
+    /// Field currently being dragged within this window; never saved to the report.
+    pub dragged_field: RwSignal<Option<Value>>,
     pub limit: RwSignal<usize>,
     pub scope: RwSignal<String>,
     pub formula_valid: RwSignal<bool>,
@@ -149,6 +151,7 @@ impl Studio {
             draft: RwSignal::new(String::new()),
             original_record: RwSignal::new(Value::Null),
             clipboard: RwSignal::new(Value::Null),
+            dragged_field: RwSignal::new(None),
             limit: RwSignal::new(200),
             formula_valid: RwSignal::new(false),
             scope: RwSignal::new("cell".into()),
