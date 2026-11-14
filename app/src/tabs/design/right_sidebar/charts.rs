@@ -200,12 +200,23 @@ pub fn CategoryColors(chart: Value, #[prop(optional)] detailed: bool) -> impl In
     let points = RwSignal::new(Vec::<Value>::new());
     #[cfg(feature = "csr")]
     {
-        let settings = chart.clone();
+        let fallback = chart.clone();
+        let revision = RwSignal::new(0_u64);
         Effect::new(move |_| {
-            let request = json!({"action":"chart-points","project":s.project.get(),"args":{"chart":settings}});
+            let project = s.project.get();
+            let settings = if detailed {
+                serde_json::from_str::<Value>(&s.draft.get()).unwrap_or_else(|_| fallback.clone())
+            } else {
+                s.selected_element().map(|element| element["chart"].clone()).unwrap_or_else(|| fallback.clone())
+            };
+            let version = revision.get_untracked().wrapping_add(1);
+            revision.set(version);
+            let request = json!({"action":"chart-points","project":project,"args":{"chart":settings}});
             leptos::task::spawn_local(async move {
                 if let Ok(result) = crate::platform::call(request).await {
-                    points.set(array(&result["points"]));
+                    if revision.try_get_untracked() == Some(version) {
+                        points.try_set(array(&result["points"]));
+                    }
                 }
             });
         });

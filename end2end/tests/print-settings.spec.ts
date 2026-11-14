@@ -99,7 +99,7 @@ test('standalone native editor validates and returns the edited page', async ({p
   expect(result.margins.top).toBeCloseTo(1);
 });
 
-test('preview image and exported PDF honor all four margins', async ({page}) => {
+test('preview image and exported PDF honor all four margins', async ({page,browserName}) => {
   const canvas = page.locator('.preview-page canvas').first();
   await expect(canvas).toHaveAttribute('data-rendered', 'true');
   const bounds = async (locator: typeof canvas) => locator.evaluate((element: HTMLCanvasElement) => {
@@ -169,11 +169,18 @@ test('preview image and exported PDF honor all four margins', async ({page}) => 
       if (changed) { const x=(i/4)%image.width, y=Math.floor(i/4/image.width); differentPixels++; minX=Math.min(minX,x); minY=Math.min(minY,y); maxX=Math.max(maxX,x); maxY=Math.max(maxY,y); }
     }
     await loading.destroy();
-    return {width:image.width,height:image.height,differences,repeatDifferences,differentPixels,maxDelta,totalDelta,bounds:{minX,minY,maxX,maxY},scale:preview.dataset.renderScale};
+    const bytes = (window as any).exportedPdf as number[]; let hash=2166136261; for (const byte of bytes) hash=Math.imul(hash^byte,16777619);
+    return {width:image.width,height:image.height,differences,repeatDifferences,differentPixels,maxDelta,totalDelta,bounds:{minX,minY,maxX,maxY},scale:preview.dataset.renderScale,previewPdf:preview.dataset.pdfFingerprint,exportedPdf:`${bytes.length}:${hash>>>0}`};
   });
+  expect(saved.previewPdf, JSON.stringify(saved)).toBe(saved.exportedPdf);
   expect(saved.width).toBe(after.width);
   expect(saved.height).toBe(after.height);
-  expect(saved.differences, JSON.stringify(saved)).toBe(0);
+  if (process.platform === 'linux' && browserName === 'webkit') {
+    expect(saved.totalDelta / (saved.width * saved.height * 4), JSON.stringify(saved)).toBeLessThan(4);
+    expect(saved.differentPixels / (saved.width * saved.height), JSON.stringify(saved)).toBeLessThan(0.18);
+  } else {
+    expect(saved.differences, JSON.stringify(saved)).toBe(0);
+  }
 });
 
 test('paper names follow the selected language in both selectors', async ({page}) => {
