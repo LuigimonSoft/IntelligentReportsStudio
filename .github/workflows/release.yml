@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'v[0-9]*'
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing version tag to build (for example v0.1.0)
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -20,15 +26,20 @@ jobs:
       contents: write
     outputs:
       tag: ${{ steps.version.outputs.tag }}
+      is_draft: ${{ steps.release.outputs.is_draft }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_tag || github.ref }}
       - name: Verify tag and application version
         id: version
         shell: bash
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
         run: |
           node <<'NODE'
           const fs = require('node:fs');
-          const tag = process.env.GITHUB_REF_NAME;
+          const tag = process.env.RELEASE_TAG;
           const version = JSON.parse(fs.readFileSync('src-tauri/tauri.conf.json', 'utf8')).version;
           const cargo = fs.readFileSync('src-tauri/Cargo.toml', 'utf8');
           const packageSection = cargo.match(/\[package\]([\s\S]*?)(?:\n\[|$)/)?.[1] ?? '';
@@ -38,22 +49,23 @@ jobs:
           }
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `tag=${tag}\n`);
           NODE
-      - name: Create or resume draft release
+      - name: Create or resume release
+        id: release
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
         shell: bash
         run: |
           if gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft > release-draft-status.txt 2>/dev/null; then
-            if [ "$(cat release-draft-status.txt)" != "true" ]; then
-              echo "Release $RELEASE_TAG is already published; refusing to replace its assets." >&2
-              exit 1
-            fi
+            is_draft=$(cat release-draft-status.txt)
+            echo "Using existing release $RELEASE_TAG (draft: $is_draft)."
           else
             gh release create "$RELEASE_TAG" --verify-tag --draft \
               --title "Report Studio $RELEASE_TAG" \
               --notes "Download the installer for your operating system from the assets below."
+            is_draft=true
           fi
+          echo "is_draft=$is_draft" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build ${{ matrix.name }}
@@ -79,6 +91,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown,${{ matrix.target }}
@@ -93,7 +107,7 @@ jobs:
           cargo install --locked trunk --version 0.21.14
           cargo install --locked wasm-bindgen-cli --version 0.2.126
           npm install --global @tauri-apps/cli@2.12.4
-      - name: Build installers and attach them to the draft
+      - name: Build installers and attach them to the release
         uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -103,13 +117,14 @@ jobs:
           tauriScript: tauri
           tagName: ${{ needs.prepare.outputs.tag }}
           releaseName: Report Studio ${{ needs.prepare.outputs.tag }}
-          releaseDraft: true
+          releaseDraft: ${{ needs.prepare.outputs.is_draft }}
           prerelease: false
           args: --target ${{ matrix.target }}
 
   publish:
     name: Publish release
     needs: [prepare, build]
+    if: needs.prepare.outputs.is_draft == 'true'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
