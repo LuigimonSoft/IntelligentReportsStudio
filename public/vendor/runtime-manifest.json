@@ -554,6 +554,22 @@
       ],
       "format": "esm"
     },
+    "../examples/apple-sales/apple-sales-template.json": {
+      "bytes": 13395,
+      "imports": [],
+      "format": "esm",
+      "with": {
+        "type": "json"
+      }
+    },
+    "../examples/apple-sales/apple-sales-data.json": {
+      "bytes": 1278,
+      "imports": [],
+      "format": "esm",
+      "with": {
+        "type": "json"
+      }
+    },
     "../examples/awb/awb-full-form-template.json": {
       "bytes": 129613,
       "imports": [],
@@ -590,7 +606,7 @@
       "format": "esm"
     },
     "domain/report/sample.ts": {
-      "bytes": 1354,
+      "bytes": 1888,
       "imports": [
         {
           "path": "domain/report/sampleCatalog.ts",
@@ -609,6 +625,22 @@
           "path": "data/sources.ts",
           "kind": "import-statement",
           "original": "../../data/sources.ts"
+        },
+        {
+          "path": "../examples/apple-sales/apple-sales-template.json",
+          "kind": "import-statement",
+          "original": "../../../examples/apple-sales/apple-sales-template.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "../examples/apple-sales/apple-sales-data.json",
+          "kind": "import-statement",
+          "original": "../../../examples/apple-sales/apple-sales-data.json",
+          "with": {
+            "type": "json"
+          }
         },
         {
           "path": "../examples/awb/awb-full-form-template.json",
@@ -916,7 +948,7 @@
     "../public/vendor/reportstudio-runtime.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-EVE77U2K.js",
+          "path": "../public/vendor/chunk-HMC73F5X.js",
           "kind": "import-statement"
         },
         {
@@ -952,10 +984,10 @@
       },
       "bytes": 524702
     },
-    "../public/vendor/sample-IMMCBD7H.js": {
+    "../public/vendor/sample-WHMX6JPI.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-EVE77U2K.js",
+          "path": "../public/vendor/chunk-HMC73F5X.js",
           "kind": "import-statement"
         }
       ],
@@ -976,6 +1008,12 @@
         "data/sources.ts": {
           "bytesInOutput": 0
         },
+        "../examples/apple-sales/apple-sales-template.json": {
+          "bytesInOutput": 6010
+        },
+        "../examples/apple-sales/apple-sales-data.json": {
+          "bytesInOutput": 701
+        },
         "../examples/awb/awb-full-form-template.json": {
           "bytesInOutput": 53713
         },
@@ -989,15 +1027,15 @@
           "bytesInOutput": 1344
         },
         "domain/report/sample.ts": {
-          "bytesInOutput": 241
+          "bytesInOutput": 371
         }
       },
-      "bytes": 118004
+      "bytes": 124845
     },
-    "../public/vendor/chunk-EVE77U2K.js": {
+    "../public/vendor/chunk-HMC73F5X.js": {
       "imports": [
         {
-          "path": "../public/vendor/sample-IMMCBD7H.js",
+          "path": "../public/vendor/sample-WHMX6JPI.js",
           "kind": "dynamic-import"
         }
       ],

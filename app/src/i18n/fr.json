@@ -1130,5 +1130,6 @@
   "Nested JSON fields produce duplicate column names.": "Les champs JSON imbriqués produisent des noms de colonne en double.",
   "Unable to show confirmation": "Impossible d’afficher la confirmation",
   "AWB example with form": "Exemple de lettre de transport aérien avec formulaire",
-  "AWB example data only": "Exemple de lettre de transport aérien sans formulaire"
+  "AWB example data only": "Exemple de lettre de transport aérien sans formulaire",
+  "Apple sales charts example": "Exemple de ventes Apple avec graphiques"
 }
