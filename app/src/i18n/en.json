@@ -1130,5 +1130,6 @@
   "Nested JSON fields produce duplicate column names.": "Nested JSON fields produce duplicate column names.",
   "Unable to show confirmation": "Unable to show confirmation",
   "AWB example with form": "AWB example with form",
-  "AWB example data only": "AWB example data only"
+  "AWB example data only": "AWB example data only",
+  "Apple sales charts example": "Apple sales charts example"
 }

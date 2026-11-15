@@ -1,0 +1,66 @@
+{
+  "source": "https://images.apple.com/newsroom/pdfs/fy2025-q4/FY25_Q4_Consolidated_Financial_Statements.pdf",
+  "units": "USD millions",
+  "fiscalYearEnd2025": "2025-09-27",
+  "tables": {
+    "categories": [
+      {
+        "category": "iPhone",
+        "sales2025": 209586,
+        "sales2024": 201183
+      },
+      {
+        "category": "Mac",
+        "sales2025": 33708,
+        "sales2024": 29984
+      },
+      {
+        "category": "iPad",
+        "sales2025": 28023,
+        "sales2024": 26694
+      },
+      {
+        "category": "Wearables & home",
+        "sales2025": 35686,
+        "sales2024": 37005
+      },
+      {
+        "category": "Services",
+        "sales2025": 109158,
+        "sales2024": 96169
+      }
+    ],
+    "regions": [
+      {
+        "region": "Americas",
+        "sales": 178353
+      },
+      {
+        "region": "Europe",
+        "sales": 111032
+      },
+      {
+        "region": "Greater China",
+        "sales": 64377
+      },
+      {
+        "region": "Japan",
+        "sales": 28703
+      },
+      {
+        "region": "Asia Pacific",
+        "sales": 33696
+      }
+    ],
+    "annual_sales": [
+      {
+        "year": "2024",
+        "sales": 391035
+      },
+      {
+        "year": "2025",
+        "sales": 416161
+      }
+    ]
+  }
+}
