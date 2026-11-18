@@ -868,7 +868,7 @@
       "format": "esm"
     },
     "bridge.ts": {
-      "bytes": 10959,
+      "bytes": 11144,
       "imports": [
         {
           "path": "shared/parameters/reportParameters.ts",
@@ -979,10 +979,10 @@
           "bytesInOutput": 3403
         },
         "bridge.ts": {
-          "bytesInOutput": 5581
+          "bytesInOutput": 5704
         }
       },
-      "bytes": 524702
+      "bytes": 524825
     },
     "../public/vendor/sample-NP3JQ4IU.js": {
       "imports": [

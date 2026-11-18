@@ -89,7 +89,10 @@ export async function call(payload: string): Promise<string> {
       const preferences = (globalThis as any).__TAURI__?.core
         ? await native("load_preferences")
         : JSON.parse(localStorage.getItem("reportstudio:preferences") ?? "{}");
-      return JSON.stringify({ preferences });
+      const systemLocale = (globalThis as any).__TAURI__?.core
+        ? await native("system_locale").catch(() => null)
+        : globalThis.navigator?.language ?? null;
+      return JSON.stringify({ preferences, systemLocale });
     }
     case "preferences-save":
       if ((globalThis as any).__TAURI__?.core) await native("save_preferences", { preferences: args.preferences });

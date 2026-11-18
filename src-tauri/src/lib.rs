@@ -25,6 +25,7 @@ pub fn run() {
             commands::editor_windows::editor_context,
             commands::editor_windows::finish_editor,
             commands::frontend_ready,
+            commands::system_locale,
             file_menu::set_file_menu_labels,
             commands::preferences::load_preferences,
             commands::preferences::save_preferences,
