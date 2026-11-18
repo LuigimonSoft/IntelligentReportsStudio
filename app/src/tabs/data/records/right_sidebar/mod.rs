@@ -7,6 +7,17 @@ pub fn RecordsSidebar() -> impl IntoView {
     view! {
         <aside class="records-sidebar">
             <h3>{move || s.t("Filters and parameters")}</h3>
+            <label class="check">
+                <input
+                    type="checkbox"
+                    prop:checked=move || s.project.get()["saveData"] == true
+                    on:change=move |event| {
+                        let checked = event_target_checked(&event);
+                        s.mutate(|project| project["saveData"] = json!(checked));
+                    }
+                />
+                {move || s.t("Save data")}
+            </label>
             <Button
                 label="Add parameter"
                 on_press=move |_| {

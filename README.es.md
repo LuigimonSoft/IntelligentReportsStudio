@@ -26,7 +26,7 @@ En **Modelo de datos**, crea tablas y define sus campos y tipos desde el editor.
 
 ![Modelo de datos con tablas y campos en Report Studio](assets/readme/data-model.png)
 
-Usa **Registros** para consultar y editar los datos disponibles. Después, en **Diseño**, arrastra campos al reporte o enlázalos con una tabla o sección de detalles. La vista previa utiliza los registros disponibles para completar el reporte. El guardado normal conserva el esquema y el nombre de la fuente, pero excluye los registros; una integración puede proporcionar los datos nuevamente cuando se necesiten.
+Usa **Registros** para consultar y editar los datos disponibles. Después, en **Diseño**, arrastra campos al reporte o enlázalos con una tabla o sección de detalles. La vista previa utiliza los registros disponibles para completar el reporte. Por defecto, el guardado conserva el esquema y el nombre de la fuente, pero excluye los registros. En **Datos → Registros**, selecciona **Guardar datos** para incluir los registros actuales en el JSON del reporte.
 
 ### Del lienzo a la vista previa
 
@@ -39,7 +39,7 @@ Crea un reporte como en otras herramientas de diseño visual: arrastra campos y 
 1. En **Diseño**, organiza la página y sus secciones; agrega elementos y configura su contenido y apariencia.
 2. En **Datos**, define tablas, campos, relaciones y parámetros. Las secciones o tablas pueden repetir contenido para cada registro.
 3. En **Vista previa**, el motor combina plantilla y datos, evalúa expresiones y distribuye las páginas. La vista previa y la exportación utilizan la misma generación de PDF.
-4. Guarda la plantilla JSON para editarla después. El guardado normal conserva el diseño y las definiciones de datos, pero excluye los registros y los valores de parámetros marcados para no guardarse. Las copias de recuperación son locales y pueden contener datos de la sesión.
+4. Guarda la plantilla JSON para editarla después. Por defecto, el guardado conserva el diseño y las definiciones de datos, pero excluye los registros; selecciona **Guardar datos** en **Datos → Registros** para incluirlos. Los valores de parámetros marcados para no guardarse se excluyen independientemente. Las copias de recuperación son locales y pueden contener datos de la sesión.
 
 Tauri gestiona la ventana y las operaciones del sistema; Leptos presenta la interfaz y el motor integrado procesa datos, validación y páginas. Durante el desarrollo se carga una factura de ejemplo; la versión de distribución inicia con un reporte en blanco.
 
@@ -59,7 +59,7 @@ cargo tauri dev
 
 Para compilar una versión distribuible, ejecuta `cargo tauri build`. Si trabajas en un disco externo con archivos auxiliares `._*`, puedes usar `node scripts/clean-build.mjs dev` para iniciar desde una copia temporal.
 
-Las plantillas JSON guardan definiciones de tablas y nombres de fuentes, pero no registros. Las copias de recuperación son locales y pueden contener los datos de la sesión.
+Las plantillas JSON guardan definiciones de tablas y nombres de fuentes; los registros solo se incluyen al seleccionar **Guardar datos** en **Datos → Registros**. Las copias de recuperación son locales y pueden contener los datos de la sesión.
 
 Consulta el [README principal](README.md) para la estructura y los comandos de pruebas.
 
@@ -67,9 +67,9 @@ El JSON guardado usa `schemaVersion: 1`. Las plantillas anteriores sin esta prop
 
 Al importar JSON, activa **Expandir JSON anidado en tablas relacionadas** para convertir una ruta como `customer.name` en una columna editable como `customer_name`, e `items[].price` en una columna de una tabla hija relacionada. El esquema conserva la ruta original en `sourcePath`; las expresiones del reporte usan el nombre de columna generado. Los arreglos deben contener objetos. Un arreglo vacío produce una tabla relacionada vacía con claves generadas. Los datos permanecen solo en la sesión.
 
-Después de cargar un archivo JSON desde cualquier tabla de una fuente expandida, **Recargar datos** actualiza de forma conjunta todas las tablas relacionadas y regenera sus claves de padre e hijo. El esquema conserva el grupo y las rutas de arreglos en `schema.nestedSource`, pero el reporte no guarda los registros ni la ruta del archivo seleccionado. Para incorporar campos o arreglos nuevos es necesario importar de nuevo; la recarga solo llena el esquema existente. Las claves generadas dependen del orden de los registros: antes de recargar, elimina las relaciones que conecten estas claves con tablas externas al grupo. En importaciones anteriores, la estructura original debe poder identificarse mediante sus campos y relaciones.
+Después de cargar un archivo JSON desde cualquier tabla de una fuente expandida, **Recargar datos** actualiza de forma conjunta todas las tablas relacionadas y regenera sus claves de padre e hijo. El esquema conserva el grupo y las rutas de arreglos en `schema.nestedSource`, pero el reporte no guarda la ruta del archivo seleccionado y solo incluye los registros cuando se selecciona **Guardar datos**. Para incorporar campos o arreglos nuevos es necesario importar de nuevo; la recarga solo llena el esquema existente. Las claves generadas dependen del orden de los registros: antes de recargar, elimina las relaciones que conecten estas claves con tablas externas al grupo. En importaciones anteriores, la estructura original debe poder identificarse mediante sus campos y relaciones.
 
-En **Diseño → Campos disponibles → Plantillas de ejemplo** puedes elegir una factura, cotización, lista de productos o reporte de ventas. Los ejemplos usan datos editables de sesión; las plantillas guardadas no incluyen registros.
+En **Diseño → Campos disponibles → Plantillas de ejemplo** puedes elegir una factura, cotización, lista de productos o reporte de ventas. Los ejemplos usan datos editables de sesión; las plantillas guardadas solo incluyen registros si se selecciona **Guardar datos**.
 
 Las secciones principales de detalles y el pie del reporte admiten `pageBreakBefore: true` para comenzar en una página nueva. En un detalle repetido, el salto se aplica a cada registro y los encabezados de grupo acompañan al contenido. No se admite en la cabecera del reporte, la cabecera o el pie de página ni las subsecciones.
 

@@ -11,6 +11,7 @@ pub struct Studio {
     pub selected: RwSignal<Vec<String>>,
     pub band: RwSignal<String>,
     pub language: RwSignal<String>,
+    pub language_selected: RwSignal<bool>,
     pub dark: RwSignal<bool>,
     pub zoom: RwSignal<f64>,
     pub zoom_auto: RwSignal<bool>,
@@ -99,7 +100,8 @@ impl Studio {
             data_tab: RwSignal::new("Data model".into()),
             selected: RwSignal::new(vec![]),
             band: RwSignal::new(first),
-            language: RwSignal::new("en".into()),
+            language: RwSignal::new(crate::i18n::initial_language().into()),
+            language_selected: RwSignal::new(false),
             dark: RwSignal::new(false),
             zoom: RwSignal::new(1.0),
             zoom_auto: RwSignal::new(true),
@@ -171,7 +173,8 @@ impl Studio {
         crate::i18n::translate(&self.language.get(), key)
     }
     fn invalidate_preview(self) {
-        self.preview_render_revision.update(|revision| *revision = revision.wrapping_add(1));
+        self.preview_render_revision
+            .update(|revision| *revision = revision.wrapping_add(1));
         self.preview_loading.set(false);
         self.preview_error.set(String::new());
         self.preview.set(Value::Null);
@@ -179,11 +182,17 @@ impl Studio {
     pub fn describe_error(self, error: &str) -> String {
         if let Some(details) = error.strip_prefix("Image could not be decoded: ") {
             if let Some((section_id, element_id)) = details.split_once(" / ") {
-                let section = bands(&self.project.get_untracked()["report"]).iter()
+                let section = bands(&self.project.get_untracked()["report"])
+                    .iter()
                     .find(|band| text(band, "id") == section_id)
                     .map(|band| self.t(&text(band, "name")))
                     .unwrap_or_else(|| section_id.to_owned());
-                return format!("{}: {} · {}", self.t("Image could not be decoded"), section, element_id);
+                return format!(
+                    "{}: {} · {}",
+                    self.t("Image could not be decoded"),
+                    section,
+                    element_id
+                );
             }
         }
         self.t(error)
@@ -296,7 +305,10 @@ impl Studio {
         }
     }
     pub fn patch_element(self, key: &str, value: Value) {
-        if self.selected_element().is_some_and(|element| element["locked"] == true) {
+        if self
+            .selected_element()
+            .is_some_and(|element| element["locked"] == true)
+        {
             return;
         }
         if ["x", "y", "width", "height"].contains(&key)
@@ -328,20 +340,30 @@ impl Studio {
     /// Serialize asynchronous document actions so rapid clicks never overwrite edits.
     pub fn command(self, action: &str, args: Value) {
         // Element clipboard and deletion commands operate only on the designer.
-        if matches!(action, "cut" | "copy" | "paste" | "delete") && self.tab.get_untracked() != "Design" {
+        if matches!(action, "cut" | "copy" | "paste" | "delete")
+            && self.tab.get_untracked() != "Design"
+        {
             return;
         }
         #[cfg(feature = "csr")]
         {
             if action == "export-pdf" {
-                if self.exporting_pdf.get_untracked() { return; }
+                if self.exporting_pdf.get_untracked() {
+                    return;
+                }
                 self.exporting_pdf.set(true);
                 self.notification_error.set(false);
                 self.notification.set(self.t("Exporting PDF..."));
             }
-            if action == "print" && (self.tab.get_untracked() != "Preview" || self.preview.get_untracked().is_null() || self.preview_loading.get_untracked() || !self.preview_error.get_untracked().is_empty()) {
+            if action == "print"
+                && (self.tab.get_untracked() != "Preview"
+                    || self.preview.get_untracked().is_null()
+                    || self.preview_loading.get_untracked()
+                    || !self.preview_error.get_untracked().is_empty())
+            {
                 self.notification_error.set(true);
-                self.notification.set(self.t("Generate the preview before printing."));
+                self.notification
+                    .set(self.t("Generate the preview before printing."));
                 return;
             }
             let mut action = action.to_owned();
@@ -365,7 +387,8 @@ impl Studio {
                 args["original"] = self.original_record.get_untracked();
             }
             if action == "preview" {
-                self.preview_render_revision.update(|revision| *revision += 1);
+                self.preview_render_revision
+                    .update(|revision| *revision += 1);
                 self.preview_error.set(String::new());
                 self.preview_loading.set(true);
                 self.preview.set(Value::Null);
@@ -385,8 +408,15 @@ impl Studio {
                 args["hiddenColumns"] = json!(self.hidden_columns.get_untracked());
             }
             if args.get("table").is_none()
-                && ["query", "export-data", "apply-definition", "model-settings", "load-table-data", "reload-table-data"]
-                    .contains(&action.as_str())
+                && [
+                    "query",
+                    "export-data",
+                    "apply-definition",
+                    "model-settings",
+                    "load-table-data",
+                    "reload-table-data",
+                ]
+                .contains(&action.as_str())
             {
                 args["table"] = json!(self.table.get_untracked());
             }
@@ -403,13 +433,23 @@ impl Studio {
                         break;
                     };
                     self.commands.set(queue);
-                    if matches!(action.as_str(), "new" | "open" | "open-recent" | "restore-example") && self.dirty.get_untracked() {
-                        match crate::platform::confirm_discard(&self.t("Discard unsaved changes?")).await {
-                            Ok(true) => {},
+                    if matches!(
+                        action.as_str(),
+                        "new" | "open" | "open-recent" | "restore-example"
+                    ) && self.dirty.get_untracked()
+                    {
+                        match crate::platform::confirm_discard(&self.t("Discard unsaved changes?"))
+                            .await
+                        {
+                            Ok(true) => {}
                             Ok(false) => continue,
                             Err(error) => {
                                 self.notification_error.set(true);
-                                self.notification.set(format!("{}: {}", self.t("Unable to show confirmation"), error));
+                                self.notification.set(format!(
+                                    "{}: {}",
+                                    self.t("Unable to show confirmation"),
+                                    error
+                                ));
                                 continue;
                             }
                         }
@@ -421,16 +461,22 @@ impl Studio {
                     let request = json!({"action":action,"project":snapshot,"selected":self.selected.get_untracked(),"band":self.band.get_untracked(),"args":args});
                     match crate::platform::call(request).await {
                         Ok(result) => {
-                            if action == "restore-example" && snapshot != self.project.get_untracked() {
+                            if action == "restore-example"
+                                && snapshot != self.project.get_untracked()
+                            {
                                 self.data_file_tables.set(vec![]);
                                 self.notification_error.set(true);
                                 self.notification.set(self.t("The report changed while opening the example. Save it again before continuing."));
                                 continue;
                             }
-                            if matches!(action.as_str(), "load-table-data" | "reload-table-data") && result.get("project").is_some() {
+                            if matches!(action.as_str(), "load-table-data" | "reload-table-data")
+                                && result.get("project").is_some()
+                            {
                                 if snapshot != self.project.get_untracked() {
                                     self.notification_error.set(true);
-                                    self.notification.set(self.t("The report changed while loading data. Try again."));
+                                    self.notification.set(
+                                        self.t("The report changed while loading data. Try again."),
+                                    );
                                     continue;
                                 }
                                 if result["pendingDataSource"] == true {
@@ -440,29 +486,55 @@ impl Studio {
                                         continue;
                                     }
                                     if snapshot != self.project.get_untracked() {
-                                        let _ = crate::platform::call(json!({"action":"clear-table-data-sources"})).await;
+                                        let _ = crate::platform::call(
+                                            json!({"action":"clear-table-data-sources"}),
+                                        )
+                                        .await;
                                         self.data_file_tables.set(vec![]);
                                         self.notification_error.set(true);
-                                        self.notification.set(self.t("The report changed while loading data. Try again."));
+                                        self.notification.set(self.t(
+                                            "The report changed while loading data. Try again.",
+                                        ));
                                         continue;
                                     }
                                 }
                                 if let Some(id) = result["dataSourceTable"].as_str() {
-                                    let tables = result["dataSourceTables"].as_array().cloned().unwrap_or_default();
+                                    let tables = result["dataSourceTables"]
+                                        .as_array()
+                                        .cloned()
+                                        .unwrap_or_default();
                                     self.data_file_tables.update(|ids| {
-                                        for table in tables.iter().filter_map(|value| value.as_str()).chain(std::iter::once(id)) {
-                                            if !ids.iter().any(|item| item == table) { ids.push(table.to_owned()); }
+                                        for table in tables
+                                            .iter()
+                                            .filter_map(|value| value.as_str())
+                                            .chain(std::iter::once(id))
+                                        {
+                                            if !ids.iter().any(|item| item == table) {
+                                                ids.push(table.to_owned());
+                                            }
                                         }
                                     });
                                     self.record_refresh.update(|version| *version += 1);
                                 }
                             }
-                            if matches!(action.as_str(), "new" | "open" | "open-recent" | "duplicate-report" | "replace-tables" | "restore-example") && result.get("project").is_some() {
+                            if matches!(
+                                action.as_str(),
+                                "new"
+                                    | "open"
+                                    | "open-recent"
+                                    | "duplicate-report"
+                                    | "replace-tables"
+                                    | "restore-example"
+                            ) && result.get("project").is_some()
+                            {
                                 self.data_file_tables.set(vec![]);
                             }
                             if let Some(project) = result.get("project") {
                                 self.commit(project.clone());
-                                if matches!(action.as_str(), "new" | "open" | "open-recent" | "restore-example") {
+                                if matches!(
+                                    action.as_str(),
+                                    "new" | "open" | "open-recent" | "restore-example"
+                                ) {
                                     self.dirty.set(action == "restore-example");
                                     self.history.set(vec![]);
                                     self.future.set(vec![]);
@@ -525,12 +597,17 @@ impl Studio {
                             }
                             if let Some(message) = result["message"].as_str() {
                                 self.message.set(message.into());
-                                if matches!(action.as_str(), "export-pdf" | "load-table-data" | "reload-table-data") {
+                                if matches!(
+                                    action.as_str(),
+                                    "export-pdf" | "load-table-data" | "reload-table-data"
+                                ) {
                                     self.notification_error.set(false);
                                     self.notification.set(self.t(message));
                                 }
                             }
-                            if action == "export-pdf" { self.exporting_pdf.set(false); }
+                            if action == "export-pdf" {
+                                self.exporting_pdf.set(false);
+                            }
                             if let Some(selected) = result["selected"].as_array() {
                                 self.selected.set(
                                     selected
@@ -562,11 +639,24 @@ impl Studio {
                                 self.preview_loading.set(false);
                                 self.preview_error.set(translated.clone());
                             }
-                            if action == "export-pdf" || action == "print" || action == "load-table-data" || action == "reload-table-data" {
-                                if action == "export-pdf" { self.exporting_pdf.set(false); }
+                            if action == "export-pdf"
+                                || action == "print"
+                                || action == "load-table-data"
+                                || action == "reload-table-data"
+                            {
+                                if action == "export-pdf" {
+                                    self.exporting_pdf.set(false);
+                                }
                                 self.notification_error.set(true);
-                                let title = if action == "print" { "Unable to print" } else if action == "export-pdf" { "Unable to export PDF" } else { "Unable to load table data" };
-                                self.notification.set(format!("{}: {}", self.t(title), translated));
+                                let title = if action == "print" {
+                                    "Unable to print"
+                                } else if action == "export-pdf" {
+                                    "Unable to export PDF"
+                                } else {
+                                    "Unable to load table data"
+                                };
+                                self.notification
+                                    .set(format!("{}: {}", self.t(title), translated));
                             }
                             self.message.set(translated);
                         }

@@ -26,7 +26,7 @@ Dans **Modèle de données**, créez des tables et définissez leurs champs et l
 
 ![Modèle de données avec des tables et des champs dans Report Studio](assets/readme/data-model.png)
 
-Utilisez **Enregistrements** pour consulter et modifier les données disponibles. Dans **Conception**, faites ensuite glisser les champs vers le rapport ou liez-les à un tableau ou à une section de détails. L’aperçu utilise les enregistrements disponibles pour remplir le rapport. L’enregistrement normal conserve le schéma et le nom de la source, mais exclut les enregistrements ; une intégration peut fournir à nouveau les données au besoin.
+Utilisez **Enregistrements** pour consulter et modifier les données disponibles. Dans **Conception**, faites ensuite glisser les champs vers le rapport ou liez-les à un tableau ou à une section de détails. L’aperçu utilise les enregistrements disponibles pour remplir le rapport. Par défaut, l’enregistrement conserve le schéma et le nom de la source, mais exclut les enregistrements. Dans **Données → Enregistrements**, sélectionnez **Enregistrer les données** pour les inclure dans le JSON du rapport.
 
 ### Du canevas à l’aperçu
 
@@ -39,7 +39,7 @@ Créez un rapport comme dans les autres outils de conception visuelle : faites g
 1. Dans **Conception**, organisez la page et ses sections, ajoutez des éléments et réglez leur contenu et leur apparence.
 2. Dans **Données**, définissez tables, champs, relations et paramètres. Une section ou un tableau peut répéter du contenu pour chaque enregistrement.
 3. Dans **Aperçu**, le moteur associe le modèle aux données, évalue les expressions et répartit le contenu sur les pages. L’aperçu et l’export utilisent la même génération PDF.
-4. Enregistrez le modèle JSON pour le modifier plus tard. L’enregistrement normal conserve la conception et les définitions de données, mais exclut les enregistrements et les valeurs de paramètres marquées comme non enregistrables. Les copies de récupération sont locales et peuvent contenir les données de session.
+4. Enregistrez le modèle JSON pour le modifier plus tard. Par défaut, l’enregistrement conserve la conception et les définitions de données, mais exclut les enregistrements ; sélectionnez **Enregistrer les données** dans **Données → Enregistrements** pour les inclure. Les valeurs de paramètres marquées comme non enregistrables restent exclues. Les copies de récupération sont locales et peuvent contenir les données de session.
 
 Tauri gère la fenêtre et les opérations système ; Leptos présente l’interface et le moteur intégré traite les données, la validation et la mise en page. Une facture d’exemple est chargée en développement ; la version distribuée démarre avec un rapport vierge.
 
@@ -59,7 +59,7 @@ cargo tauri dev
 
 Pour créer une version distribuable, exécutez `cargo tauri build`. Sur un disque externe contenant des fichiers auxiliaires `._*`, `node scripts/clean-build.mjs dev` démarre une copie temporaire.
 
-Les modèles JSON enregistrent les définitions des tables et les noms des sources, mais pas leurs données. Les fichiers de récupération sont locaux et peuvent contenir les données de la session.
+Les modèles JSON enregistrent les définitions des tables et les noms des sources ; les enregistrements ne sont inclus que si **Enregistrer les données** est sélectionné dans **Données → Enregistrements**. Les fichiers de récupération sont locaux et peuvent contenir les données de la session.
 
 Consultez le [README principal](README.md) pour la structure et les commandes de test.
 
@@ -67,9 +67,9 @@ Le JSON enregistré utilise `schemaVersion: 1`. Les anciens modèles sans cette 
 
 Lors de l’import JSON, activez **Développer le JSON imbriqué en tables liées** pour convertir une propriété comme `customer.name` en colonne modifiable `customer_name`, et `items[].price` en colonne d’une table enfant liée. Le schéma conserve le chemin d’origine dans `sourcePath` ; les expressions du rapport utilisent le nom de colonne généré. Les tableaux doivent contenir des objets. Un tableau vide produit une table liée vide avec des clés générées. Les données restent dans la session.
 
-Après le chargement d’un fichier JSON depuis une table d’une source développée, **Recharger les données** met à jour ensemble toutes les tables associées et régénère les clés parent et enfant. Le schéma conserve le groupe et les chemins des tableaux dans `schema.nestedSource`, mais le rapport ne stocke ni les enregistrements ni le chemin du fichier. Pour ajouter de nouveaux champs ou tableaux, il faut réimporter les données ; le rechargement remplit uniquement le schéma existant. Les clés générées dépendent de l’ordre des enregistrements : supprimez leurs relations avec les tables extérieures au groupe avant le rechargement. Pour les anciennes importations, la structure originale doit pouvoir être identifiée à partir des champs et relations existants.
+Après le chargement d’un fichier JSON depuis une table d’une source développée, **Recharger les données** met à jour ensemble toutes les tables associées et régénère les clés parent et enfant. Le schéma conserve le groupe et les chemins des tableaux dans `schema.nestedSource`, mais le rapport ne stocke pas le chemin du fichier et n’inclut les enregistrements que si **Enregistrer les données** est sélectionné. Pour ajouter de nouveaux champs ou tableaux, il faut réimporter les données ; le rechargement remplit uniquement le schéma existant. Les clés générées dépendent de l’ordre des enregistrements : supprimez leurs relations avec les tables extérieures au groupe avant le rechargement. Pour les anciennes importations, la structure originale doit pouvoir être identifiée à partir des champs et relations existants.
 
-Dans **Conception → Champs disponibles → Modèles d’exemple**, choisissez une facture, un devis, une liste de produits ou un rapport de ventes. Les exemples utilisent des données de session modifiables ; les modèles enregistrés ne contiennent pas les enregistrements.
+Dans **Conception → Champs disponibles → Modèles d’exemple**, choisissez une facture, un devis, une liste de produits ou un rapport de ventes. Les exemples utilisent des données de session modifiables ; les modèles enregistrés les incluent uniquement si **Enregistrer les données** est sélectionné.
 
 Les sections principales de détails et le pied du rapport acceptent `pageBreakBefore: true` pour commencer sur une nouvelle page. Dans un détail répété, le saut s’applique à chaque enregistrement et les en-têtes de groupe accompagnent le contenu. Ce réglage ne s’applique pas aux en-têtes du rapport ou de page, aux pieds de page ni aux sous-sections.
 

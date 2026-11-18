@@ -356,6 +356,7 @@ export function validateDatasets(input: unknown): Dataset[] {
 export function validateProject(input: unknown): Project {
   const obj = object(input);
   if (obj.version !== 1) throw new Error('Unsupported project version.');
+  if (obj.saveData !== undefined && typeof obj.saveData !== 'boolean') throw new Error('Invalid save data setting.');
   if (obj.schemaVersion !== undefined && obj.schemaVersion !== 1) throw new Error('Unsupported report schema version.');
   const report = validateReport(obj.report);
   const datasets = validateDatasets(obj.datasets);
@@ -484,6 +485,7 @@ export function validateProject(input: unknown): Project {
   }
   return {
     version: 1,
+    ...(obj.saveData !== undefined ? { saveData: obj.saveData as boolean } : {}),
     schemaVersion: 1,
     ...(parameters ? { parameters } : {}),
     ...(dataModel ? { dataModel } : {}),

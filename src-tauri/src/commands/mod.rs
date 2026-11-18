@@ -1,7 +1,7 @@
-mod editor_modality;
 pub mod data_files;
-pub mod preferences;
+mod editor_modality;
 pub mod editor_windows;
+pub mod preferences;
 use serde_json::Value;
 use std::{fs, path::Path, sync::Mutex};
 use tauri::{Manager, State};
@@ -24,15 +24,27 @@ pub struct NativeClipboard(pub Mutex<Option<arboard::Clipboard>>);
 
 /// Ask in an operating-system dialog; a WebKit window.confirm is not supported.
 #[tauri::command]
-pub async fn confirm_discard_changes(window: tauri::WebviewWindow, message: String) -> Result<bool, String> {
-    if message.len() > 2048 { return Err("Confirmation message is too long.".into()); }
+pub async fn confirm_discard_changes(
+    window: tauri::WebviewWindow,
+    message: String,
+) -> Result<bool, String> {
+    if message.len() > 2048 {
+        return Err("Confirmation message is too long.".into());
+    }
     let answer = rfd::AsyncMessageDialog::new()
         .set_title("Report Studio")
         .set_description(&message)
         .set_buttons(rfd::MessageButtons::YesNo)
         .set_parent(&window)
-        .show().await;
+        .show()
+        .await;
     Ok(answer == rfd::MessageDialogResult::Yes)
+}
+
+/// Return the preferred operating-system interface locale.
+#[tauri::command]
+pub fn system_locale() -> Option<String> {
+    sys_locale::get_locale()
 }
 
 /// A native acknowledgement proves that the CSR application mounted in the WebView.
@@ -46,7 +58,10 @@ fn validate_document_version(document: &Value) -> Result<(), String> {
     if document["version"] != 1 || !document["report"].is_object() {
         return Err("Invalid report document.".into());
     }
-    if document.get("schemaVersion").is_some_and(|version| version != 1) {
+    if document
+        .get("schemaVersion")
+        .is_some_and(|version| version != 1)
+    {
         return Err("Unsupported report schema version.".into());
     }
     Ok(())
@@ -195,7 +210,10 @@ pub async fn save_report(
     }
 }
 #[tauri::command]
-pub fn reset_document_path(state: State<'_, DocumentPath>, files: State<'_, data_files::DataFiles>) -> Result<(), String> {
+pub fn reset_document_path(
+    state: State<'_, DocumentPath>,
+    files: State<'_, data_files::DataFiles>,
+) -> Result<(), String> {
     files.clear()?;
     *state.0.lock().map_err(|e| e.to_string())? = None;
     Ok(())
@@ -235,15 +253,60 @@ pub fn accept_document_path(
 }
 /// Generate a portable file name without treating report titles as paths.
 fn pdf_file_name(title: Option<&str>) -> String {
-    let cleaned: String = title.unwrap_or("").chars().take(100)
-        .map(|c| if c.is_control() || ['/', '\\', ':', '*', '?', '"', '<', '>', '|'].contains(&c) { '_' } else { c })
+    let cleaned: String = title
+        .unwrap_or("")
+        .chars()
+        .take(100)
+        .map(|c| {
+            if c.is_control() || ['/', '\\', ':', '*', '?', '"', '<', '>', '|'].contains(&c) {
+                '_'
+            } else {
+                c
+            }
+        })
         .collect();
     let stem = cleaned.trim().trim_matches('.').trim();
-    let stem = if stem.is_empty() { "Report Studio" } else { stem };
+    let stem = if stem.is_empty() {
+        "Report Studio"
+    } else {
+        stem
+    };
     let base = stem.split('.').next().unwrap_or(stem).to_ascii_uppercase();
-    let reserved = matches!(base.as_str(), "CON" | "PRN" | "AUX" | "NUL" | "COM1" | "COM2" | "COM3" | "COM4" | "COM5" | "COM6" | "COM7" | "COM8" | "COM9" | "LPT1" | "LPT2" | "LPT3" | "LPT4" | "LPT5" | "LPT6" | "LPT7" | "LPT8" | "LPT9");
-    let stem = if reserved { format!("_{stem}") } else { stem.to_owned() };
-    if stem.to_ascii_lowercase().ends_with(".pdf") { stem } else { format!("{stem}.pdf") }
+    let reserved = matches!(
+        base.as_str(),
+        "CON"
+            | "PRN"
+            | "AUX"
+            | "NUL"
+            | "COM1"
+            | "COM2"
+            | "COM3"
+            | "COM4"
+            | "COM5"
+            | "COM6"
+            | "COM7"
+            | "COM8"
+            | "COM9"
+            | "LPT1"
+            | "LPT2"
+            | "LPT3"
+            | "LPT4"
+            | "LPT5"
+            | "LPT6"
+            | "LPT7"
+            | "LPT8"
+            | "LPT9"
+    );
+    let stem = if reserved {
+        format!("_{stem}")
+    } else {
+        stem.to_owned()
+    };
+    if stem.to_ascii_lowercase().ends_with(".pdf") {
+        stem
+    } else {
+        format!("{stem}.pdf")
+    }
 }
 #[tauri::command]
 pub async fn save_pdf(bytes: Vec<u8>, suggested_name: Option<String>) -> Result<bool, String> {
