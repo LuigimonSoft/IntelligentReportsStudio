@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.release_tag || github.ref }}
-      - name: Verify tag and application version
+      - name: Verify release tag
         id: version
         shell: bash
         env:
@@ -40,12 +40,8 @@ jobs:
           node <<'NODE'
           const fs = require('node:fs');
           const tag = process.env.RELEASE_TAG;
-          const version = JSON.parse(fs.readFileSync('src-tauri/tauri.conf.json', 'utf8')).version;
-          const cargo = fs.readFileSync('src-tauri/Cargo.toml', 'utf8');
-          const packageSection = cargo.match(/\[package\]([\s\S]*?)(?:\n\[|$)/)?.[1] ?? '';
-          const cargoVersion = packageSection.match(/^version\s*=\s*"([^"]+)"/m)?.[1];
-          if (!/^v\d+\.\d+\.\d+$/.test(tag) || tag !== `v${version}` || version !== cargoVersion) {
-            throw new Error(`Expected a vMAJOR.MINOR.PATCH tag matching Tauri (${version}) and Cargo (${cargoVersion}); received ${tag}.`);
+          if (!/^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/.test(tag)) {
+            throw new Error(`Expected a vMAJOR.MINOR.PATCH release tag; received ${tag}.`);
           }
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `tag=${tag}\n`);
           NODE
@@ -93,12 +89,24 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.prepare.outputs.tag }}
+      # The workflow's revision can be newer than an existing tag rebuilt manually.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: .release-workflow
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown,${{ matrix.target }}
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      - name: Apply release version to the build
+        env:
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+        shell: bash
+        run: |
+          node --test .release-workflow/scripts/tests/set-release-version.test.mjs
+          node .release-workflow/scripts/set-release-version.mjs "$RELEASE_TAG"
       - name: Install Linux prerequisites
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev patchelf
