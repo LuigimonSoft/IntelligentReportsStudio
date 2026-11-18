@@ -26,7 +26,7 @@ In **Data model**, create tables and define their fields and types through the t
 
 ![Data model with tables and fields in Report Studio](assets/readme/data-model.png)
 
-Use **Records** to inspect and edit the available data. Back in **Design**, drag fields onto the report or bind them to a table or detail section. The preview uses the available records to populate the report. Normal template saves retain the schema and source name while excluding records; a host integration can supply data again when needed.
+Use **Records** to inspect and edit the available data. Back in **Design**, drag fields onto the report or bind them to a table or detail section. The preview uses the available records to populate the report. By default, saving retains the schema and source name but excludes records. In **Data → Records**, select **Save data** to include the current records in the report JSON.
 
 ### From canvas to preview
 
@@ -39,7 +39,7 @@ Build a report much like you would in other visual design tools: drag fields and
 1. **Design** the page and its sections. Drag fields or add elements, then set their content, size and appearance.
 2. **Data** defines tables, fields, relationships and parameters. A section or table can use a data source to repeat content for records.
 3. **Preview** combines the template and available data, evaluates expressions and lays out pages. The same PDF generation path supplies the preview and PDF export.
-4. **Save** the template as JSON and reopen it for later changes. Normal template saves retain the design and data-source definitions, but exclude table records; parameter values marked not to save are excluded too. Recovery copies are local and may contain session data.
+4. **Save** the template as JSON and reopen it for later changes. By default, saving retains the design and data-source definitions but excludes table records; select **Save data** in **Data → Records** to include them. Parameter values marked not to save are excluded independently. Recovery copies are local and may contain session data.
 
 Tauri provides the desktop window and system operations. The Leptos interface runs in the WebView, while a bundled report engine handles validation, data processing, layout and PDF generation. The included sample invoice is for development; release builds start with a blank report.
 
@@ -92,15 +92,15 @@ Browser tests are in `end2end`; install their dependencies with `npm ci` and run
 - `public/`: styles and compiled browser assets.
 - `end2end/`: browser integration tests.
 
-Reports are JSON documents. Saved templates contain table definitions and source names; table records are excluded. Parameters can be configured not to persist their values. Recovery files are stored locally and may contain the current session's data.
+Reports are JSON documents. Saved templates contain table definitions and source names. Table records are excluded unless **Save data** is selected in **Data → Records**. Parameters can be configured not to persist their values. Recovery files are stored locally and may contain the current session's data.
 
 Saved report JSON uses `schemaVersion: 1`. Older templates without this property are read as version 1; unsupported schema versions are rejected. The existing root `version` and `report.version` fields remain required.
 
 When importing JSON, enable **Expand nested JSON into related tables** to turn a path such as `customer.name` into an editable column such as `customer_name`, and `items[].price` into a column in a related child table. The schema retains the original path as `sourcePath`; report expressions use the generated column name. Arrays must contain objects. Empty arrays produce an empty related table with generated key columns. Data is session-only.
 
-After loading a JSON data file for any table in an expanded source, **Reload data** updates the entire related group atomically, including regenerated parent and child keys. The schema stores the group and original array paths in `schema.nestedSource`, while records and the selected file path are not saved in the report. A newly introduced field or array requires a new import; reload only fills the existing schema. Generated keys depend on record order, so relationships from those keys to tables outside the imported group must be removed before reloading. For older imports, the existing structure must be identifiable from the original fields and relationships.
+After loading a JSON data file for any table in an expanded source, **Reload data** updates the entire related group atomically, including regenerated parent and child keys. The schema stores the group and original array paths in `schema.nestedSource`, while the selected file path is not saved in the report; records are saved only when **Save data** is selected. A newly introduced field or array requires a new import; reload only fills the existing schema. Generated keys depend on record order, so relationships from those keys to tables outside the imported group must be removed before reloading. For older imports, the existing structure must be identifiable from the original fields and relationships.
 
-In **Design → Available fields → Example templates**, choose an invoice, quotation, product list or sales report. Examples use editable session data; saved templates do not include table records.
+In **Design → Available fields → Example templates**, choose an invoice, quotation, product list or sales report. Examples use editable session data; saved templates include those records only when **Save data** is selected.
 
 Root detail sections and the report footer support `pageBreakBefore: true` to start on a new page. On a repeating detail, the break applies to each record; repeating group headers move with the content. Page headers, page footers, the report header, and nested sections do not support this setting.
 

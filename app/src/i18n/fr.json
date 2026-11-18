@@ -494,6 +494,7 @@
   "This design has no parameters.": "Ce modèle ne définit aucun paramètre.",
   "Apply filters": "Appliquer les filtres",
   "Column filters": "Filtres par colonne",
+  "Save data": "Enregistrer les données",
   "Data options": "Options des données",
   "Show nulls as empty": "Afficher les valeurs nulles comme vides",
   "Fit column widths": "Ajuster la largeur des colonnes",

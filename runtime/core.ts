@@ -78,11 +78,12 @@ export function templateOnly(project: Project): Project {
     version: 1,
     schemaVersion: project.schemaVersion ?? 1,
     report: structuredClone(project.report),
-    datasets: project.datasets.map(({ id, name, schema }) => ({
+    ...(project.saveData !== undefined ? { saveData: project.saveData } : {}),
+    datasets: project.datasets.map(({ id, name, schema, data }) => ({
       id,
       name,
       schema: structuredClone(schema),
-      data: [],
+      data: project.saveData === true ? structuredClone(data) : [],
     })),
     ...(project.dataSource
       ? { dataSource: { name: project.dataSource.name } }
@@ -93,6 +94,11 @@ export function templateOnly(project: Project): Project {
       ? { parameters: serializableParameters(project.parameters) }
       : {}),
   });
+}
+function loadSavedProject(input: unknown): Project {
+  const project = validateProject(input);
+  ensureDefaultSections(project.report, false);
+  return validateProject(project);
 }
 export function bindExample(project: Project): Project {
   if (project.dataSource?.name === "InvoiceDB")
@@ -379,7 +385,7 @@ export async function act(request: Request): Promise<any> {
     case "open-recent": {
       const text = request.action === "open-recent" ? await native("open_recent_document", {path: args.path}) : await native("open_document");
       if (text === null) return { message: "Open cancelled" };
-      const project = bindExample(validateProject(JSON.parse(text)));
+      const project = loadSavedProject(JSON.parse(text));
       await native("accept_document_path");
       return {
         project,
@@ -453,7 +459,7 @@ export async function act(request: Request): Promise<any> {
       checkEditable(p, [], band);
       const text = await native("open_report");
       if (text === null) return { message: "Open cancelled" };
-      const source = bindExample(validateProject(JSON.parse(text)));
+      const source = loadSavedProject(JSON.parse(text));
       const groupId = uid("subreport");
       const items = createSubreport(
         compileReport(source.report, source.datasets),

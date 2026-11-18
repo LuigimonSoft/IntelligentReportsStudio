@@ -202,6 +202,8 @@ export type DataModelSettings = {
 };
 export type Project = {
   version: 1;
+  /** Include dataset rows in explicitly saved report files. Defaults to false. */
+  saveData?: boolean;
   /** Missing in legacy documents; new templates always write version 1. */
   schemaVersion?: 1;
   report: ReportDefinition;

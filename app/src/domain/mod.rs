@@ -99,13 +99,18 @@ pub fn example_project() -> Value {
     }
     value
 }
-/// Explicit whitelist prevents credentials and runtime rows reaching disk.
+/// Explicit whitelist excludes credentials and saves rows only when requested.
 pub fn template_only(project: &Value) -> Value {
-    let mut result = json!({"version":1,"schemaVersion":1,"report":project["report"].clone(),"datasets":[]});
+    let mut result =
+        json!({"version":1,"schemaVersion":1,"report":project["report"].clone(),"datasets":[]});
+    let save_data = project["saveData"] == true;
+    if let Some(value) = project.get("saveData") {
+        result["saveData"] = value.clone();
+    }
     result["datasets"] = Value::Array(
         array(&project["datasets"])
             .into_iter()
-            .map(|d| json!({"id":d["id"],"name":d["name"],"schema":d["schema"],"data":[]}))
+            .map(|d| json!({"id":d["id"],"name":d["name"],"schema":d["schema"],"data":if save_data { d["data"].clone() } else { json!([]) }}))
             .collect(),
     );
     for key in ["relations", "dataModel"] {
@@ -168,6 +173,23 @@ mod tests {
             .all(|d| d["data"] == json!([])));
         assert!(saved["parameters"][0].get("value").is_none());
         assert_eq!(saved["parameters"][1]["value"], "keep");
+    }
+    #[test]
+    fn template_preserves_rows_only_when_save_data_is_enabled() {
+        let mut project = example_project();
+        let original = project["datasets"][0]["data"].clone();
+        assert!(!original.as_array().unwrap().is_empty());
+        project["credentials"] = json!({"password":"secret"});
+        project["saveData"] = json!(true);
+        let saved = template_only(&project);
+        assert_eq!(saved["saveData"], true);
+        assert_eq!(saved["datasets"][0]["data"], original);
+        assert!(saved.get("credentials").is_none());
+        project["saveData"] = json!(false);
+        let without_data = template_only(&project);
+        assert_eq!(without_data["saveData"], false);
+        assert_eq!(without_data["datasets"][0]["data"], json!([]));
+        assert_eq!(project["datasets"][0]["data"], original);
     }
     #[test]
     fn inherited_read_only() {

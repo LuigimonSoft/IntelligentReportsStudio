@@ -11,7 +11,7 @@
       "format": "esm"
     },
     "engine/types.ts": {
-      "bytes": 8335,
+      "bytes": 8440,
       "imports": [],
       "format": "esm"
     },
@@ -85,7 +85,7 @@
       "format": "esm"
     },
     "engine/validation.ts": {
-      "bytes": 24251,
+      "bytes": 24451,
       "imports": [
         {
           "path": "engine/charts.ts",
@@ -680,7 +680,7 @@
       "format": "esm"
     },
     "core.ts": {
-      "bytes": 44765,
+      "bytes": 45058,
       "imports": [
         {
           "path": "engine/resourceDiagnostics.ts",
@@ -948,7 +948,7 @@
     "../public/vendor/reportstudio-runtime.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-HMC73F5X.js",
+          "path": "../public/vendor/chunk-DHYYVAEZ.js",
           "kind": "import-statement"
         },
         {
@@ -984,10 +984,10 @@
       },
       "bytes": 524702
     },
-    "../public/vendor/sample-WHMX6JPI.js": {
+    "../public/vendor/sample-NP3JQ4IU.js": {
       "imports": [
         {
-          "path": "../public/vendor/chunk-HMC73F5X.js",
+          "path": "../public/vendor/chunk-DHYYVAEZ.js",
           "kind": "import-statement"
         }
       ],
@@ -1032,10 +1032,10 @@
       },
       "bytes": 124845
     },
-    "../public/vendor/chunk-HMC73F5X.js": {
+    "../public/vendor/chunk-DHYYVAEZ.js": {
       "imports": [
         {
-          "path": "../public/vendor/sample-WHMX6JPI.js",
+          "path": "../public/vendor/sample-NP3JQ4IU.js",
           "kind": "dynamic-import"
         }
       ],
@@ -1087,7 +1087,7 @@
           "bytesInOutput": 846
         },
         "engine/validation.ts": {
-          "bytesInOutput": 14753
+          "bytesInOutput": 14900
         },
         "engine/index.ts": {
           "bytesInOutput": 0
@@ -1174,10 +1174,10 @@
           "bytesInOutput": 2034
         },
         "core.ts": {
-          "bytesInOutput": 23641
+          "bytesInOutput": 23779
         }
       },
-      "bytes": 98418
+      "bytes": 98703
     },
     "../public/vendor/renderChart-7BOQJLCP.js": {
       "imports": [
