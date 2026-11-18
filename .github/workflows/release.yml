@@ -124,12 +124,29 @@ jobs:
   publish:
     name: Publish release
     needs: [prepare, build]
-    if: needs.prepare.outputs.is_draft == 'true'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Test release download mapping
+        run: node --test scripts/tests/release-downloads.test.mjs
+      - name: Create and upload stable download links
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets download-aliases
+          gh release download "$RELEASE_TAG" --dir release-assets
+          node scripts/release-downloads.mjs release-assets download-aliases "$RELEASE_TAG"
+          gh release upload "$RELEASE_TAG" download-aliases/* --clobber
       - name: Publish completed release
+        if: needs.prepare.outputs.is_draft == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
