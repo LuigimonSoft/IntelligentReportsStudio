@@ -17,9 +17,11 @@ export function selectInstallers(files, tag) {
   if (!/^v\d+\.\d+\.\d+$/.test(tag)) throw new Error('Invalid release tag');
   const version = tag.slice(1);
   return installers.map(([alias, suffix]) => {
-    const expected = `Report Studio${suffix.startsWith('-') ? '-' : '_'}${version}${suffix}`;
-    const matches = files.filter(file => file === expected);
-    if (matches.length !== 1) throw new Error(`Expected exactly one installer named ${expected}; found ${matches.length}.`);
+    // GitHub may store the asset name with a dot while its display label keeps the space.
+    const separator = suffix.startsWith('-') ? '-' : '_';
+    const expected = ['Report.Studio', 'Report Studio'].map(prefix => `${prefix}${separator}${version}${suffix}`);
+    const matches = files.filter(file => expected.includes(file));
+    if (matches.length !== 1) throw new Error(`Expected exactly one installer (${expected.join(' or ')}); found ${matches.length}. Available files: ${files.join(', ') || '(none)'}`);
     return {source: matches[0], alias};
   });
 }

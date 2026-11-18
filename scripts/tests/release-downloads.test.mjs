@@ -26,3 +26,15 @@ test('copies each installer without changing its bytes', async () => {
     for (const {source, alias} of result) assert.deepEqual(await readFile(path.join(destination, alias)), await readFile(path.join(root, source)));
   } finally { await rm(root, {recursive: true, force: true}); }
 });
+
+test('matches actual GitHub asset names with dots for v0.1.1', () => {
+  const actual = assets.map(name => name.replace('Report Studio', 'Report.Studio').replace('0.1.0', '0.1.1'));
+  const result = selectInstallers(actual, 'v0.1.1');
+  assert.equal(result.length, 7);
+  assert.equal(result[0].source, 'Report.Studio_0.1.1_aarch64.dmg');
+  assert.equal(result[6].source, 'Report.Studio-0.1.1-1.x86_64.rpm');
+});
+test('rejects ambiguous assets with both display and stored names', () => {
+  const stored = assets.map(name => name.replace('Report Studio', 'Report.Studio'));
+  assert.throws(() => selectInstallers([...assets, ...stored], 'v0.1.0'), /found 2/);
+});
