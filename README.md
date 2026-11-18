@@ -43,6 +43,18 @@ Build a report much like you would in other visual design tools: drag fields and
 
 Tauri provides the desktop window and system operations. The Leptos interface runs in the WebView, while a bundled report engine handles validation, data processing, layout and PDF generation. The included sample invoice is for development; release builds start with a blank report.
 
+## Download
+
+Download the latest stable release for your operating system. For other files and previous versions, visit [Releases](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases).
+
+- [macOS · Apple Silicon](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-macOS-Apple-Silicon.dmg)
+- [macOS · Intel](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-macOS-Intel.dmg)
+- [Windows · x64 (.exe)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Windows-x64.exe)
+- [Windows · x64 (.msi)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Windows-x64.msi)
+- [Linux · x64 (AppImage)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Linux-x64.AppImage)
+- [Linux · x64 (.deb)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Linux-x64.deb)
+- [Linux · x64 (.rpm)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Linux-x64.rpm)
+
 ## Requirements
 
 Install Rust, Node.js, Tauri CLI 2, Trunk 0.21.14 and wasm-bindgen-cli 0.2.126. Install the [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/) for your platform.

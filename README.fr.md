@@ -43,6 +43,18 @@ Créez un rapport comme dans les autres outils de conception visuelle : faites g
 
 Tauri gère la fenêtre et les opérations système ; Leptos présente l’interface et le moteur intégré traite les données, la validation et la mise en page. Une facture d’exemple est chargée en développement ; la version distribuée démarre avec un rapport vierge.
 
+## Téléchargement
+
+Téléchargez la dernière version stable pour votre système d’exploitation. Pour les autres fichiers et les versions précédentes, consultez les [releases](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases).
+
+- [macOS · Apple Silicon](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-macOS-Apple-Silicon.dmg)
+- [macOS · Intel](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-macOS-Intel.dmg)
+- [Windows · x64 (.exe)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Windows-x64.exe)
+- [Windows · x64 (.msi)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Windows-x64.msi)
+- [Linux · x64 (AppImage)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Linux-x64.AppImage)
+- [Linux · x64 (.deb)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Linux-x64.deb)
+- [Linux · x64 (.rpm)](https://github.com/LuigimonSoft/IntelligentReportsStudio/releases/latest/download/Report-Studio-Linux-x64.rpm)
+
 ## Installation et démarrage
 
 Installez Rust, Node.js, Tauri CLI 2, Trunk 0.21.14 et wasm-bindgen-cli 0.2.126, ainsi que les [prérequis Tauri](https://v2.tauri.app/start/prerequisites/).
